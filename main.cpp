@@ -1,0 +1,33 @@
+
+#include "math/Vector.h"
+#include "World/Camera.h"
+#include "geometry/Sphere.h"
+#include "World/Scene.h"
+#include "geometry/Plane.h"
+
+using namespace std;
+
+int main() {
+
+    Camera cam = Camera(Vector(0, 0, 0.1), Vector(1, 0, 0), 200, 200, 1); // min is ca. 0.7
+    cam.lookAt(Vector(10, 2, 0));
+
+    Sphere s = Sphere(Vector(10, 3, 1), 2, Vector(255, 0, 0));
+    Sphere s1 = Sphere(Vector(10, 3, 5), 3, Vector(180, 40, 120));
+    Sphere s2 = Sphere(Vector(2, 1, -1), 1, Vector(80, 255, 150));
+
+    Plane p1 = Plane(Vector(2, 1, -1), Vector(0,0,1), Vector(255, 255, 150));
+
+
+    Scene scene = Scene(cam);
+
+    scene.addShape(&s);
+    scene.addShape(&s1);
+    scene.addShape(&s2);
+    scene.addShape(&p1);
+
+    scene.render();
+
+
+    return 0;
+}
