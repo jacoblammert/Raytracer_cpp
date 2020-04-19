@@ -2,12 +2,12 @@
 #include "math/Vector.h"
 #include "world/Camera.h"
 #include "geometry/Sphere.h"
-#include "World/Scene.h"
+#include "world/Scene.h"
 #include "geometry/Plane.h"
 
 int main() {
 
-    Camera cam = Camera(Vector(0, 0, 0.1), Vector(1, 0, 0), 200, 200, 1); // min dist is ca. 0.7
+    Camera cam = Camera(Vector(0, 0, 0.1), Vector(1, 0, 0), 500, 500, 1); // min dist is ca. 0.7
     cam.lookAt(Vector(10, 2, 0));
 
     Sphere s = Sphere(Vector(10, 3, 1), 2, Vector(255, 0, 0));
@@ -18,12 +18,9 @@ int main() {
 
 
     Scene scene = Scene(cam);
-
-    scene.addShape(&s);
-    scene.addShape(&s1);
-    scene.addShape(&s2);
-
-    scene.addShape(&p1);
+    for (int i = 0; i < 1200; ++i) {
+        scene.addShape(&s2);
+    }
 
     scene.render();
 

@@ -6,10 +6,14 @@
 #define RAYTRACER_LIGHT_H
 
 
+#include "../math/Vector.h"
+
 class Light {
 public:
     Light();
-    Light(Vector position, vector color);
+    Light(Vector position, Vector color);
+    Vector getPosition();
+    Vector getColor();
 private:
     Vector position;
     Vector color;
