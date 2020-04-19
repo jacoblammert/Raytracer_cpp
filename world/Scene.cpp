@@ -14,6 +14,7 @@ Scene::Scene() {
 
 Scene::Scene(Camera camera) {
     this->camera = camera;
+    Light light = Light();
 }
 
 void Scene::setCamera(Camera camera) {
