@@ -26,30 +26,39 @@ Vector Sphere::getRgb() {
     return color;
 }
 
-bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal) {
-
+bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) {
 
     Vector raydirection = ray.getDir();
     Vector rayposition = ray.getPos();
 
-    float t = (pos - rayposition).dot(raydirection);
-    raydirection = raydirection * t;
 
+    float t = (pos - rayposition).dot(raydirection);
+
+
+    raydirection = raydirection * t;
     Vector point = rayposition + raydirection;
 
     float y = (pos - point).getLength();
 
+    if (y < radius) { // (y < radius)
 
-    if (y < radius) {
         float x = sqrt(radius * radius - y * y);
         float t1 = t - x; // close intersection point
-        //float t2 = t + x; // far intersection point
 
         raydirection = ray.getDir() * t1;
 
-        HitPoint = rayposition + raydirection;
-        HitNormal = getNormal(HitPoint);
+#pragma omp critical
+        {
 
+            float dist = (ray.getPos() - rayposition + raydirection).getLength();
+
+            if (dist < distance) {
+                distance = dist;
+                HitPoint = rayposition + raydirection;
+                HitNormal = getNormal(HitPoint);
+                id = newid;
+            }
+        }
         return true;
     }
     return false;

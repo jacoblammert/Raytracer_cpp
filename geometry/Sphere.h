@@ -7,14 +7,19 @@
 
 #include "Shape.h"
 
-class Sphere: public Shape{
+class Sphere : public Shape {
 public:
     Sphere(Vector position, float radius);
+
     Sphere(Vector position, float radius, Vector color);
 
     int getId() override;
+
     Vector getRgb() override;
-    virtual bool getIntersectVec(Ray ray, Vector& HitPoint, Vector& HitNormal) override;
+
+    virtual bool
+    getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) override;
+
     Vector getNormal(Vector pos) override;
 
 private:

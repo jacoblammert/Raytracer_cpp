@@ -27,20 +27,30 @@ Vector Plane::getRgb() {
     return color;
 }
 
-bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal) {
+bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) {
 
     Vector raydirection = ray.getDir();
     Vector rayposition = ray.getPos();
 
     float denom = normal.dot(raydirection);
     //if (denom > 1e-6) { // if its activated, the plane is visible from both sides. Otherwise see through from the other side.
-        Vector p0l0 = pos - rayposition;
-        float t = p0l0.dot(normal) / denom;
-        if (t >= 0) {
-            HitNormal = normal;
-            raydirection = raydirection * t;
-            HitPoint = rayposition + raydirection;
-            return true;
+    Vector p0l0 = pos - rayposition;
+    float t = p0l0.dot(normal) / denom;
+    if (t >= 0) {
+
+        raydirection = raydirection * t;
+#pragma omp critical
+        {
+            float dist = (ray.getPos() - rayposition + raydirection).getLength();
+            if (dist < distance) {
+                distance = dist;
+                HitPoint = rayposition + raydirection;
+                HitNormal = normal;
+                id = newid;
+            }
+
+        }
+        return true;
         //}
     }
     return false;

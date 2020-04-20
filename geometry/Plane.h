@@ -15,7 +15,7 @@ public:
 
     int getId() override;
     Vector getRgb() override;
-    bool getIntersectVec(Ray ray, Vector& HitPoint, Vector& HitNormal) override;
+    bool getIntersectVec(Ray ray, Vector& HitPoint, Vector& HitNormal, float &distance, int &id, int &newid) override;
     Vector getNormal(Vector pos) override;
 
 private:

@@ -8,6 +8,7 @@
 Ray::Ray(Vector position, Vector direction) {
     this->position = position;
     this->direction = direction;
+    this->direction.normalize();
 }
 
 void Ray::print() {

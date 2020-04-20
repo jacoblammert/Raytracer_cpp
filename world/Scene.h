@@ -9,6 +9,7 @@
 #include "Object.h"
 #include "Camera.h"
 #include "../geometry/Shape.h"
+#include "Light.h"
 #include <vector>
 //#include "../geometry/Shape.h"
 
@@ -23,12 +24,15 @@ public:
     void addShape(Shape *shape); // different shapes like spheres, triangles or cubes
     void render();
     Camera getCamera();
-
+    void resetImage();
+    void drawImage();
 
 private:
     Camera camera;
     //BoundingBox (Object array)
     std::vector<Shape*> shapes;
+    std::vector<Light*> lights;
+    std::vector<std::vector<Vector>> Pixel;
 };
 
 

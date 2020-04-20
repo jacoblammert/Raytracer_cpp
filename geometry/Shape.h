@@ -13,7 +13,7 @@ class Shape {
 public:
     virtual int getId() = 0;
     virtual Vector getRgb() = 0;
-    virtual bool getIntersectVec(Ray ray, Vector& HitPoint, Vector& HitNormal) = 0; // returns true, if the Ray and the object intersect
+    virtual bool getIntersectVec(Ray ray, Vector& HitPoint, Vector& HitNormal, float& distance,int &id,int &newid) = 0; // returns true, if the Ray and the object intersect
     virtual Vector getNormal(Vector pos) = 0;
 
 protected:
