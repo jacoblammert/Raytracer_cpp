@@ -54,7 +54,7 @@ void Scene::render() {
             ray = camera.generateRay(x, y);
 
 
-            omp_set_num_threads(4); // new threads for every pixel => slower = bad
+            omp_set_num_threads(2); // new threads for every pixel => slower = bad
 #pragma omp parallel for
             for (int i = 0; i < size(shapes); ++i) { // more effiecient with bounding boxes
                 if (shapes[i]->getIntersectVec(ray, HitPoint, HitNormal,mindistance,hit,i)) { // bool if ray intersects the Object

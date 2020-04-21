@@ -3,7 +3,9 @@
 //
 
 #include <cmath>
+#include <iostream>
 #include "Triangle.h"
+#include "Plane.h"
 
 Triangle::Triangle(Vector a, Vector b, Vector c) {
     this->a = a;
@@ -38,65 +40,40 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
     Vector raydirection = ray.getDir();
     Vector rayposition = ray.getPos();
 
-    float t;
 
-// compute plane's normal
     Vector v0v1 = b - a;
     Vector v0v2 = c - a;
-    // no need to normalize
-    Vector N = v0v1 * v0v2; // N
-    float area2 = N.getLength();
+    Vector pvec = raydirection * v0v2;
+    float det = v0v1.dot(pvec);
 
-    // Step 1: finding P
+    // if the determinant is negative the triangle is backfacing
+    // if the determinant is close to 0, the ray misses the triangle
+    if (det < 0.0001f) return false;
 
-    // check if ray and plane are parallel ?
-    float NdotRayDirection = N.dot(raydirection);
-    if (fabs(NdotRayDirection) < 0.000001f) // almost 0
-        return false; // they are parallel so they don't intersect !
+    // ray and triangle are parallel if det is close to 0
+    if (fabs(det) < 0.0001) return false;
 
-    // compute d parameter using equation 2
-    float d = N.dot(a);
+    float invDet = 1 / det;
 
-    // compute t (equation 3)
-    t = (N.dot(rayposition) + d) / NdotRayDirection;
-    // check if the triangle is in behind the ray
-    if (t < 0) return false; // the triangle is behind
+    Vector tvec = rayposition - a;
+    float u = tvec.dot(pvec) * invDet;
+    if (u < 0 || u > 1) return false;
 
-    // compute the intersection point using equation 1
-    raydirection.scale(t);
-    Vector P = rayposition + raydirection;
+    Vector qvec = tvec * v0v1;
+    float v = raydirection.dot(qvec) * invDet;
+    if (v < 0 || u + v > 1) return false;
 
-    // Step 2: inside-outside test
-    Vector C; // vector perpendicular to triangle's plane
-
-    // edge 0
-    Vector edge0 = b - a;
-    Vector vp0 = P - a;
-    C = edge0 * vp0;
-    if (N.dot(C) < 0) return false; // P is on the right side
-
-    // edge 1
-    Vector edge1 = c - b;
-    Vector vp1 = P - b;
-    C = edge1 * vp1;
-    if (N.dot(C) < 0) return false; // P is on the right side
-
-    // edge 2
-    Vector edge2 = a - c;
-    Vector vp2 = P - c;
-    C = edge2 * vp2;
-    if (N.dot(C) < 0) return false; // P is on the right side;
-
+    float t = v0v2.dot(qvec) * invDet;
 #pragma omp critical
     {
         if (t < distance) {
             distance = t;
             HitNormal = normal;
-            HitPoint = P;
+            raydirection.scale(t);
+            HitPoint = rayposition + raydirection;
             id = newid;
         }
     }
-
     return true;
 }
 

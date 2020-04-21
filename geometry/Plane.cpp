@@ -41,15 +41,12 @@ bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float 
 #pragma omp critical
         {
             raydirection.scale(t);
-
-            float dist = t;
-            if (dist < distance) {
-                distance = dist;
+            if (t < distance) {
+                distance = t;
                 HitPoint = rayposition + raydirection;
                 HitNormal = normal;
                 id = newid;
             }
-
         }
         return true;
     }

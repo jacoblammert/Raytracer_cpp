@@ -9,7 +9,7 @@
 
 int main() {
 
-    Camera cam = Camera(Vector(2, 2, 2), Vector(1, 0, 0), 250, 250, 2);
+    Camera cam = Camera(Vector(2, 2, 1), Vector(1, 0, 0), 250, 250, 1);
 
     cam.lookAt(Vector(0, 0, 0));
 
@@ -24,14 +24,16 @@ int main() {
     Sphere s1 = Sphere(Vector(2, 0, 0.1), 0.2, Vector(0, 255, 255));
     Sphere s2 = Sphere(Vector(0, 2, 0.1), 0.2, Vector(255, 0, 255));
     Sphere s3 = Sphere(Vector(0, -2, 0.1), 0.2, Vector(255, 255, 0));
-    Sphere s4 = Sphere(Vector(-2, 0, 0.1), 0.2, Vector(100, 100, 100));
+    Sphere s4 = Sphere(Vector(-2, 0, 0.1), 0.2, Vector(0, 0, 0));
 
 
     Plane p1 = Plane(Vector(0, 0, 0), Vector(0,0,1), Vector(100, 100, 100));
-
-    Triangle t1 = Triangle(Vector(0,2,0),Vector(2,0,0),Vector(2,2,0),Vector(255,255,150));
-
     Box b1 = Box(Vector(-0.1,-0.1,-2), Vector(0.1,0.1,2),Vector(255,0,0));
+
+
+    Triangle t1 = Triangle(Vector(2,0,0.1),Vector(0,2,0.1),Vector(0,-2,0.1),Vector(255,255,150));
+    Triangle t2 = Triangle(Vector(-2,0,0.1),Vector(0,-2,0.1),Vector(0,2,0.1),Vector(120,255,255));
+
 
     Scene scene = Scene(cam);
 
@@ -42,8 +44,12 @@ int main() {
     scene.addShape(&s4);
 
     scene.addShape(&p1);
-    scene.addShape(&t1);
+
     scene.addShape(&b1);
+
+    scene.addShape(&t1);
+    scene.addShape(&t2);
+
 
     scene.render();
     scene.drawImage();
