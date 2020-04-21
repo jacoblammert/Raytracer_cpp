@@ -6,7 +6,7 @@
 #define RAYTRACER_CHRONOMETER_H
 
 #include <chrono>
-#include <xstring>
+#include <string>
 
 
 class Chronometer {

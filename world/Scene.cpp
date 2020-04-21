@@ -5,6 +5,7 @@
 #include <iostream>
 #include <ostream>
 #include <fstream>
+#include <cmath>
 #include "Scene.h"
 #include "../Debug/Chronometer.h"
 
@@ -50,7 +51,7 @@ void Scene::render() {
             hit = -1;
             ray = camera.generateRay(x, y);
 
-            for (int i = 0; i < size(shapes); ++i) { // more effiecient with bounding boxes
+            for (int i = 0; i < shapes.size(); ++i) { // more effiecient with bounding boxes
 
                 if (shapes[i]->getIntersectVec(ray,HitPoint,HitNormal)){ // bool if ray intersects the Object
 
