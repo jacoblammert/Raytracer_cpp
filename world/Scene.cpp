@@ -47,7 +47,6 @@ void Scene::render() {
 
         std::cout << "Percentage: " << (y * 100.0f) / (float) camera.getHeight() << " %" << std::endl;
 
-
         for (int x = 0; x < camera.getWidth(); ++x) {
 
             mindistance = INFINITY - 1;
@@ -82,8 +81,6 @@ void Scene::render() {
         }
     }
     chr.stop();
-
-    drawImage();
 }
 
 Camera Scene::getCamera() {
@@ -93,8 +90,8 @@ Camera Scene::getCamera() {
 void Scene::resetImage() {
 
     std::vector<Vector> vec;
-    vec.assign(camera.getHeight(), Vector());
-    Pixel.assign(camera.getWidth(), vec);
+    vec.assign(camera.getWidth(), Vector());
+    Pixel.assign(camera.getHeight(), vec);
 }
 
 void Scene::drawImage() {

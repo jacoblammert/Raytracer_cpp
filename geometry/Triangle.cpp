@@ -89,12 +89,10 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
 
 #pragma omp critical
     {
-        float dist = (ray.getPos() - rayposition + raydirection).getLength();
-
-        if (dist < distance) {
-            distance = dist;
-            HitNormal = getNormal(Vector());
-            HitPoint = rayposition + raydirection;
+        if (t < distance) {
+            distance = t;
+            HitNormal = normal;
+            HitPoint = P;
             id = newid;
         }
     }

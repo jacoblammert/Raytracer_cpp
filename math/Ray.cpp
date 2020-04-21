@@ -12,8 +12,8 @@ Ray::Ray(Vector position, Vector direction) {
 }
 
 void Ray::print() {
-    //std::cout << "Position: ";
-    //position.print();
+    std::cout << "Position: ";
+    position.print();
     std::cout << "Dircetion: ";
     direction.print();
 }

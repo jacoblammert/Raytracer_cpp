@@ -2,6 +2,8 @@
 // Created by Jacob on 14.04.2020.
 //
 
+#include <cmath>
+#include <iostream>
 #include "Camera.h"
 #include "../math/Ray.h"
 #include "../math/Vector.h"
@@ -15,6 +17,7 @@ Camera::Camera(Vector position, Vector direction, int width, int height, float d
     this->direction = direction;
     this->width = width;
     this->height = height;
+    this->pixel = width * height;
     this->dist = dist;
     update();
 }
@@ -25,9 +28,11 @@ Camera::Camera(Vector position, Vector direction, int width, int height, float d
 void Camera::update() {
 
     right = direction.cross(up);// from the left of the camera plane to the right
-    top = right.cross(this->direction); // from bottom of the camera plane to the top
+    top = direction.cross(right); // from bottom of the camera plane to the top
     direction.normalize();
-    direction =  direction * dist;
+    right.normalize();
+    top.normalize();
+    direction = direction * dist;
 }
 
 /**
@@ -40,18 +45,19 @@ void Camera::update() {
 Ray Camera::generateRay(int x, int y) {
     update(); // shouldn't be called normally, but it appears, as if the values are automatically changed, so we need to reset them
 
-    float widthToHeight = ((float)(width-1)/(float)(height-1));
+    this->wToH = ((float) (width - 1) / (float) (height - 1));
 
-    float scalex = (((float) x / (float) (width-1))- 0.5f) * 2 * widthToHeight; // now a range from -1 to 1 depending on the x to width ratio
-    float scaley = -(((float) y / (float) (height-1)) - 0.5f) * 2; // now a range from -1 to 1 depending on the y to Height ratio
+    float xpercentage = (float) x / (float) (width - 1);
+    float ypercentage = (float) y / (float) (height - 1);
 
-    right.normalize();
-    top.normalize();
+    float scalex = (xpercentage - 0.5f) * -2 * wToH; // now a range from -1 to 1 depending on the x to width ratio
+    float scaley = (ypercentage - 0.5f) * 2; // now a range from -1 to 1 depending on the y to Height ratio
 
-    right = right * scalex;
-    top = top * scaley;
 
-    return {position,position + direction + top + right};
+    Vector vright = right * scalex;
+    Vector vtop = top * scaley;
+
+    return {position, direction + vtop + vright};
 }
 
 void Camera::setPosition(Vector pos) {
@@ -60,12 +66,11 @@ void Camera::setPosition(Vector pos) {
 
 void Camera::lookAt(Vector pos) {
     direction = pos - position;
-    //direction.normalize();
     update();
 }
 
-void Camera::setDist(float dist) {
-    this->dist = dist;
+void Camera::setDist(float Dist) {
+    this->dist = Dist;
     update();
 }
 
@@ -75,6 +80,28 @@ int Camera::getWidth() {
 
 int Camera::getHeight() {
     return height;
+}
+
+void Camera::setNumberOfPixel(int Pixel) {
+    this->pixel = Pixel;
+    width = (int) (wToH * sqrt((float) pixel / wToH));
+    height = (int) sqrt((float) pixel / wToH);
+}
+
+void Camera::setWidthToHeight(float wToH) {
+    this->wToH = wToH;
+    width = (int) abs((wToH * sqrt((float) pixel / wToH)));
+    height = (int) abs(sqrt((float) pixel / wToH));
+}
+
+void Camera::print() {
+    std::cout << "Camera position: ";
+    position.print();
+    std::cout << "Camera direction: ";
+    direction.print();
+
+    std::cout << "Width: " << width << std::endl;
+    std::cout << "Height: " << height << std::endl;
 }
 
 

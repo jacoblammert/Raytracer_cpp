@@ -24,6 +24,8 @@ public:
 
     void scale(float value);
 
+    void divide(float value);
+
     void normalize();
 
     void print();
@@ -38,6 +40,9 @@ public:
 
     float dot(Vector &obj);
 
+    int sign(int pos);
+
+
     Vector cross(Vector &obj);
 
     Vector operator+(Vector &obj);
@@ -50,8 +55,6 @@ public:
     Vector operator*(Vector &obj);// cross product ^?
     /**/
     Vector operator*(float &obj);//scalar
-
-    //Vector& operator + =(Vector const& other);
 
 private:
     float x;

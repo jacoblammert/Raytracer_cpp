@@ -19,6 +19,10 @@ public:
     int getWidth();
     int getHeight();
 
+    void setNumberOfPixel(int pixel);
+    void setWidthToHeight(float wToH);
+    void print();
+
 private:
     Vector position;
     Vector direction;
@@ -29,6 +33,8 @@ private:
     int width;
     int height;
     float dist; // Camera plane distance from the Position
+    int pixel;
+    float wToH;
 };
 
 

@@ -33,15 +33,16 @@ bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float 
     Vector rayposition = ray.getPos();
 
     float denom = normal.dot(raydirection);
-    //if (denom > 1e-6) { // if its activated, the plane is visible from both sides. Otherwise see through from the other side.
     Vector p0l0 = pos - rayposition;
-    float t = p0l0.dot(normal) / denom;
-    if (t >= 0) {
 
-        raydirection = raydirection * t;
+    float t = p0l0.dot(normal) / denom;
+
+    if (t >= 0) {
 #pragma omp critical
         {
-            float dist = (ray.getPos() - rayposition + raydirection).getLength();
+            raydirection.scale(t);
+
+            float dist = t;
             if (dist < distance) {
                 distance = dist;
                 HitPoint = rayposition + raydirection;
@@ -51,7 +52,6 @@ bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float 
 
         }
         return true;
-        //}
     }
     return false;
 }
