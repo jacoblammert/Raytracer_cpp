@@ -8,6 +8,7 @@
 #include <omp.h>
 #include "Scene.h"
 #include "../debug/Chronometer.h"
+#include "BoundingBox.h"
 
 Scene::Scene() {
 
@@ -41,10 +42,18 @@ void Scene::render() {
     Vector HitNormal = Vector();
     int hit;
 
+    Chronometer chrb = Chronometer("BoundingBox");
+    boundingBox = BoundingBox(shapes);
+    chrb.stop();
+
+    boundingBox.print(2);
+
+
     Chronometer chr = Chronometer("Raytracer");
 
     for (int y = 0; y < camera.getHeight(); ++y) {
 
+        chr.getTime();
         std::cout << "Percentage: " << (y * 100.0f) / (float) camera.getHeight() << " %" << std::endl;
 
         for (int x = 0; x < camera.getWidth(); ++x) {
@@ -53,12 +62,12 @@ void Scene::render() {
             hit = -1;
             ray = camera.generateRay(x, y);
 
+            shapes = boundingBox.getIntersectVec(ray);
 
-            omp_set_num_threads(2); // new threads for every pixel => slower = bad
+            omp_set_num_threads(1); // new threads for every pixel => slower = bad
 #pragma omp parallel for
             for (int i = 0; i < size(shapes); ++i) { // more effiecient with bounding boxes
-                if (shapes[i]->getIntersectVec(ray, HitPoint, HitNormal,mindistance,hit,i)) { // bool if ray intersects the Object
-
+                if (shapes[i]->getIntersectVec(ray, HitPoint, HitNormal,mindistance,hit,i)) { // bool if ray intersects the Object // hit & other values set for lighting & stuff
                 }
             }
 

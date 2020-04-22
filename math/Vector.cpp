@@ -42,6 +42,16 @@ void Vector::setZ(float value) {
     z = value;
 }
 
+void Vector::set(int position, float value) {
+    if (position % 3 == 0) {
+        x = value;
+    } else if (position % 3 == 1) {
+        y = value;
+    } else {
+        z = value;
+    }
+}
+
 void Vector::normalize() {
     auto a = getLength();
     x /= a;
@@ -70,6 +80,16 @@ float Vector::getY() {
 
 float Vector::getZ() {
     return z;
+}
+
+float Vector::get(int position) {
+    if (position % 3 == 0) {
+        return x;
+    } else if (position % 3 == 1) {
+        return y;
+    } else {
+        return z;
+    }
 }
 
 float Vector::getLength() {
@@ -134,11 +154,15 @@ void Vector::divide(float value) {
 }
 
 int Vector::sign(int pos) {
-    if((pos == 0 && x < 0) || (pos == 1 && y < 0) || (pos == 2 && z < 0)){
+    if ((pos == 0 && x < 0) || (pos == 1 && y < 0) || (pos == 2 && z < 0)) {
         return 1;
     }
     return 0;
 }
+
+
+
+
 
 
 

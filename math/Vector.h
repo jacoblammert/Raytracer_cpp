@@ -22,6 +22,8 @@ public:
 
     void setZ(float value);
 
+    void set(int position, float value);
+
     void scale(float value);
 
     void divide(float value);
@@ -35,6 +37,8 @@ public:
     float getY();
 
     float getZ();
+
+    float get(int position);
 
     float getLength();
 

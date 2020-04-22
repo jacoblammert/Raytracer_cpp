@@ -3,9 +3,7 @@
 //
 
 #include <cmath>
-#include <iostream>
 #include "Triangle.h"
-#include "Plane.h"
 
 Triangle::Triangle(Vector a, Vector b, Vector c) {
     this->a = a;
@@ -79,4 +77,43 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
 
 Vector Triangle::getNormal(Vector pos) {
     return normal;
+}
+
+Vector Triangle::getMin() {
+    Vector min = a;
+
+    for (int j = 0; j < 3; ++j) {
+        if (min.get(j) > b.get(j)) {
+            min.set(j, b.get(j));
+        }
+    }
+
+    for (int j = 0; j < 3; ++j) {
+        if (min.get(j) > c.get(j)) {
+            min.set(j, c.get(j));
+        }
+    }
+    return min;
+}
+
+
+Vector Triangle::getMax() {
+    Vector max = a;
+    for (int j = 0; j < 3; ++j) {
+        if (max.get(j) < b.get(j)) {
+            max.set(j, b.get(j));
+        }
+    }
+    for (int j = 0; j < 3; ++j) {
+        if (max.get(j) < c.get(j)) {
+            max.set(j, c.get(j));
+        }
+    }
+    return max;
+}
+
+Vector Triangle::getMedian() {
+    Vector median = a + b + c;
+    median.scale(1.0f / 3.0f);
+    return median;
 }

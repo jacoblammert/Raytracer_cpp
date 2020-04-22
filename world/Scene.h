@@ -10,8 +10,8 @@
 #include "Camera.h"
 #include "../geometry/Shape.h"
 #include "Light.h"
+#include "BoundingBox.h"
 #include <vector>
-//#include "../geometry/Shape.h"
 
 class Scene {
 public:
@@ -29,7 +29,7 @@ public:
 
 private:
     Camera camera;
-    //BoundingBox (Object array)
+    BoundingBox boundingBox;
     std::vector<Shape*> shapes;
     std::vector<Light*> lights;
     std::vector<std::vector<Vector>> Pixel;

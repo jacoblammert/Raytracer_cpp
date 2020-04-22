@@ -68,4 +68,18 @@ Vector Sphere::getNormal(Vector pos) {
     return pos - this->pos;
 }
 
+Vector Sphere::getMin() {
+    Vector rad = Vector(radius,radius,radius);
+    return pos - rad;
+}
+
+Vector Sphere::getMax() {
+    Vector rad = Vector(radius,radius,radius);
+    return pos + rad;
+}
+
+Vector Sphere::getMedian() {
+    return pos;
+}
+
 

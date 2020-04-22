@@ -3,18 +3,43 @@
 //
 
 #include "Box.h"
+Box::Box() {}
 
 Box::Box(Vector minXminYminZ, Vector maxXmaxYmaxZ) {
     color = Vector(255, 255, 255);
 
     bounds.push_back(minXminYminZ);
     bounds.push_back(maxXmaxYmaxZ);
+
+    position = minXminYminZ + maxXmaxYmaxZ;
+    position.scale(0.5);
+}
+
+Box::Box(Vector Pos, float xScale, float yScale, float zScale) {
+    Vector minXminYminZ = Vector(Pos.getX() - xScale / 2, Pos.getY() - yScale / 2, Pos.getZ() - zScale / 2);
+    Vector maxXmaxYmaxZ = Vector(Pos.getX() + xScale / 2, Pos.getY() + yScale / 2, Pos.getZ() + zScale / 2);
+    bounds.push_back(minXminYminZ);
+    bounds.push_back(maxXmaxYmaxZ);
+    color = Vector(255, 255, 255);
+    position = Pos;
 }
 
 Box::Box(Vector minXminYminZ, Vector maxXmaxYmaxZ, Vector color) {
     bounds.push_back(minXminYminZ);
     bounds.push_back(maxXmaxYmaxZ);
     this->color = color;
+
+    position = minXminYminZ + maxXmaxYmaxZ;
+    position.scale(0.5);
+}
+
+Box::Box(Vector Pos, float xScale, float yScale, float zScale, Vector color) {
+    Vector minXminYminZ = Vector(Pos.getX() - xScale / 2, Pos.getY() - yScale / 2, Pos.getZ() - zScale / 2);
+    Vector maxXmaxYmaxZ = Vector(Pos.getX() + xScale / 2, Pos.getY() + yScale / 2, Pos.getZ() + zScale / 2);
+    bounds.push_back(minXminYminZ);
+    bounds.push_back(maxXmaxYmaxZ);
+    this->color = color;
+    position = Pos;
 }
 
 int Box::getId() {
@@ -72,6 +97,37 @@ bool Box::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &d
     return true;
 }
 
+/**
+ * Important for BoundingBox intersection testing. Similar to the previous method, but without all the useless stuff
+ * @param ray that get tested against this box
+ * @return true if the ray hits
+ */
+bool Box::getIntersect(Ray ray) {
+
+    Vector rayposition = ray.getPos();
+    Vector raydirection = ray.getDir();
+    raydirection.divide(1);
+
+    float tmin, tmax, tymin, tymax, tzmin, tzmax;
+
+    tmin = (bounds[raydirection.sign(0)].getX() - rayposition.getX()) * raydirection.getX();
+    tmax = (bounds[1 - raydirection.sign(0)].getX() - rayposition.getX()) * raydirection.getX();
+    tymin = (bounds[raydirection.sign(1)].getY() - rayposition.getY()) * raydirection.getY();
+    tymax = (bounds[1 - raydirection.sign(1)].getY() - rayposition.getY()) * raydirection.getY();
+
+    if ((tmin > tymax) || (tymin > tmax))
+        return false;
+    if (tymin > tmin)
+        tmin = tymin;
+    if (tymax < tmax)
+        tmax = tymax;
+
+    tzmin = (bounds[raydirection.sign(2)].getZ() - rayposition.getZ()) * raydirection.getZ();
+    tzmax = (bounds[1 - raydirection.sign(2)].getZ() - rayposition.getZ()) * raydirection.getZ();
+
+    return !((tmin > tzmax) || (tzmin > tmax));
+}
+
 Vector Box::getNormal(Vector pos) {
 
     float epsilon = 0.001f;
@@ -93,3 +149,21 @@ Vector Box::getNormal(Vector pos) {
     }
     return {0, 1, 0};
 }
+
+Vector Box::getMin() {
+    return bounds[0];
+}
+
+Vector Box::getMax() {
+    return bounds[1];
+}
+
+Vector Box::getMedian() {
+    return position;
+}
+
+
+
+
+
+

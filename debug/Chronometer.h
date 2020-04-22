@@ -13,6 +13,7 @@ class Chronometer {
 public:
     Chronometer(std::string message);
     void start(std::string message);
+    void getTime();
     void stop();
 
 

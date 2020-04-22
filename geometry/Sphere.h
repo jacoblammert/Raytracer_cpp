@@ -22,6 +22,12 @@ public:
 
     Vector getNormal(Vector pos) override;
 
+    Vector getMin() override;
+
+    Vector getMax() override;
+
+    Vector getMedian() override;
+
 private:
     Vector pos;
     float radius;

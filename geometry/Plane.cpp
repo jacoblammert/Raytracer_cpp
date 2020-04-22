@@ -57,4 +57,16 @@ Vector Plane::getNormal(Vector pos) {
     return normal;
 }
 
+Vector Plane::getMin() {
+    return Vector(); // should give back a box of the desired size of the plane
+}
+
+Vector Plane::getMax() {
+    return Vector(); // should give back a box of the desired size of the plane (cutting doesn't work)
+}
+
+Vector Plane::getMedian() {
+    return pos;
+}
+
 

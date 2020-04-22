@@ -17,6 +17,9 @@ public:
     Vector getRgb() override;
     bool getIntersectVec(Ray ray, Vector& HitPoint, Vector& HitNormal, float &distance, int &id, int &newid) override;
     Vector getNormal(Vector pos) override;
+    Vector getMin() override;
+    Vector getMax() override;
+    Vector getMedian() override ;
 
 private:
     Vector pos;

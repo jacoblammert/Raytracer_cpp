@@ -9,18 +9,38 @@
 #include "Shape.h"
 #include <vector>
 
-class Box: public Shape{
+class Box : public Shape {
 public:
+    Box();
+
     Box(Vector minXminYminZ, Vector maxXmaxYmaxZ);
-    Box(Vector minXminYminZ, Vector maxXmaxYmaxZ,Vector color);
+
+    Box(Vector Pos, float xScale, float yScale, float zScale);
+
+    Box(Vector minXminYminZ, Vector maxXmaxYmaxZ, Vector color);
+
+    Box(Vector Pos, float xScale, float yScale, float zScale, Vector color);
 
     int getId() override;
+
     Vector getRgb() override;
-    bool getIntersectVec(Ray ray, Vector& HitPoint, Vector& HitNormal, float &distance, int &id, int &newid) override;
+
+    bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) override;
+
+    bool getIntersect(Ray ray);
+
     Vector getNormal(Vector pos) override;
 
+    Vector getMin() override;
+
+    Vector getMax() override;
+
+    Vector getMedian() override;
+
 private:
-std::vector<Vector> bounds;
+    std::vector<Vector> bounds;
+
+    Vector position;
 
 };
 
