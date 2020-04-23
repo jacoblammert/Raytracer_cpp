@@ -6,6 +6,7 @@
 #include <ostream>
 #include <fstream>
 #include <omp.h>
+#include <cmath>
 #include "Scene.h"
 #include "../debug/Chronometer.h"
 #include "BoundingBox.h"
@@ -48,7 +49,7 @@ void Scene::addShape(Shape *shape) {
 
 void Scene::render() {
 
-    std::cout << "Size shapes: " << std::size(shapes) << std::endl;
+    std::cout << "Size shapes: " << shapes.size() << std::endl;
 
     Chronometer chrb = Chronometer("BoundingBox");
     boundingBox = BoundingBox(shapes);
@@ -88,7 +89,7 @@ void Scene::render() {
                 shapes2 = boundingBox.getIntersectVec(ray);
             }
 
-            for (int i = 0; i < size(shapes2); ++i) {
+            for (int i = 0; i < shapes2.size(); ++i) {
                 if (shapes2[i]->getIntersectVec(ray, HitPoint, HitNormal, mindistance, hit,
                                                 i)) { // bool if ray intersects the Object // hit & other values set for lighting & stuff
                 }
@@ -103,7 +104,7 @@ void Scene::render() {
                 int r = 0;
                 int g = 0;
                 int b = 0;
-                if (-1 < hit && hit < size(shapes2)) {
+                if (-1 < hit && hit < shapes2.size()) {
                     color = shapes2[hit]->getRgb();
                     r = (int) color.getX();
                     g = (int) color.getY();
@@ -135,8 +136,8 @@ void Scene::drawImage() {
     std::ofstream img("picture.ppm");
     img << "P3" << std::endl << camera.getWidth() << " " << camera.getHeight() << std::endl << "255" << std::endl;
 
-    for (int i = 0; i < size(Pixel); ++i) {
-        for (int j = 0; j < size(Pixel[i]); ++j) {
+    for (int i = 0; i < Pixel.size(); ++i) {
+        for (int j = 0; j < Pixel[i].size(); ++j) {
 
             img << Pixel[i][j].getX() << " " << Pixel[i][j].getY() << " " << Pixel[i][j].getZ() << std::endl;
         }

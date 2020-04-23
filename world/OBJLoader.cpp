@@ -46,7 +46,7 @@ void OBJLoader::LoadOBJ() {
 }
 
 void OBJLoader::printOBJ() {
-    for (int i = 0; i < std::size(filestring); ++i) {
+    for (int i = 0; i < filestring.size(); ++i) {
         std::cout << filestring[i] << std::endl;
     }
 }
@@ -56,9 +56,9 @@ void OBJLoader::split() {
 
     std::string token = " ";
     std::vector<std::string> result;
-    for (int i = 0; i < std::size(filestring); ++i) {
+    for (int i = 0; i < filestring.size(); ++i) {
 
-        while (std::size(filestring[i])) {
+        while (filestring[i].size()) {
             int index = filestring[i].find(token);
 
             if (index != std::string::npos) {
@@ -84,7 +84,7 @@ void OBJLoader::buildObject() {
 
     int A, B, C;
 
-    for (int i = 0; i < std::size(filestring); ++i) {
+    for (int i = 0; i < filestring.size(); ++i) {
         if (filestring[i] == "o") {
             objectname = filestring[i + 1];
         } else if (filestring[i] == "v") {

@@ -5,7 +5,7 @@
 #ifndef RAYTRACER_OBJECT_H
 #define RAYTRACER_OBJECT_H
 
-#include <xstring>
+#include <string>
 #include <vector>
 #include "../geometry/Triangle.h"
 
