@@ -2,6 +2,7 @@
 // Created by Jacob on 18.04.2020.
 //
 
+#include <iostream>
 #include "Plane.h"
 
 Plane::Plane(Vector position, Vector normal) {
@@ -38,7 +39,7 @@ bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float 
     float t = p0l0.dot(normal) / denom;
 
     if (t >= 0) {
-#pragma omp critical
+//#pragma omp critical
         {
             raydirection.scale(t);
             if (t < distance) {
@@ -67,6 +68,10 @@ Vector Plane::getMax() {
 
 Vector Plane::getMedian() {
     return pos;
+}
+
+void Plane::print() {
+    std::cout<<"Plane"<<std::endl;
 }
 
 

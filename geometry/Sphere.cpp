@@ -2,6 +2,7 @@
 // Created by Jacob on 18.04.2020.
 //
 
+#include <iostream>
 #include "Sphere.h"
 #include "cmath"
 #include "../Debug/Chronometer.h"
@@ -47,7 +48,7 @@ bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float
 
         raydirection = ray.getDir() * t1;
 
-#pragma omp critical
+//#pragma omp critical
         {
 
             float dist = (ray.getPos() - rayposition + raydirection).getLength();
@@ -80,6 +81,10 @@ Vector Sphere::getMax() {
 
 Vector Sphere::getMedian() {
     return pos;
+}
+
+void Sphere::print() {
+    std::cout<<"Sphere"<<std::endl;
 }
 
 

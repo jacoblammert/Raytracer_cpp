@@ -37,6 +37,8 @@ public:
 
     Vector getMedian() override;
 
+    void print() override;
+
 private:
     std::vector<Vector> bounds;
 

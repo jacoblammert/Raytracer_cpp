@@ -28,6 +28,8 @@ public:
 
     Vector getMedian() override;
 
+    void print() override;
+
 private:
     Vector pos;
     float radius;

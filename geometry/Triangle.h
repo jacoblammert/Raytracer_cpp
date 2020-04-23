@@ -30,6 +30,8 @@ public:
 
     Vector getMedian() override;
 
+    void print() override;
+
 private:
     Vector a;
     Vector b;

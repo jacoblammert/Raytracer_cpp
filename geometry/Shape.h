@@ -25,6 +25,8 @@ public:
 
     virtual Vector getMedian() = 0;
 
+    virtual void print() = 0;
+
 protected:
     int id;
     Vector color;

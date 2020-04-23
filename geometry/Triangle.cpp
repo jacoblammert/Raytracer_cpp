@@ -3,6 +3,7 @@
 //
 
 #include <cmath>
+#include <iostream>
 #include "Triangle.h"
 
 Triangle::Triangle(Vector a, Vector b, Vector c) {
@@ -62,7 +63,7 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
     if (v < 0 || u + v > 1) return false;
 
     float t = v0v2.dot(qvec) * invDet;
-#pragma omp critical
+//#pragma omp critical
     {
         if (t < distance) {
             distance = t;
@@ -116,4 +117,14 @@ Vector Triangle::getMedian() {
     Vector median = a + b + c;
     median.scale(1.0f / 3.0f);
     return median;
+}
+
+void Triangle::print() {
+    std::cout<<"Triangle"<<std::endl;
+    std::cout<<"A: ";
+    a.print();
+    std::cout<<"B: ";
+    b.print();
+    std::cout<<"C: ";
+    c.print();
 }

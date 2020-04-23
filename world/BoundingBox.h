@@ -23,6 +23,8 @@ public:
 
     std::vector<Shape *> getIntersectVec(Ray ray);
 
+    std::vector<Shape *> removeDoubles(std::vector<Shape *> shapes);
+
     void build();
 
     void split();
@@ -36,6 +38,7 @@ public:
     void getMax(Vector shapemax);
 
     void addShape(Shape *shape);
+
 
     void print(int depth);
 

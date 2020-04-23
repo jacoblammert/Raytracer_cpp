@@ -3,3 +3,30 @@
 //
 
 #include "Object.h"
+
+#include <utility>
+#include <iostream>
+
+Object::Object() {
+
+}
+
+Object::Object(std::string name) {
+    this->name = std::move(name);
+}
+
+Object::Object(std::string name, std::vector<Shape*> triangles) {
+    this->name = std::move(name);
+    this->triangles = std::move(triangles);
+
+}
+
+void Object::setTriangles(std::vector<Shape*> triangles) {
+    this->triangles = std::move(triangles);
+}
+
+std::vector<Shape *> Object::getTriangles() {
+    return this->triangles;
+}
+
+

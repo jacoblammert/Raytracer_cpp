@@ -2,6 +2,7 @@
 // Created by Jacob on 21.04.2020.
 //
 
+#include <iostream>
 #include "Box.h"
 Box::Box() {}
 
@@ -80,7 +81,7 @@ bool Box::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &d
     if (tzmax < tmax)
         tmax = tzmax;
 
-#pragma omp critical
+//#pragma omp critical
     {
         raydirection = ray.getDir();
         raydirection.scale(tmin);
@@ -160,6 +161,10 @@ Vector Box::getMax() {
 
 Vector Box::getMedian() {
     return position;
+}
+
+void Box::print() {
+    std::cout<<"Box"<<std::endl;
 }
 
 

@@ -20,7 +20,7 @@ public:
 
 
     void setCamera(Camera camera);
-    void addObject(Object object); // many triangles of a single object
+    void addShapes(std::vector<Shape*> shapes); // many triangles of a single object
     void addShape(Shape *shape); // different shapes like spheres, triangles or cubes
     void render();
     Camera getCamera();

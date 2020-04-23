@@ -1,19 +1,21 @@
 
+#include <iostream>
 #include "math/Vector.h"
 #include "world/Camera.h"
 #include "geometry/Sphere.h"
 #include "world/Scene.h"
 #include "geometry/Plane.h"
 #include "geometry/Triangle.h"
-#include "geometry/Box.h"
+#include "world/OBJLoader.h"
 
 int main() {
+
 
     Camera cam = Camera(Vector(0.181818, 6, 2.5), Vector(1, 0, 0), 250, 250, 1);
 
     cam.lookAt(Vector(0.181818, 0, 0));
 
-    cam.setNumberOfPixel(250000);// max number of pixels for the image
+    cam.setNumberOfPixel(500000);// max number of pixels for the image
     cam.setWidthToHeight(16.0f / 9.0f); // Height to width ratio
 
     cam.print();
@@ -44,22 +46,32 @@ int main() {
 
 
     Scene scene = Scene(cam);
-
+/*/
     scene.addShape(&s);
     scene.addShape(&s1);
     scene.addShape(&s2);
     scene.addShape(&s3);
-
+    scene.addShape(&s4);
 
     scene.addShape(&p1);
 
     scene.addShape(&b1);
     scene.addShape(&b2);
     scene.addShape(&b3);
-    scene.addShape(&b4);
+    //scene.addShape(&b4);
 
     scene.addShape(&t1);
     scene.addShape(&t2);
+/**/
+    //scene.addShape(&t2);
+
+    //scene.addShape(&p1);
+
+    OBJLoader objLoader = OBJLoader("untitled4.obj");
+    objLoader.LoadOBJ();
+    Object object = objLoader.getObject();
+    scene.addShapes(object.getTriangles());
+
 
     scene.render();
     scene.drawImage();
