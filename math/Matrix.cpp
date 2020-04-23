@@ -151,11 +151,11 @@ Matrix Matrix::getInverse() {
 
 
 int Matrix::getWidth() {
-    return size(matrix[0]);
+    return matrix[0].size();
 }
 
 int Matrix::getHeight() {
-    return size(matrix);
+    return matrix.size();
 }
 
 
