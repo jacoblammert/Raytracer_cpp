@@ -7,6 +7,7 @@
 
 #include <utility>
 #include <iostream>
+#include <cmath>
 
 BoundingBox::BoundingBox() {
 
@@ -19,7 +20,7 @@ BoundingBox::BoundingBox(std::vector<Shape *> shapes) {
     setMinMaxMid();
 
     box = Box(minXminYminZ, maxXmaxYmaxZ);
-    if (std::size(this->shapes) != 0) {
+    if (this->shapes.size() != 0) {
         split();
     }
 }
@@ -41,7 +42,7 @@ BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<S
     box = Box(minXminYminZ, maxXmaxYmaxZ);
 
     this->shapes = std::move(shapes);
-    if (std::size(this->shapes) != 0) {
+    if (this->shapes.size() != 0) {
         build();
     }
 }
@@ -51,14 +52,14 @@ std::vector<Shape *> BoundingBox::getIntersectVec(Ray ray) {
     std::vector<Shape *> returnshapes;
 
     if (box.getIntersect(ray)) {
-        if (std::size(boxes) == 0) {
+        if (boxes.size() == 0) {
             return shapes;
         }
-        for (int i = 0; i < std::size(boxes); ++i) {
+        for (int i = 0; i < boxes.size(); ++i) {
             std::vector<Shape*> shapes2 = boxes[i].getIntersectVec(ray);
             returnshapes.insert(returnshapes.end(), shapes2.begin(), shapes2.end());
         }
-        if (std::size(shapes) != 0) {
+        if (shapes.size() != 0) {
             returnshapes.insert(returnshapes.end(), shapes.begin(), shapes.end());
         }
 
@@ -76,7 +77,7 @@ std::vector<Shape *> BoundingBox::getIntersectVec(Ray ray) {
  * @return output array without the same shape twice
  */
 std::vector<Shape *> BoundingBox::removeDoubles(std::vector<Shape *> shapesToClear) {
-    for (int i = (int) std::size(shapesToClear) - 1; i > 0; i--) {
+    for (int i = (int) shapesToClear.size() - 1; i > 0; i--) {
         for (int j = (int) i - 1; j > 0; j--) {
             if (shapesToClear[i] == shapesToClear[j]) {
                 shapesToClear.erase(shapesToClear.begin() + i);
@@ -94,7 +95,7 @@ std::vector<Shape *> BoundingBox::removeDoubles(std::vector<Shape *> shapesToCle
  * or if there are more than 10 shapes inside the box
  */
 void BoundingBox::build() {
-    if (depth < 4 && std::size(shapes) > 20) {
+    if (depth < 4 && shapes.size() > 20) {
         setMid();
         split();
     }
@@ -110,7 +111,7 @@ void BoundingBox::setMinMaxMid() {
     median = Vector();
 
     Vector medianShape = {};
-    for (int i = 0; i < std::size(shapes); ++i) {
+    for (int i = 0; i < shapes.size(); ++i) {
         getMin(shapes[i]->getMin());
         getMax(shapes[i]->getMax());
         medianShape = shapes[i]->getMedian();
@@ -123,7 +124,7 @@ void BoundingBox::setMid() {
 
     median = Vector();
     Vector medianShape = {};
-    for (int i = 0; i < std::size(shapes); ++i) {
+    for (int i = 0; i < shapes.size(); ++i) {
         medianShape = shapes[i]->getMedian();
         median = median + medianShape;
     }
@@ -166,7 +167,7 @@ void BoundingBox::split() {
     boxes.push_back(right);
     boxes.push_back(left);
 
-    for (int i = 0; i < std::size(shapes); ++i) {
+    for (int i = 0; i < shapes.size(); ++i) {
         if (!dynamic_cast<Plane *>(shapes[i])) { // Planes stay in the first Box, because they are really big
             min = shapes[i]->getMin();
             max = shapes[i]->getMax();
@@ -204,7 +205,7 @@ void BoundingBox::print(int depthToPrint) {
               << std::endl;
     if (depthToPrint > 0) {
         depthToPrint--;
-        for (int i = 0; i < std::size(boxes); ++i) {
+        for (int i = 0; i < boxes.size(); ++i) {
             boxes[i].print(depthToPrint);
         }
     }
