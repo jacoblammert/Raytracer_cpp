@@ -8,10 +8,10 @@
 Plane::Plane(Vector position, Vector normal) {
     pos = position;
     this->normal = normal;
-    this->color = Vector(255, 255, 255);
+    this->color = Color(1, 1, 1);
 }
 
-Plane::Plane(Vector position, Vector normal, Vector color) {
+Plane::Plane(Vector position, Vector normal, Color color) {
     pos = position;
     this->normal = normal;
     this->normal.normalize();
@@ -24,7 +24,7 @@ int Plane::getId() {
 }
 
 
-Vector Plane::getRgb() {
+Color Plane::getRgb() {
     return color;
 }
 
@@ -42,7 +42,7 @@ bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float 
 //#pragma omp critical
         {
             raydirection.scale(t);
-            if (t < distance) {
+            if (0 < t && t < distance) {
                 distance = t;
                 HitPoint = rayposition + raydirection;
                 HitNormal = normal;

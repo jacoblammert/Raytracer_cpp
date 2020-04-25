@@ -7,16 +7,31 @@
 
 
 #include "../math/Vector.h"
+#include "../geometry/Color.h"
 
 class Light {
 public:
     Light();
-    Light(Vector position, Vector color);
+
+    Light(Vector position, Color color);
+
+    Light(Vector position, Color color, float intensity);
+
+    float getIntensity();
+
     Vector getPosition();
-    Vector getColor();
+
+    void setPosition(Vector position);
+    void setIntensity(float intensity);
+
+    Color getColor();
+
+    void setColor(Color color);
+
 private:
+    float intensity;
     Vector position;
-    Vector color;
+    Color color;
 };
 
 

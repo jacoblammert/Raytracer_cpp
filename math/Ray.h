@@ -18,9 +18,12 @@ public:
 
     Vector getDir();
 
+
+
 private:
     Vector position;
     Vector direction;
+    int depth;
 };
 
 

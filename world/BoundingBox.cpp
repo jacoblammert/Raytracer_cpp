@@ -20,7 +20,7 @@ BoundingBox::BoundingBox(std::vector<Shape *> shapes) {
     setMinMaxMid();
 
     box = Box(minXminYminZ, maxXmaxYmaxZ);
-    if (this->shapes.size() != 0) {
+    if (!this->shapes.empty()) {
         split();
     }
 }
@@ -42,7 +42,7 @@ BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<S
     box = Box(minXminYminZ, maxXmaxYmaxZ);
 
     this->shapes = std::move(shapes);
-    if (this->shapes.size() != 0) {
+    if (!this->shapes.empty()) {
         build();
     }
 }
@@ -52,14 +52,14 @@ std::vector<Shape *> BoundingBox::getIntersectVec(Ray ray) {
     std::vector<Shape *> returnshapes;
 
     if (box.getIntersect(ray)) {
-        if (boxes.size() == 0) {
+        if (boxes.empty()) {
             return shapes;
         }
-        for (int i = 0; i < boxes.size(); ++i) {
-            std::vector<Shape*> shapes2 = boxes[i].getIntersectVec(ray);
+        for (auto & boxe : boxes) {
+            std::vector<Shape*> shapes2 = boxe.getIntersectVec(ray);
             returnshapes.insert(returnshapes.end(), shapes2.begin(), shapes2.end());
         }
-        if (shapes.size() != 0) {
+        if (!shapes.empty()) {
             returnshapes.insert(returnshapes.end(), shapes.begin(), shapes.end());
         }
 
@@ -95,7 +95,7 @@ std::vector<Shape *> BoundingBox::removeDoubles(std::vector<Shape *> shapesToCle
  * or if there are more than 10 shapes inside the box
  */
 void BoundingBox::build() {
-    if (depth < 4 && shapes.size() > 20) {
+    if (depth < 5 && shapes.size() > 20) {
         setMid();
         split();
     }
@@ -111,10 +111,10 @@ void BoundingBox::setMinMaxMid() {
     median = Vector();
 
     Vector medianShape = {};
-    for (int i = 0; i < shapes.size(); ++i) {
-        getMin(shapes[i]->getMin());
-        getMax(shapes[i]->getMax());
-        medianShape = shapes[i]->getMedian();
+    for (auto & shape : shapes) {
+        getMin(shape->getMin());
+        getMax(shape->getMax());
+        medianShape = shape->getMedian();
         median = median + medianShape;
     }
     median.scale(1.0f / (float) std::size(shapes));

@@ -28,4 +28,3 @@ Vector Ray::getDir() {
 }
 
 
-

@@ -17,13 +17,13 @@ public:
 
     Box(Vector Pos, float xScale, float yScale, float zScale);
 
-    Box(Vector minXminYminZ, Vector maxXmaxYmaxZ, Vector color);
+    Box(Vector minXminYminZ, Vector maxXmaxYmaxZ, Color color);
 
-    Box(Vector Pos, float xScale, float yScale, float zScale, Vector color);
+    Box(Vector Pos, float xScale, float yScale, float zScale, Color color);
 
     int getId() override;
 
-    Vector getRgb() override;
+    Color getRgb() override;
 
     bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) override;
 

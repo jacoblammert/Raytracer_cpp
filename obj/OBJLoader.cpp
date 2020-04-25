@@ -84,9 +84,17 @@ void OBJLoader::buildObject() {
 
     int A, B, C;
 
+    int count = 0;
+
     for (int i = 0; i < filestring.size(); ++i) {
         if (filestring[i] == "o") {
-            objectname = filestring[i + 1];
+            if (count == 0) {
+                objectname = filestring[i + 1];
+                count++;
+            }//new Object or abort
+            else{
+                i = filestring.size()+1;
+            }
         } else if (filestring[i] == "v") {
             Vector vector = Vector{std::stof(filestring[i + 1]),
                                    std::stof(filestring[i + 2]),

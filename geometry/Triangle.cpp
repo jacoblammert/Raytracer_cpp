@@ -10,13 +10,13 @@ Triangle::Triangle(Vector a, Vector b, Vector c) {
     this->a = a;
     this->b = b;
     this->c = c;
-    this->color = Vector(255, 255, 255);
+    this->color = Color(1, 1, 1);
     Vector ab = b - a;
     Vector ac = c - a;
     this->normal = ab * ac;
 }
 
-Triangle::Triangle(Vector a, Vector b, Vector c, Vector color) {
+Triangle::Triangle(Vector a, Vector b, Vector c, Color color) {
     this->a = a;
     this->b = b;
     this->c = c;
@@ -30,7 +30,7 @@ int Triangle::getId() {
     return 0;
 }
 
-Vector Triangle::getRgb() {
+Color Triangle::getRgb() {
     return color;
 }
 
@@ -65,7 +65,7 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
     float t = v0v2.dot(qvec) * invDet;
 //#pragma omp critical
     {
-        if (t < distance) {
+        if (0 < t && t < distance) {
             distance = t;
             HitNormal = normal;
             raydirection.scale(t);

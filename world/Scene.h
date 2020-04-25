@@ -6,7 +6,7 @@
 #define RAYTRACER_SCENE_H
 
 
-#include "Object.h"
+#include "../obj/Object.h"
 #include "Camera.h"
 #include "../geometry/Shape.h"
 #include "Light.h"
@@ -22,6 +22,7 @@ public:
     void setCamera(Camera camera);
     void addShapes(std::vector<Shape*> shapes); // many triangles of a single object
     void addShape(Shape *shape); // different shapes like spheres, triangles or cubes
+    void addLight(Light* lights); // many triangles of a single object
     void render();
     Camera getCamera();
     void resetImage();

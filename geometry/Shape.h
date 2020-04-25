@@ -8,12 +8,13 @@
 
 #include "../math/Vector.h"
 #include "../math/Ray.h"
+#include "Color.h"
 
 class Shape {
 public:
     virtual int getId() = 0;
 
-    virtual Vector getRgb() = 0;
+    virtual Color getRgb() = 0;
 
     virtual bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id,
                                  int &newid) = 0; // returns true, if the Ray and the object intersect
@@ -29,7 +30,7 @@ public:
 
 protected:
     int id;
-    Vector color;
+    Color color;
 };
 
 

@@ -49,6 +49,8 @@ public:
 
     Vector cross(Vector &obj);
 
+    Vector getReflected(Vector normal, Vector input);
+
     Vector operator+(Vector &obj);
 
     Vector operator-(Vector &obj);

@@ -13,12 +13,12 @@ class Triangle : public Shape {
 public:
     Triangle(Vector a, Vector b, Vector c);
 
-    Triangle(Vector a, Vector b, Vector c, Vector color);
+    Triangle(Vector a, Vector b, Vector c, Color color);
 
 
     int getId() override;
 
-    Vector getRgb() override;
+    Color getRgb() override;
 
     bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) override;
 

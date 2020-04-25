@@ -11,14 +11,13 @@ class Sphere : public Shape {
 public:
     Sphere(Vector position, float radius);
 
-    Sphere(Vector position, float radius, Vector color);
+    Sphere(Vector position, float radius, Color color);
 
     int getId() override;
 
-    Vector getRgb() override;
+    Color getRgb() override;
 
-    virtual bool
-    getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) override;
+    bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) override;
 
     Vector getNormal(Vector pos) override;
 

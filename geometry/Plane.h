@@ -12,11 +12,11 @@ class Plane : public Shape {
 public:
     Plane(Vector position, Vector normal);
 
-    Plane(Vector position, Vector normal, Vector color);
+    Plane(Vector position, Vector normal, Color color);
 
     int getId() override;
 
-    Vector getRgb() override;
+    Color getRgb() override;
 
     bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) override;
 

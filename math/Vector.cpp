@@ -109,6 +109,18 @@ Vector Vector::cross(Vector &obj) {
     return res;
 }
 
+Vector Vector::getReflected(Vector normal, Vector input) {
+
+    input.normalize();
+    input.scale(-1);
+
+    float NV = fmax(normal.dot(input), 0);//angle
+    normal.scale(NV * 2);
+    normal = normal - input;
+    normal.normalize();
+    return normal;
+}
+
 Vector Vector::operator+(Vector &obj) {
     Vector res;
     res.setX(x + obj.getX());
@@ -160,6 +172,8 @@ int Vector::sign(int pos) {
     }
     return 0;
 }
+
+
 
 
 

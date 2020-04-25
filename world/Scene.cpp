@@ -9,6 +9,7 @@
 #include "Scene.h"
 #include "../debug/Chronometer.h"
 #include "BoundingBox.h"
+#include "Material.h"
 
 Scene::Scene() {
 
@@ -32,75 +33,44 @@ void Scene::addShape(Shape *shape) {
     shapes.push_back(shape);
 }
 
+void Scene::addLight(Light *light) {
+    lights.push_back(light);
+}
+
 void Scene::render() {
 
-    std::cout << "Size shapes: " << std::size(shapes) << std::endl;
+    std::cout << "Size shapes: " << shapes.size() << std::endl;
+    std::cout << "Size lights: " << lights.size() << std::endl;
 
     Chronometer chrb = Chronometer("BoundingBox");
     boundingBox = BoundingBox(shapes);
-    //boundingBox.print(3);
+    //boundingBox.print(0);
     chrb.stop();
 
     Chronometer chr = Chronometer("Raytracer");
 
-    omp_set_num_threads(2);
+    omp_set_num_threads(16);
 
-    // 1 Thread: 1.641s, 2 Threads: 1.244s, 4 Threads: 1.188s, 8 Threads: 1.304s, 16 Threads: 1.393s (666 * 375)Pixel
-    // 1 Thread: 6.458s, 2 Threads: 4.741s, 4 Threads: 4.515s, 8 Threads: 5.065s, 16 Threads: 5.384s (1333 * 750)Pixel
-    // 1 Thread and no Bounding Box: 4.3s (1333 * 750)Pixel = better with a total of 11 shapes, but worse with several thousands
 
 #pragma omp parallel for
 
     for (int y = 0; y < camera.getHeight(); ++y) {
-
-        //chr.getTime();
-        //std::cout << "Percentage: " << ((float) y * 100.0f) / (float) camera.getHeight() << " %" << std::endl;
         for (int x = 0; x < camera.getWidth(); ++x) {
 
-            float mindistance = INFINITY - 1;
-            int hit = -1;
             Ray ray = {{},
                        {}};
-            Vector HitPoint = {};
-            Vector HitNormal = {};
-            Vector color = {};
-
-            std::vector<Shape *> shapes2 = {};
-
+            Material m = Material();
 #pragma omp critical
             {
                 ray = camera.generateRay(x, y);
-
-                shapes2 = boundingBox.getIntersectVec(ray);
             }
-
-            for (int i = 0; i < shapes2.size(); ++i) {
-                if (shapes2[i]->getIntersectVec(ray, HitPoint, HitNormal, mindistance, hit,
-                                                i)) { // bool if ray intersects the Object // hit & other values set for lighting & stuff
-                }
-            }
-
-
-            //lightcalculations / colorcalculations
-
-
-#pragma omp critical
-            {
-                int r = 0;
-                int g = 0;
-                int b = 0;
-                if (-1 < hit && hit < shapes2.size()) {
-                    color = shapes2[hit]->getRgb();
-                    r = (int) color.getX();
-                    g = (int) color.getY();
-                    b = (int) color.getZ();
-                }
-                Pixel[y][x] = Vector((float) r, (float) g, (float) b);
-            }
+            Pixel[y][x] = m.castRay(0, ray, &boundingBox, lights);/**/
         }
     }
 
     chr.stop();
+
+    //boundingBox.print(40);
 }
 
 Camera Scene::getCamera() {
@@ -121,10 +91,12 @@ void Scene::drawImage() {
     std::ofstream img("picture.ppm");
     img << "P3" << std::endl << camera.getWidth() << " " << camera.getHeight() << std::endl << "255" << std::endl;
 
-    for (int i = 0; i < Pixel.size(); ++i) {
-        for (int j = 0; j < Pixel[i].size(); ++j) {
-            img << Pixel[i][j].getX() << " " << Pixel[i][j].getY() << " " << Pixel[i][j].getZ() << std::endl;
+    for (auto &i : Pixel) {
+        for (auto &j : i) {
+            img << (int) j.get(0) << " " << (int) j.get(1) << " " << (int) j.get(2) << std::endl;
         }
     }
     chr.stop();
 }
+
+
