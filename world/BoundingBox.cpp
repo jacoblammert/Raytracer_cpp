@@ -55,8 +55,8 @@ std::vector<Shape *> BoundingBox::getIntersectVec(Ray ray) {
         if (boxes.empty()) {
             return shapes;
         }
-        for (auto & boxe : boxes) {
-            std::vector<Shape*> shapes2 = boxe.getIntersectVec(ray);
+        for (auto &boxe : boxes) {
+            std::vector<Shape *> shapes2 = boxe.getIntersectVec(ray);
             returnshapes.insert(returnshapes.end(), shapes2.begin(), shapes2.end());
         }
         if (!shapes.empty()) {
@@ -65,7 +65,7 @@ std::vector<Shape *> BoundingBox::getIntersectVec(Ray ray) {
 
     }
     //if (this->depth == 0) {
-        //returnshapes = removeDoubles(returnshapes);
+    //returnshapes = removeDoubles(returnshapes);
     //}
 
     return returnshapes;
@@ -111,7 +111,7 @@ void BoundingBox::setMinMaxMid() {
     median = Vector();
 
     Vector medianShape = {};
-    for (auto & shape : shapes) {
+    for (auto &shape : shapes) {
         getMin(shape->getMin());
         getMax(shape->getMax());
         medianShape = shape->getMedian();

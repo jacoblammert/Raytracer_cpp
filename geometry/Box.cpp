@@ -83,19 +83,29 @@ bool Box::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &d
 
 //#pragma omp critical
     {
-        raydirection = ray.getDir();
-        raydirection.scale(tmin);
 
-        float dist = tmin;//(/*ray.getPos() - rayposition + */raydirection).getLength();
+        if (0 < tmin && tmin < distance) {
+            raydirection = ray.getDir();
+            raydirection.scale(tmin);
 
-        if (0 < dist && dist < distance) {
-            distance = dist;
+            distance = tmin;
             HitPoint = rayposition + raydirection;
             HitNormal = getNormal(HitPoint);
             id = newid;
+            return true;
+        }
+        if (tmin < 0 && 0 < tmax && tmax < distance) {
+            raydirection = ray.getDir();
+            raydirection.scale(tmax);
+
+            distance = tmax;
+            HitPoint = rayposition + raydirection;
+            HitNormal = getNormal(HitPoint);
+            id = newid;
+            return true;
         }
     }
-    return true;
+
 }
 
 /**
@@ -131,21 +141,23 @@ bool Box::getIntersect(Ray ray) {
 
 Vector Box::getNormal(Vector pos) {
 
-    float epsilon = 0.001f;
+    float epsilon = 0.0001f;
 
-    if (pos.getX() <= bounds[0].getX() + epsilon) {
+    //pos.scale(1.001);
+
+    if (pos.get(0) <= bounds[0].get(0) + epsilon) {
         return {-1, 0, 0};
-    } else if (pos.getX() >= bounds[1].getX() - epsilon) {
+    } else if (pos.get(0) >= bounds[1].get(0) - epsilon) {
         return {1, 0, 0};
     }
-    if (pos.getY() <= bounds[0].getY() + 0.001) {
+    if (pos.get(1) <= bounds[0].get(1) + 0.001) {
         return {0, -1, 0};
-    } else if (pos.getY() >= bounds[1].getY() - epsilon) {
+    } else if (pos.get(1) >= bounds[1].get(1) - epsilon) {
         return {0, 1, 0};
     }
-    if (pos.getZ() <= bounds[0].getZ() + epsilon) {
+    if (pos.get(2) <= bounds[0].get(2) + epsilon) {
         return {0, 0, -1};
-    } else if (pos.getZ() >= bounds[1].getZ() - epsilon) {
+    } else if (pos.get(2) >= bounds[1].get(2) - epsilon) {
         return {0, 0, 1};
     }
     return {0, 1, 0};
@@ -166,6 +178,14 @@ Vector Box::getMedian() {
 void Box::print() {
     std::cout<<"Box"<<std::endl;
 }
+/**/
+Material Box::getMaterial() {
+    return material;
+}
+
+void Box::setMaterial(Material material) {
+    this->material = material;
+}/**/
 
 
 

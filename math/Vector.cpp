@@ -109,16 +109,31 @@ Vector Vector::cross(Vector &obj) {
     return res;
 }
 
-Vector Vector::getReflected(Vector normal, Vector input) {
-
-    input.normalize();
-    input.scale(-1);
-
-    float NV = fmax(normal.dot(input), 0);//angle
-    normal.scale(NV * 2);
-    normal = normal - input;
+Vector Vector::getReflected(Vector normal) {
+    Vector thisVec = *this;
+    thisVec.normalize();
     normal.normalize();
-    return normal;
+    thisVec.scale(-1);
+    float NV = fmax(normal.dot(thisVec), 0);//angle
+    normal.scale(NV * 2);
+    return normal - thisVec;
+}
+
+Vector Vector::getRefracted(Vector normal, float n1, float n2) {
+
+    Vector thisVec = *this;
+    thisVec.normalize();
+    normal.normalize();
+
+    float n = n1 / n2;
+    float cosI = -thisVec.dot(normal);
+    float sinT2 = n * n * (1.0 - cosI * cosI);
+    if(sinT2 > 1.0) return thisVec.getReflected(normal); // TIR
+    float cosT = sqrt(1.0 - sinT2);
+
+    thisVec.scale(n);
+    normal.scale((n * cosI - cosT));
+    return thisVec + normal;
 }
 
 Vector Vector::operator+(Vector &obj) {
@@ -172,6 +187,8 @@ int Vector::sign(int pos) {
     }
     return 0;
 }
+
+
 
 
 

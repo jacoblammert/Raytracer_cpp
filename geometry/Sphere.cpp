@@ -45,10 +45,10 @@ bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float
 
         float x = sqrt(radius * radius - y * y);
         float t1 = t - x; // close intersection point
+        float t2 = t + x; // far intersection point
 
         raydirection = ray.getDir();
         raydirection.normalize();
-        raydirection.scale(t1);
 
 //#pragma omp critical
         {
@@ -56,13 +56,25 @@ bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float
             //float dist = t1;//(ray.getPos() - rayposition + raydirection).getLength();
 
             if (0 < t1 && t1 < distance) {
+                raydirection.scale(t1);
                 distance = t1;
                 HitPoint = rayposition + raydirection;
                 HitNormal = getNormal(HitPoint);
                 id = newid;
+                return true;
+            }
+            if (t1 < 0 && 0 < t2 && t2 < distance) {
+                raydirection.scale(t2);
+                distance = t2;
+                HitPoint = rayposition + raydirection;
+                HitNormal = getNormal(HitPoint);
+                id = newid;
+                //std::cout<<"Hitpoint: ";
+                //HitPoint.print();
+                //std::cout<<std::endl;
+                return true;
             }
         }
-        return true;
     }
     return false;
 }
@@ -74,12 +86,12 @@ Vector Sphere::getNormal(Vector position) {
 }
 
 Vector Sphere::getMin() {
-    Vector rad = Vector(radius,radius,radius);
+    Vector rad = Vector(radius, radius, radius);
     return pos - rad;
 }
 
 Vector Sphere::getMax() {
-    Vector rad = Vector(radius,radius,radius);
+    Vector rad = Vector(radius, radius, radius);
     return pos + rad;
 }
 
@@ -88,7 +100,14 @@ Vector Sphere::getMedian() {
 }
 
 void Sphere::print() {
-    std::cout<<"Sphere"<<std::endl;
+    std::cout << "Sphere" << std::endl;
 }
 
+/**/
+Material Sphere::getMaterial() {
+    return material;
+}
 
+void Sphere::setMaterial(Material material) {
+    this->material = material;
+}/**/

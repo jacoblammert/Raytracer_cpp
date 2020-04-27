@@ -27,4 +27,12 @@ Vector Ray::getDir() {
     return this->direction;
 }
 
+float Ray::getRefractionindex() {
+    return this->refractionindex;
+}
+
+void Ray::setRefractionindex(float index) {
+    this->refractionindex = index;
+}
+
 

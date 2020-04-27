@@ -47,7 +47,10 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
 
     // if the determinant is negative the triangle is backfacing
     // if the determinant is close to 0, the ray misses the triangle
-    if (det < 0.0001f) return false;
+    if (det < 0.0001f){
+        //normal.scale(-1);
+        //return false;
+    }
 
     // ray and triangle are parallel if det is close to 0
     if (fabs(det) < 0.0001) return false;
@@ -128,3 +131,11 @@ void Triangle::print() {
     std::cout<<"C: ";
     c.print();
 }
+/**/
+Material Triangle::getMaterial() {
+    return material;
+}
+
+void Triangle::setMaterial(Material material) {
+    this->material = material;
+}/**/

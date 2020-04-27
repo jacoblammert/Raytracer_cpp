@@ -18,12 +18,15 @@ public:
 
     Vector getDir();
 
+    float getRefractionindex();
 
+    void setRefractionindex(float index);
 
 private:
     Vector position;
     Vector direction;
     int depth;
+    float refractionindex = 1;
 };
 
 

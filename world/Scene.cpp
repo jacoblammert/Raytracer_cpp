@@ -9,7 +9,7 @@
 #include "Scene.h"
 #include "../debug/Chronometer.h"
 #include "BoundingBox.h"
-#include "Material.h"
+#include "../math/Renderer.h"
 
 Scene::Scene() {
 
@@ -43,29 +43,31 @@ void Scene::render() {
     std::cout << "Size lights: " << lights.size() << std::endl;
 
     Chronometer chrb = Chronometer("BoundingBox");
-    boundingBox = BoundingBox(shapes);
+    this->boundingBox = BoundingBox(this->shapes);
     //boundingBox.print(0);
     chrb.stop();
 
     Chronometer chr = Chronometer("Raytracer");
 
-    omp_set_num_threads(16);
+    omp_set_num_threads(8);
 
+    int progress = 0;
 
 #pragma omp parallel for
-
     for (int y = 0; y < camera.getHeight(); ++y) {
         for (int x = 0; x < camera.getWidth(); ++x) {
 
             Ray ray = {{},
                        {}};
-            Material m = Material();
+            Renderer renderer = Renderer();
 #pragma omp critical
             {
                 ray = camera.generateRay(x, y);
             }
-            Pixel[y][x] = m.castRay(0, ray, &boundingBox, lights);/**/
+            Pixel[y][x] = renderer.getColor(ray, 0, lights, &boundingBox);/**/
         }
+        progress++;
+        std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getHeight() << "%" << std::endl;
     }
 
     chr.stop();
@@ -79,8 +81,8 @@ Camera Scene::getCamera() {
 
 void Scene::resetImage() {
 
-    std::vector<Vector> vec;
-    vec.assign(camera.getWidth(), Vector());
+    std::vector<Color> vec;
+    vec.assign(camera.getWidth(), Color());
     Pixel.assign(camera.getHeight(), vec);
 }
 
@@ -91,9 +93,14 @@ void Scene::drawImage() {
     std::ofstream img("picture.ppm");
     img << "P3" << std::endl << camera.getWidth() << " " << camera.getHeight() << std::endl << "255" << std::endl;
 
+
     for (auto &i : Pixel) {
         for (auto &j : i) {
-            img << (int) j.get(0) << " " << (int) j.get(1) << " " << (int) j.get(2) << std::endl;
+
+            j.scale(255);
+            j.setRange(0, 255);
+
+            img << (int) j.getR() << " " << (int) j.getG() << " " << (int) j.getB() << std::endl;
         }
     }
     chr.stop();

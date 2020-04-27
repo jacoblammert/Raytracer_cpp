@@ -35,7 +35,7 @@ private:
     std::vector<Shape *> shapes;
     std::vector<std::string> filestring;
     std::vector<Vector> vectors;
-    Object object;
+    Object  object;
 };
 
 

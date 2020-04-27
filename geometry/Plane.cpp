@@ -73,5 +73,11 @@ Vector Plane::getMedian() {
 void Plane::print() {
     std::cout<<"Plane"<<std::endl;
 }
-
-
+/**/
+Material Plane::getMaterial() {
+    return material;
+}
+void Plane::setMaterial(Material material) {
+    this->material = material;
+}
+/**/

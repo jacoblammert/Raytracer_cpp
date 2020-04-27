@@ -9,6 +9,7 @@
 #include "../math/Vector.h"
 #include "../math/Ray.h"
 #include "Color.h"
+#include "../world/Material.h"
 
 class Shape {
 public:
@@ -25,12 +26,17 @@ public:
     virtual Vector getMax() = 0;
 
     virtual Vector getMedian() = 0;
+/**/
+    virtual Material getMaterial() = 0;
 
+    virtual void setMaterial(Material material) = 0;
+/**/
     virtual void print() = 0;
 
 protected:
     int id;
     Color color;
+    Material material;
 };
 
 

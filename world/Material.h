@@ -9,9 +9,7 @@
 #include <vector>
 #include "../math/Vector.h"
 #include "../math/Ray.h"
-#include "../geometry/Shape.h"
 #include "Light.h"
-#include "BoundingBox.h"
 
 class Material {
 public:
@@ -23,12 +21,13 @@ public:
 
     Material(Vector color, float roughness, float glossy, float transparency, float refractiveIndex);
 
-    Vector getColor(Ray ray,int depth,Shape *shape, Vector *HitPoint, Vector *HitNormal, std::vector<Light *> lights,
-                    BoundingBox *boundingBox);
+    float getRoughness();
 
+    float getGlossy();
 
-    Vector castRay(int depth,Ray ray, BoundingBox *boundingBox, std::vector<Light *> lights);
-    bool castShadowRay(Ray ray, BoundingBox *boundingBox,float distance);
+    float getTransparency();
+
+    float getrefractiveIndex();
 
 private:
     float roughness;

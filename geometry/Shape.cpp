@@ -12,9 +12,18 @@ int Shape::getId() {
 
 
 Color Shape::getRgb() {
-    return Color();
+    return {};
 }
 
 Vector Shape::getNormal(Vector pos) {
-    return Vector();
+    return {};
 }
+/**/
+Material Shape::getMaterial() {
+    return {};
+}
+
+
+void Shape::setMaterial(Material material) {
+   this->material = material;
+}/**/

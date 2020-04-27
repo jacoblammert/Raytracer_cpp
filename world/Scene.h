@@ -16,24 +16,29 @@
 class Scene {
 public:
     Scene();
+
     explicit Scene(Camera camera);
 
 
     void setCamera(Camera camera);
-    void addShapes(std::vector<Shape*> shapes); // many triangles of a single object
+
+    void addShapes(std::vector<Shape *> shapes); // many triangles of a single object
     void addShape(Shape *shape); // different shapes like spheres, triangles or cubes
-    void addLight(Light* lights); // many triangles of a single object
+    void addLight(Light *lights); // many triangles of a single object
     void render();
+
     Camera getCamera();
+
     void resetImage();
+
     void drawImage();
 
 private:
     Camera camera;
     BoundingBox boundingBox;
-    std::vector<Shape*> shapes;
-    std::vector<Light*> lights;
-    std::vector<std::vector<Vector>> Pixel;
+    std::vector<Shape *> shapes;
+    std::vector<Light *> lights;
+    std::vector<std::vector<Color>> Pixel;
 };
 
 

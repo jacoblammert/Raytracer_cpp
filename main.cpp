@@ -13,10 +13,10 @@ int main() {
 
     Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 250, 250, 5);
 
-    //cam.setPosition({7,0,2});
+    //cam.setPosition({10,0,5});
     cam.lookAt(Vector(0, 0, 0));
 
-    cam.setNumberOfPixel(250000);// max number of pixels for the image
+    cam.setNumberOfPixel(25000);// max number of pixels for the image
     cam.setWidthToHeight(16.0f / 9.0f); // Height to width ratio
 
     cam.print();
@@ -40,7 +40,8 @@ int main() {
     Box b3 = Box(Vector(2, 0, 0), 4, 0.05, 0.05, Color(1, 1, 1));
 
     Triangle t1 = Triangle(Vector(2, 0, 0.1), Vector(0, 2, 0.1), Vector(0, -2, 0.1), Color(1, 1, 0.5));
-    Triangle t2 = Triangle(Vector(-2, 0, 0.1), Vector(0, -2, 0.1), Vector(0, 2, 0.1), Color(0.4, 1, 1));
+    //Triangle t2 = Triangle(Vector(-2, 0, 0.1), Vector(0, -2, 0.1), Vector(0, 2, 0.1), Color(0.4, 1, 1));
+    Triangle t2 = Triangle({-2, 0, 0.1}, {0, 2, 0.1}, {0, -2, 0.1}, Color(0.4, 1, 1));
 
 
     Box b4 = Box(Vector(-2, -3.2, -2), Vector(4, 2.2, 2), Color(1, 1, 1));
@@ -63,23 +64,33 @@ int main() {
 
     scene.addShape(&t1);
     scene.addShape(&t2);
-/**/
-    //scene.addShape(&t2);
 
-    //scene.addShape(&p1);
+    scene.addShape(&t2);
+
+    scene.addShape(&p1);
 
     //scene.addShape(&b1);
 
-    //scene.addShape(&p1);
+    scene.addShape(&p1);
 
-    //scene.addShape(&p1);
+    scene.addShape(&p1);
+/**/
 
     OBJLoader objLoader = OBJLoader("untitled6.obj");
     objLoader.LoadOBJ();
     Object object = objLoader.getObject();
     scene.addShapes(object.getTriangles());
 
-    Sphere sp1 = {{1.33,-0.69,-1},1,{1,1,0}};
+
+
+
+    //Sphere sp1 = {{1.33,-0.69,-1},1,{1,1,1}};
+    //Sphere sp1 = {{1.33,0.2,0.5},1,{1,1,1}};
+    Box sp1 = {{1.33,0.2,0.5},1,1,1};
+    //Sphere sp1 = {{10,0,2},1,{1,1,1}};
+    sp1.setMaterial({{1,1,1},0,0,1,1.1}),
+
+
     scene.addShape(&sp1);
 
     Light light = {{-3,0,-1},{1,0,0.2},1};
@@ -115,12 +126,13 @@ int main() {
     light2.setIntensity(25);/**/
 
 /**/
+    //light2.setPosition({1.33,-0.7,2});
     scene.addLight(&light);
     scene.addLight(&light1);
     scene.addLight(&light2);
     scene.addLight(&light3);/**/
 
-    //scene.addLight(&light4);
+    /*/scene.addLight(&light4);/**/
 
     scene.render();
     scene.drawImage();

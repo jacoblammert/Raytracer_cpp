@@ -26,7 +26,11 @@ public:
     Vector getMax() override;
 
     Vector getMedian() override;
+/**/
+    Material getMaterial() override;
 
+    void setMaterial(Material material) override;
+/**/
     void print() override;
 
 private:

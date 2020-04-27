@@ -9,7 +9,7 @@
 #include "Shape.h"
 #include <vector>
 
-class Box : public Shape {
+class Box: public Shape {
 public:
     Box();
 
@@ -36,7 +36,11 @@ public:
     Vector getMax() override;
 
     Vector getMedian() override;
+/**/
+    Material getMaterial() override;
 
+    void setMaterial(Material material) override;
+/**/
     void print() override;
 
 private:
