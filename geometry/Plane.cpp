@@ -8,7 +8,7 @@
 Plane::Plane(Vector position, Vector normal) {
     pos = position;
     this->normal = normal;
-    this->color = Color(1, 1, 1);
+    this->material.setColor({1,1,1});
 }
 
 Plane::Plane(Vector position, Vector normal, Color color) {
@@ -16,7 +16,7 @@ Plane::Plane(Vector position, Vector normal, Color color) {
     this->normal = normal;
     this->normal.normalize();
     //this->normal.scale(-1);
-    this->color = color;
+    this->material.setColor(color);
 }
 
 int Plane::getId() {
@@ -24,9 +24,6 @@ int Plane::getId() {
 }
 
 
-Color Plane::getRgb() {
-    return color;
-}
 
 bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) {
 

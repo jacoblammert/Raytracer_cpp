@@ -7,7 +7,7 @@
 Box::Box() {}
 
 Box::Box(Vector minXminYminZ, Vector maxXmaxYmaxZ) {
-    color = Color(1, 1, 1);
+    this->material.setColor({1,1,1});
 
     bounds.push_back(minXminYminZ);
     bounds.push_back(maxXmaxYmaxZ);
@@ -21,14 +21,14 @@ Box::Box(Vector Pos, float xScale, float yScale, float zScale) {
     Vector maxXmaxYmaxZ = Vector(Pos.getX() + xScale / 2, Pos.getY() + yScale / 2, Pos.getZ() + zScale / 2);
     bounds.push_back(minXminYminZ);
     bounds.push_back(maxXmaxYmaxZ);
-    color = Color(1, 1, 1);
+    this->material.setColor({1,1,1});
     position = Pos;
 }
 
 Box::Box(Vector minXminYminZ, Vector maxXmaxYmaxZ, Color color) {
     bounds.push_back(minXminYminZ);
     bounds.push_back(maxXmaxYmaxZ);
-    this->color = color;
+    this->material.setColor(color);
 
     position = minXminYminZ + maxXmaxYmaxZ;
     position.scale(0.5);
@@ -39,7 +39,7 @@ Box::Box(Vector Pos, float xScale, float yScale, float zScale, Color color) {
     Vector maxXmaxYmaxZ = Vector(Pos.getX() + xScale / 2, Pos.getY() + yScale / 2, Pos.getZ() + zScale / 2);
     bounds.push_back(minXminYminZ);
     bounds.push_back(maxXmaxYmaxZ);
-    this->color = color;
+    this->material.setColor(color);
     position = Pos;
 }
 
@@ -47,9 +47,6 @@ int Box::getId() {
     return 0;
 }
 
-Color Box::getRgb() {
-    return color;
-}
 
 bool Box::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) {
 

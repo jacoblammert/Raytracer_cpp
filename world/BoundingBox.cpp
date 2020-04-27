@@ -95,7 +95,7 @@ std::vector<Shape *> BoundingBox::removeDoubles(std::vector<Shape *> shapesToCle
  * or if there are more than 10 shapes inside the box
  */
 void BoundingBox::build() {
-    if (depth < 5 && shapes.size() > 20) {
+    if (/**/depth < 16 && /**/shapes.size() > 80) {
         setMid();
         split();
     }

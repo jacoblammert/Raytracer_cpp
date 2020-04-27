@@ -23,8 +23,6 @@ public:
 
     int getId() override;
 
-    Color getRgb() override;
-
     bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) override;
 
     bool getIntersect(Ray ray);

@@ -9,17 +9,17 @@
 #include <vector>
 #include "../math/Vector.h"
 #include "../math/Ray.h"
-#include "Light.h"
+#include "../world/Light.h"
 
 class Material {
 public:
     Material();
 
-    Material(Vector color);
+    Material(Color color);
 
-    Material(Vector color, float roughness, float glossy, float transparency);
+    Material(Color color, float roughness, float glossy, float transparency);
 
-    Material(Vector color, float roughness, float glossy, float transparency, float refractiveIndex);
+    Material(Color color, float roughness, float glossy, float transparency, float refractiveIndex);
 
     float getRoughness();
 
@@ -27,14 +27,18 @@ public:
 
     float getTransparency();
 
-    float getrefractiveIndex();
+    float getRefractiveIndex();
+
+    void setColor(Color color);
+
+    Color getColor();
 
 private:
     float roughness;
     float glossy;
     float transparency;
     float refractiveIndex;
-    Vector color;
+    Color color;
 
 };
 

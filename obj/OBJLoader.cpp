@@ -92,8 +92,12 @@ void OBJLoader::buildObject() {
                 objectname = filestring[i + 1];
                 count++;
             }//new Object or abort
-            else{
-                i = filestring.size()+1;
+            else {
+                Object a = Object(objectname, shapes);
+                //objects.push_back(&a);
+                object = a;
+                objectname = filestring[i + 1];
+                count++;
             }
         } else if (filestring[i] == "v") {
             Vector vector = Vector{std::stof(filestring[i + 1]),
@@ -111,6 +115,8 @@ void OBJLoader::buildObject() {
             shapes.push_back(triangle);
         }
     }
-    object = Object(objectname, shapes);
+    Object a = Object(objectname, shapes);
+    //objects.push_back(&a);
+    object = a;
 
 }

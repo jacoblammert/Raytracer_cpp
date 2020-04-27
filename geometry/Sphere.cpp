@@ -15,17 +15,13 @@ Sphere::Sphere(Vector pos, float radius) {
 Sphere::Sphere(Vector pos, float radius, Color color) {
     this->pos = pos;
     this->radius = radius;
-    this->color = color;
+    this->material.setColor(color);
 }
 
 int Sphere::getId() {
     return 0;
 }
 
-
-Color Sphere::getRgb() {
-    return color;
-}
 
 bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) {
 

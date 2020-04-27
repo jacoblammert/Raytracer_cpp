@@ -49,7 +49,7 @@ void Scene::render() {
 
     Chronometer chr = Chronometer("Raytracer");
 
-    omp_set_num_threads(8);
+    omp_set_num_threads(64);
 
     int progress = 0;
 
@@ -60,10 +60,12 @@ void Scene::render() {
             Ray ray = {{},
                        {}};
             Renderer renderer = Renderer();
-#pragma omp critical
-            {
-                ray = camera.generateRay(x, y);
-            }
+//#pragma omp critical
+            //{
+            Camera camera1 = camera;
+
+            ray = camera1.generateRay(x, y);
+            //}
             Pixel[y][x] = renderer.getColor(ray, 0, lights, &boundingBox);/**/
         }
         progress++;

@@ -11,12 +11,12 @@
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 250, 250, 5);
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 5);
 
     //cam.setPosition({10,0,5});
     cam.lookAt(Vector(0, 0, 0));
 
-    cam.setNumberOfPixel(25000);// max number of pixels for the image
+    //cam.setNumberOfPixel(25000);// max number of pixels for the image
     cam.setWidthToHeight(16.0f / 9.0f); // Height to width ratio
 
     cam.print();
@@ -72,23 +72,26 @@ int main() {
     //scene.addShape(&b1);
 
     scene.addShape(&p1);
-
-    scene.addShape(&p1);
 /**/
+    scene.addShape(&p1);
 
-    OBJLoader objLoader = OBJLoader("untitled6.obj");
+
+    OBJLoader objLoader = OBJLoader("untitled8.obj");
     objLoader.LoadOBJ();
-    Object object = objLoader.getObject();
+
+    Object object = objLoader.getObject(); // get the first Object inside the obj file
     scene.addShapes(object.getTriangles());
 
 
 
 
     //Sphere sp1 = {{1.33,-0.69,-1},1,{1,1,1}};
-    //Sphere sp1 = {{1.33,0.2,0.5},1,{1,1,1}};
-    Box sp1 = {{1.33,0.2,0.5},1,1,1};
+
+    Sphere sp1 = {{6,-0.8,1.27f},0.5f,{1,1,1}};
+
+    //Box sp1 = {{1.33,0.2,0.5},1,1,1};
     //Sphere sp1 = {{10,0,2},1,{1,1,1}};
-    sp1.setMaterial({{1,1,1},0,0,1,1.1}),
+    sp1.setMaterial({{1,1,1},0,0,1,1.025f});
 
 
     scene.addShape(&sp1);
@@ -106,7 +109,8 @@ int main() {
 
     //light.setPosition({-3,0,4});
     //light1.setPosition({10,0,4});
-    //light2.setPosition({4,-1.4,4});
+    light2.setPosition({2.5,-2,2});
+    light3.setPosition({1.3,-1,2});
     /*/
     light3.setPosition({1.33,-0.69,7});
     light3.setPosition({1.33,-0.39,7});
@@ -131,6 +135,12 @@ int main() {
     scene.addLight(&light1);
     scene.addLight(&light2);
     scene.addLight(&light3);/**/
+
+/*/
+    Plane pl = {{5,0,3},{5,0,-1}};
+    Material mat = {{},0.0,1,0};
+    pl.setMaterial(mat);
+    scene.addShape(&pl);/**/
 
     /*/scene.addLight(&light4);/**/
 

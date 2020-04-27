@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "Renderer.h"
-#include "../world/Material.h"
+#include "../geometry/Material.h"
 
 Renderer::Renderer() {
 
@@ -39,7 +39,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
 
         Color Lightcolor;
-        Color colorfinal = shapes[hit]->getRgb();
+        Color colorfinal = shapes[hit]->getMaterial().getColor();
         colorfinal.scale(0.2);
 
 
@@ -49,38 +49,39 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
         float lightStrength = 0;
         float angle;
 
-        for (int i = 0; i < lights.size(); ++i) {
+        if (shapes[hit]->getMaterial().getTransparency() != 1) {
+            for (int i = 0; i < lights.size(); ++i) {
 
-            if (lights[i]->getIntensity() > 0) {
+                if (lights[i]->getIntensity() > 0) {
 
-                Vector Normal = HitNormal;
-                Normal.normalize();
+                    Vector Normal = HitNormal;
+                    Normal.normalize();
 
 
-                HitToLight = (lights[i]->getPosition() - PointHit);
-                lightStrength = HitToLight.getLength();
-                HitToLight.normalize();
+                    HitToLight = (lights[i]->getPosition() - PointHit);
+                    lightStrength = HitToLight.getLength();
+                    HitToLight.normalize();
 
-                angle = Normal.dot(HitToLight);
+                    angle = Normal.dot(HitToLight);
 
-                if (0 < angle) { // normal facing in direction of light
-                    Normal.scale(0.001);
-                    if (!castShadowRay({PointHit + Normal, HitToLight}, boundingBox, lightStrength)) {
+                    if (0 < angle) { // normal facing in direction of light
+                        Normal.scale(0.001);
+                        if (!castShadowRay({PointHit + Normal, HitToLight}, boundingBox, lightStrength)) {
 
-                        Lightcolor = lights[i]->getColor();
-                        Lightcolor.scale((angle * lights[i]->getIntensity()) /
-                                         (lightStrength * lightStrength)); // brightness
+                            Lightcolor = lights[i]->getColor();
+                            Lightcolor.scale((angle * lights[i]->getIntensity()) /
+                                             (lightStrength * lightStrength)); // brightness
 
-                        colorfinal = shapes[hit]->getRgb() * Lightcolor + colorfinal;
+                            colorfinal = shapes[hit]->getMaterial().getColor() * Lightcolor + colorfinal;
+                        }
                     }
                 }
             }
         }
-
         Color reflectionColor;
         Color refractionColor;
 
-        if (depth < 5) { // calculates as n reflections because depth < n
+        if (depth < 3) { // calculates as n reflections because depth < n
 
             Vector Normal = HitNormal;//HitNormal.scale(0.001);
 
@@ -98,20 +99,20 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
                 Vector position = {};
 
-                float newRefractionindex = shapes[hit]->getMaterial().getrefractiveIndex();
+                float newRefractionindex = shapes[hit]->getMaterial().getRefractiveIndex();
                 float oldrefractionIndex = ray.getRefractionindex();
 
                 if (depth % 2 == 0) { // Camera is in air // Normal is ok
                     position = HitPoint - Normal;
 
                     oldrefractionIndex = 1;
-                    newRefractionindex = shapes[hit]->getMaterial().getrefractiveIndex();
+                    newRefractionindex = shapes[hit]->getMaterial().getRefractiveIndex();
 
                 } else {
                     HitNormal.scale(-1);// Normal needs to be inverted because the ray enters air again
                     position = HitPoint + Normal;
 
-                    oldrefractionIndex = shapes[hit]->getMaterial().getrefractiveIndex(); // hitting the same shape from the inside
+                    oldrefractionIndex = shapes[hit]->getMaterial().getRefractiveIndex(); // hitting the same shape from the inside
                     newRefractionindex = 1;
 
                 }
@@ -122,7 +123,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
 
                 Ray refractionray = {position, refractedVector};
-                refractionray.setRefractionindex(shapes[hit]->getMaterial().getrefractiveIndex());
+                refractionray.setRefractionindex(shapes[hit]->getMaterial().getRefractiveIndex());
 
 
                 refractionColor = getColor(refractionray, depth + 1, lights, boundingBox);

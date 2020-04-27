@@ -11,10 +11,6 @@ int Shape::getId() {
 }
 
 
-Color Shape::getRgb() {
-    return {};
-}
-
 Vector Shape::getNormal(Vector pos) {
     return {};
 }

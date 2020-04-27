@@ -8,14 +8,14 @@
 #include <iostream>
 
 Material::Material() {
-    roughness = 1.0f;
-    glossy = 0.1f;
-    transparency = 0.0f;
-    refractiveIndex = 1;
+    roughness = 0.5f;
+    glossy = 0.0f;
+    transparency = 0.00f;
+    refractiveIndex = 1.0f;
     color = {255, 255, 255};
 }
 
-Material::Material(Vector color) {
+Material::Material(Color color) {
 
     roughness = 0.5f;
     glossy = 0.0f;
@@ -24,7 +24,7 @@ Material::Material(Vector color) {
     this->color = color;
 }
 
-Material::Material(Vector color, float roughness, float glossy, float transparency) {
+Material::Material(Color color, float roughness, float glossy, float transparency) {
     this->roughness = roughness;
     this->glossy = glossy;
     this->transparency = transparency;
@@ -32,7 +32,7 @@ Material::Material(Vector color, float roughness, float glossy, float transparen
     this->color = color;
 }
 
-Material::Material(Vector color, float roughness, float glossy, float transparency, float refractiveIndex) {
+Material::Material(Color color, float roughness, float glossy, float transparency, float refractiveIndex) {
 
     this->roughness = roughness;
     this->glossy = glossy;
@@ -54,8 +54,16 @@ float Material::getTransparency() {
     return transparency;
 }
 
-float Material::getrefractiveIndex() {
+Color Material::getColor() {
+    return color = Color(1.0f,1.0f,1.0f);
+}
+
+float Material::getRefractiveIndex() {
     return refractiveIndex;
+}
+
+void Material::setColor(Color color) {
+    this->color = color;
 }
 
 
