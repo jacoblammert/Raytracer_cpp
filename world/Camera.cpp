@@ -67,7 +67,7 @@ void Camera::setPosition(Vector pos) {
 void Camera::lookAt(Vector pos) {
     direction = pos - position;
     direction.normalize();
-    direction.print();
+    //direction.print();
     update();
 }
 

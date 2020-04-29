@@ -39,7 +39,7 @@ void Scene::addShape(Shape *shape) {
 
 void Scene::render() {
 
-    Chronometer chr = Chronometer("Raytracer");
+    //Chronometer chr = Chronometer("Raytracer");
 
     omp_set_num_threads(8); //64
 
@@ -47,22 +47,26 @@ void Scene::render() {
 
     image = Image("picture", camera.getWidth(),camera.getHeight());
 
+
+    Renderer renderer = Renderer();
+    renderer.setSkybox(skybox);
+
 #pragma omp parallel for
     for (int x = 0; x < camera.getWidth(); ++x) {
         for (int y = 0; y < camera.getHeight(); ++y) {
 
             Ray ray = {{},
                        {}};
-            Renderer renderer = Renderer();
+
             Camera camera1 = camera;
             ray = camera1.generateRay(x, y);
             image.setPixel(x,y,renderer.getColor(ray, 0, lights, &boundingBox));/**/
         }
-        progress++;
-        std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getWidth() << "% Thread: " << omp_get_thread_num() << std::endl;
+        //progress++;
+        //std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getWidth() << "% Thread: " << omp_get_thread_num() << std::endl;
     }
 
-    chr.stop();
+    //chr.stop();
     //boundingBox.print(40);
 }
 
@@ -82,6 +86,10 @@ void Scene::buildBoundingBox() {
     Chronometer chrb = Chronometer("BoundingBox");
     this->boundingBox = BoundingBox(this->shapes);
     chrb.stop();
+}
+
+void Scene::setSkybox(Image *skybox) {
+    this->skybox = skybox;
 }
 
 

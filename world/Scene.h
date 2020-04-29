@@ -34,6 +34,8 @@ public:
 
     void drawImage(int number);
 
+    void setSkybox(Image* skybox);
+
     //static Image background = Image("");
 
 private:
@@ -42,6 +44,7 @@ private:
     std::vector<Shape *> shapes;
     const std::vector<Light *> &lights;
     Image image = Image("picture");
+    Image* skybox;
 };
 
 

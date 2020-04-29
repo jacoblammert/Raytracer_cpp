@@ -48,6 +48,7 @@ void Image::readImage() {
     for (int i = 0; i < filestring.size(); ++i) {
 
         while (!filestring[i].empty()) {
+
             int index = filestring[i].find(token);
 
             if (index != std::string::npos) {
@@ -67,17 +68,29 @@ void Image::readImage() {
 
 void Image::constructImage() {
 
+
+    std::cout<<"Name: "<<filename<<std::endl;
+    std::cout<<"Arraysize: "<<filestring.size()<<std::endl;
+
+    //for (int j = 0; j < filestring.size(); ++j) {
+    //    std::cout<<filestring[j]<<std::endl;
+    //}
+
+
     int x = 0;
     int y = 0;
 
     for (int i = 0; i < filestring.size(); ++i) {
-        if (filestring[i] == "P3") {
+        if (filestring[0] == "P3") {
 
             if (i < 4) {
                 if (i == 1) {
+                    //std::cout<<"Testtesttesttest"<<std::endl;
                     width = std::stoi(filestring[i]);
+                    std::cout<<"Width image: "<<width<<std::endl;
                 } else if (i == 2) {
                     height = std::stoi(filestring[i]);
+                    std::cout<<"Height image: "<<height<<std::endl;
                     resetImage();
                 }
             } else {
@@ -99,9 +112,16 @@ void Image::constructImage() {
             }
         }
     }
+    std::cout<<"Width image: "<<width<<std::endl;
+    std::cout<<"Height image: "<<height<<std::endl;
+    std::cout<<"Width image: "<<filestring[1]<<std::endl;
+    std::cout<<"Height image: "<<filestring[2]<<std::endl;
+
 }
 
 void Image::saveImage(int number) {
+
+    std::cout<<"Saving Image: "<<number<<std::endl;
 
     std::ofstream img("picture" + std::to_string(number) + ".ppm");
     img << "P3" << std::endl << width << " " << height << std::endl << "255" << std::endl;

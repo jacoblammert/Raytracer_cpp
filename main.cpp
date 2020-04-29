@@ -19,6 +19,8 @@ int main() {
     cam.lookAt(Vector(0, 0, 0));
 
     cam.setNumberOfPixel(25000);// max number of pixels for the image
+
+    cam.setNumberOfPixel(50000);// max number of pixels for the image
     cam.setWidthToHeight(16.0f / 9.0f); // Height to width ratio
 
     cam.print();
@@ -91,7 +93,7 @@ int main() {
 
     scene.addShape(&p1);
 /**/
-    scene.addShape(&p1);
+    //scene.addShape(&p1);
 
 
     OBJLoader objLoader = OBJLoader("untitled8.obj");
@@ -112,7 +114,7 @@ int main() {
 
     //Box sp1 = {{1.33,0.2,0.5},1,1,1};
     //Sphere sp1 = {{10,0,2},1,{1,1,1}};
-    sp1.setMaterial({{1, 0, 0}, 0.0, 0.1, 1, 1.025f});
+    sp1.setMaterial({{1, 0, 0}, 0.0, 0.2, 1, 1.025f});
 
     scene.addShape(&sp1);
 
@@ -129,6 +131,20 @@ int main() {
     Sphere sphere = {{2, 0.8, 1.27f}, 0.3f, {1, 0, 0}};
     sphere.setMaterial({{0, 1, 0}, 0.1, 0, 0.7, 1.035f});
     scene.addShape(&sphere);
+
+
+    //Image skies = Image("skies.ppm");
+    /**/
+    Image skies = Image("skies.ppm");//"picture80.ppm");
+    /*/
+    Image skies = Image("skybox4.ppm");//"picture80.ppm");
+    /**/
+    skies.loadImage();
+    scene.setSkybox(&skies);
+    //skies.saveImage(123456);
+
+
+
 
 
 /*/
@@ -220,7 +236,7 @@ int main() {
 
     float pi = 3.14159265f;
     float progress;
-    float dist = 6;
+    float dist = 7.5;
 
     for (int i = 0; i < images; ++i) {
         progress = (float) i / images;

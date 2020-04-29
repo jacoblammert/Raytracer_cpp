@@ -52,7 +52,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
         float lightStrength = 0;
         float angle;
 
-        if (shapes[hit]->getMaterial().getTransparency() != 1) {
+        if (shapes[hit]->getMaterial().getTransparency() != 1 && shapes[hit]->getMaterial().getGlossy() != 1) {
             for (int i = 0; i < lights.size(); ++i) {
 
                 if (lights[i]->getIntensity() > 0) {
@@ -146,7 +146,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
         return colorfinal;
     }
-    return /*/getSkybox(ray.getDir());/*/Color();/**/
+    return /**/getSkybox(ray.getDir());/*/Color();/**/
 }
 
 /**
@@ -174,24 +174,31 @@ bool Renderer::castShadowRay(Ray ray, BoundingBox *boundingBox, float distance) 
     return hit >= 0 && 0 < mindistance && mindistance < distance;
 }
 
+void Renderer::setSkybox(Image *skybox) {
+    this->skybox = skybox;
+}
+
 /**
  * Returns the color of the Skybox, if the ray doesn't hit any objects and
  * takes the directional Vector as an Input
  * @param vector direction
  * @return color at x and y
  */
- /*
+ /**/
 Color Renderer::getSkybox(Vector vector) {
     vector.normalize();
     Vector horizontal = {1,0,0};
     Vector xvec = {vector.get(0),vector.get(2)};
-    float x = horizontal.dot(xvec);
-    float y = vector.get(2);
+
+    xvec.normalize();
+
+    float x = horizontal.dot(xvec); // certainly wrong
+    float y = -vector.get(2); // possibly wrong
 
     x = (x+1)/2;
     y = (y+1)/2;
 
-    return background.getPixel(x,y);
+    return skybox->getPixel(x,y);
 }/**/
 
 

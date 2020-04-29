@@ -24,9 +24,12 @@ public:
 
     bool castShadowRay(Ray ray, BoundingBox *boundingBox, float distance);
 
-    //Color getSkybox(Vector vector);
+    void setSkybox(Image* skybox);
+
+    Color getSkybox(Vector vector);
 
 private:
+    Image* skybox;
 };
 
 
