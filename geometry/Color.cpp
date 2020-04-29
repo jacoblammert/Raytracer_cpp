@@ -115,6 +115,17 @@ Color Color::operator/=(Color &obj) {
     return a;
 }
 
+void Color::setR(int red) {
+    r = (float) red /255.0f;
+}
+
+void Color::setG(int green) {
+    g = (float) green /255.0f;
+}
+
+void Color::setB(int blue) {
+    b = (float) blue /255.0f;
+}
 
 
 

@@ -58,7 +58,7 @@ void OBJLoader::split() {
     std::vector<std::string> result;
     for (int i = 0; i < filestring.size(); ++i) {
 
-        while (filestring[i].size()) {
+        while (!filestring[i].empty()) {
             int index = filestring[i].find(token);
 
             if (index != std::string::npos) {

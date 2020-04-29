@@ -24,6 +24,12 @@ public:
 
     void print();
 
+    void setR(int red);
+
+    void setG(int green);
+
+    void setB(int blue);
+
     Color operator+(Color &obj);
 
     Color operator+=(Color &obj);

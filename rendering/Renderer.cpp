@@ -7,7 +7,10 @@
 #include "../geometry/Material.h"
 
 Renderer::Renderer() {
-
+    //std::cout<< "Loading Image"<<std::endl;
+    //image = Image("picture99999.ppm");
+    //image.loadImage();
+    //std::cout<< "Image loaded"<<std::endl;
 }
 
 /**
@@ -40,7 +43,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
         Color Lightcolor;
         Color colorfinal = shapes[hit]->getMaterial().getColor();
-        colorfinal.scale(0.2);
+        colorfinal.scale(0.2 * (1-shapes[hit]->getMaterial().getTransparency()));
 
 
         Vector PointHit = HitPoint;//{HitPoint->get(0), HitPoint->get(1), HitPoint->get(2)};
@@ -87,12 +90,14 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
             Normal.scale(0.001);
 
-            Vector reflectedVector = ray.getDir().getReflected(HitNormal);
-            Ray reflectionray = {HitPoint + Normal, reflectedVector};
-            if (shapes[hit]->getMaterial().getGlossy() > 0) {
-                reflectionColor = getColor(reflectionray, depth + 1, lights, boundingBox);
-            }
 
+            if (shapes[hit]->getMaterial().getGlossy() > 0) {
+                Vector reflectedVector = ray.getDir().getReflected(HitNormal);
+                Ray reflectionray = {HitPoint + Normal, reflectedVector};
+                if (shapes[hit]->getMaterial().getGlossy() > 0) {
+                    reflectionColor = getColor(reflectionray, depth + 1, lights, boundingBox);
+                }
+            }
 
             if (shapes[hit]->getMaterial().getTransparency() > 0) {
 
@@ -137,9 +142,11 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
         colorfinal = colorfinal + reflectionColor + refractionColor;
 
+        colorfinal.scale(1/(shapes[hit]->getMaterial().getTransparency() + shapes[hit]->getMaterial().getGlossy()+shapes[hit]->getMaterial().getRoughness()));
+
         return colorfinal;
     }
-    return Color();
+    return /*/getSkybox(ray.getDir());/*/Color();/**/
 }
 
 /**
@@ -166,5 +173,25 @@ bool Renderer::castShadowRay(Ray ray, BoundingBox *boundingBox, float distance) 
     }
     return hit >= 0 && 0 < mindistance && mindistance < distance;
 }
+
+/**
+ * Returns the color of the Skybox, if the ray doesn't hit any objects and
+ * takes the directional Vector as an Input
+ * @param vector direction
+ * @return color at x and y
+ */
+ /*
+Color Renderer::getSkybox(Vector vector) {
+    vector.normalize();
+    Vector horizontal = {1,0,0};
+    Vector xvec = {vector.get(0),vector.get(2)};
+    float x = horizontal.dot(xvec);
+    float y = vector.get(2);
+
+    x = (x+1)/2;
+    y = (y+1)/2;
+
+    return background.getPixel(x,y);
+}/**/
 
 

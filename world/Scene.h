@@ -11,13 +11,14 @@
 #include "../geometry/Shape.h"
 #include "Light.h"
 #include "BoundingBox.h"
+#include "../rendering/Image.h"
 #include <vector>
 
 class Scene {
 public:
-    Scene();
+    Scene(const std::vector<Light *> &lights);
 
-    explicit Scene(Camera camera);
+    explicit Scene(Camera camera, const std::vector<Light *> &lights);
 
 
     void setCamera(Camera camera);
@@ -29,16 +30,18 @@ public:
 
     Camera getCamera();
 
-    void resetImage();
+    void buildBoundingBox();
 
-    void drawImage();
+    void drawImage(int number);
+
+    //static Image background = Image("");
 
 private:
     Camera camera;
     BoundingBox boundingBox;
     std::vector<Shape *> shapes;
-    std::vector<Light *> lights;
-    std::vector<std::vector<Color>> Pixel;
+    const std::vector<Light *> &lights;
+    Image image = Image("picture");
 };
 
 

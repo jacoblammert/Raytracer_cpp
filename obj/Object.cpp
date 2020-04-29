@@ -29,4 +29,11 @@ std::vector<Shape *> Object::getTriangles() {
     return this->triangles;
 }
 
+void Object::setMaterial(Material material) {
+    for (int i = 0; i < triangles.size(); ++i) {
+        triangles[i]->setMaterial(material);
+    }
+
+}
+
 

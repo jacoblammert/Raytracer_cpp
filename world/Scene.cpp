@@ -9,20 +9,20 @@
 #include "Scene.h"
 #include "../debug/Chronometer.h"
 #include "BoundingBox.h"
-#include "../math/Renderer.h"
+#include "../rendering/Renderer.h"
+#include "../rendering/Image.h"
 
-Scene::Scene() {
+Scene::Scene(const std::vector<Light *> &lights) : lights(lights) {
 
 }
 
-Scene::Scene(Camera camera) {
+Scene::Scene(Camera camera, const std::vector<Light *> &lights) : lights(lights) {
     this->camera = camera;
-    resetImage();
+
 }
 
 void Scene::setCamera(Camera camera) {
     this->camera = camera;
-    resetImage();
 }
 
 void Scene::addShapes(std::vector<Shape *> shapesToAdd) {
@@ -33,47 +33,36 @@ void Scene::addShape(Shape *shape) {
     shapes.push_back(shape);
 }
 
-void Scene::addLight(Light *light) {
-    lights.push_back(light);
-}
+//void Scene::addLight(Light *light) {
+//    lights.push_back(light);
+//}
 
 void Scene::render() {
 
-    std::cout << "Size shapes: " << shapes.size() << std::endl;
-    std::cout << "Size lights: " << lights.size() << std::endl;
-
-    Chronometer chrb = Chronometer("BoundingBox");
-    this->boundingBox = BoundingBox(this->shapes);
-    //boundingBox.print(0);
-    chrb.stop();
-
     Chronometer chr = Chronometer("Raytracer");
 
-    omp_set_num_threads(64);
+    omp_set_num_threads(8); //64
 
     int progress = 0;
 
+    image = Image("picture", camera.getWidth(),camera.getHeight());
+
 #pragma omp parallel for
-    for (int y = 0; y < camera.getHeight(); ++y) {
-        for (int x = 0; x < camera.getWidth(); ++x) {
+    for (int x = 0; x < camera.getWidth(); ++x) {
+        for (int y = 0; y < camera.getHeight(); ++y) {
 
             Ray ray = {{},
                        {}};
             Renderer renderer = Renderer();
-//#pragma omp critical
-            //{
             Camera camera1 = camera;
-
             ray = camera1.generateRay(x, y);
-            //}
-            Pixel[y][x] = renderer.getColor(ray, 0, lights, &boundingBox);/**/
+            image.setPixel(x,y,renderer.getColor(ray, 0, lights, &boundingBox));/**/
         }
         progress++;
-        std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getHeight() << "%" << std::endl;
+        std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getWidth() << "% Thread: " << omp_get_thread_num() << std::endl;
     }
 
     chr.stop();
-
     //boundingBox.print(40);
 }
 
@@ -81,31 +70,18 @@ Camera Scene::getCamera() {
     return camera;
 }
 
-void Scene::resetImage() {
 
-    std::vector<Color> vec;
-    vec.assign(camera.getWidth(), Color());
-    Pixel.assign(camera.getHeight(), vec);
+void Scene::drawImage(int number) {
+   image.saveImage(number);
 }
 
-void Scene::drawImage() {
+void Scene::buildBoundingBox() {
+    std::cout << "Size shapes: " << shapes.size() << std::endl;
+    std::cout << "Size lights: " << lights.size() << std::endl;
 
-    Chronometer chr = Chronometer("Image");
-
-    std::ofstream img("picture.ppm");
-    img << "P3" << std::endl << camera.getWidth() << " " << camera.getHeight() << std::endl << "255" << std::endl;
-
-
-    for (auto &i : Pixel) {
-        for (auto &j : i) {
-
-            j.scale(255);
-            j.setRange(0, 255);
-
-            img << (int) j.getR() << " " << (int) j.getG() << " " << (int) j.getB() << std::endl;
-        }
-    }
-    chr.stop();
+    Chronometer chrb = Chronometer("BoundingBox");
+    this->boundingBox = BoundingBox(this->shapes);
+    chrb.stop();
 }
 
 

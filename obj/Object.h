@@ -15,11 +15,13 @@ public:
 
     Object(std::string name);
 
-    Object(std::string name, std::vector<Shape*> triangles);
+    Object(std::string name, std::vector<Shape *> triangles);
 
-    void setTriangles(std::vector<Shape*> triangles);
+    void setTriangles(std::vector<Shape *> triangles);
 
-    std::vector<Shape*> getTriangles();
+    void setMaterial(Material material);
+
+    std::vector<Shape *> getTriangles();
 
 private:
     std::string name;

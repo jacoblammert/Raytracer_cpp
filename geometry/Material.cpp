@@ -8,10 +8,10 @@
 #include <iostream>
 
 Material::Material() {
-    roughness = 0.5f;
+    roughness = 1.0f;
     glossy = 0.0f;
     transparency = 0.00f;
-    refractiveIndex = 1.0f;
+    refractiveIndex = 1.025f;
     color = {255, 255, 255};
 }
 
@@ -20,7 +20,7 @@ Material::Material(Color color) {
     roughness = 0.5f;
     glossy = 0.0f;
     transparency = 0.0f;
-    refractiveIndex = 1;
+    refractiveIndex = 1.025f;
     this->color = color;
 }
 
