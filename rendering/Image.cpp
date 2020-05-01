@@ -69,8 +69,8 @@ void Image::readImage() {
 void Image::constructImage() {
 
 
-    std::cout<<"Name: "<<filename<<std::endl;
-    std::cout<<"Arraysize: "<<filestring.size()<<std::endl;
+    //std::cout<<"Name: "<<filename<<std::endl;
+    //std::cout<<"Arraysize: "<<filestring.size()<<std::endl;
 
     //for (int j = 0; j < filestring.size(); ++j) {
     //    std::cout<<filestring[j]<<std::endl;
@@ -87,10 +87,10 @@ void Image::constructImage() {
                 if (i == 1) {
                     //std::cout<<"Testtesttesttest"<<std::endl;
                     width = std::stoi(filestring[i]);
-                    std::cout<<"Width image: "<<width<<std::endl;
+                    //std::cout<<"Width image: "<<width<<std::endl;
                 } else if (i == 2) {
                     height = std::stoi(filestring[i]);
-                    std::cout<<"Height image: "<<height<<std::endl;
+                    //std::cout<<"Height image: "<<height<<std::endl;
                     resetImage();
                 }
             } else {
@@ -112,10 +112,10 @@ void Image::constructImage() {
             }
         }
     }
-    std::cout<<"Width image: "<<width<<std::endl;
-    std::cout<<"Height image: "<<height<<std::endl;
-    std::cout<<"Width image: "<<filestring[1]<<std::endl;
-    std::cout<<"Height image: "<<filestring[2]<<std::endl;
+    //std::cout<<"Width image: "<<width<<std::endl;
+    //std::cout<<"Height image: "<<height<<std::endl;
+    //std::cout<<"Width image: "<<filestring[1]<<std::endl;
+    //std::cout<<"Height image: "<<filestring[2]<<std::endl;
 
 }
 

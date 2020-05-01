@@ -95,7 +95,7 @@ std::vector<Shape *> BoundingBox::removeDoubles(std::vector<Shape *> shapesToCle
  * or if there are more than 10 shapes inside the box
  */
 void BoundingBox::build() {
-    if (/**/depth < 16 && /**/shapes.size() > 80) {
+    if (/**/depth < 14 && /**/shapes.size() > 80) {
         setMid();
         split();
     }
@@ -174,14 +174,17 @@ void BoundingBox::split() {
 
             if (min.get(axis) > median.get(axis)) { // right box
                 boxes[0].addShape(shapes[i]);
+                shapes.erase(shapes.begin() + i);
+                i--;
             } else if (max.get(axis) < median.get(axis)) { // left box
                 boxes[1].addShape(shapes[i]);
+                shapes.erase(shapes.begin() + i);
+                i--;
             } else {
-                boxes[0].addShape(shapes[i]); // object inside the cutting plane added to both arrays -> simpler
-                boxes[1].addShape(shapes[i]); // object inside the cutting plane added to both arrays -> simpler
+                //boxes[0].addShape(shapes[i]); // object inside the cutting plane added to both arrays -> simpler
+                //boxes[1].addShape(shapes[i]); // object inside the cutting plane added to both arrays -> simpler
             }
-            shapes.erase(shapes.begin() + i);
-            i--;
+
         }
     }
 

@@ -43,7 +43,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
         Color Lightcolor;
         Color colorfinal = shapes[hit]->getMaterial().getColor();
-        colorfinal.scale(0.2 * (1-shapes[hit]->getMaterial().getTransparency()));
+        colorfinal.scale(0.2 * (1 - shapes[hit]->getMaterial().getTransparency()));
 
 
         Vector PointHit = HitPoint;//{HitPoint->get(0), HitPoint->get(1), HitPoint->get(2)};
@@ -84,7 +84,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
         Color reflectionColor;
         Color refractionColor;
 
-        if (depth < 3) { // calculates as n reflections because depth < n
+        if (depth < 4) { // calculates as n reflections because depth < n
 
             Vector Normal = HitNormal;//HitNormal.scale(0.001);
 
@@ -142,7 +142,8 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
         colorfinal = colorfinal + reflectionColor + refractionColor;
 
-        colorfinal.scale(1/(shapes[hit]->getMaterial().getTransparency() + shapes[hit]->getMaterial().getGlossy()+shapes[hit]->getMaterial().getRoughness()));
+        colorfinal.scale(1 / (shapes[hit]->getMaterial().getTransparency() + shapes[hit]->getMaterial().getGlossy() +
+                              shapes[hit]->getMaterial().getRoughness()));
 
         return colorfinal;
     }
@@ -184,21 +185,28 @@ void Renderer::setSkybox(Image *skybox) {
  * @param vector direction
  * @return color at x and y
  */
- /**/
+/**/
 Color Renderer::getSkybox(Vector vector) {
     vector.normalize();
-    Vector horizontal = {1,0,0};
-    Vector xvec = {vector.get(0),vector.get(2)};
+    Vector horizontal = {1, 0, 0};
+    Vector horizontal2 = {0, 1, 0};
 
+    Vector xvec = {vector.get(0), vector.get(1),0};
     xvec.normalize();
 
-    float x = horizontal.dot(xvec); // certainly wrong
-    float y = -vector.get(2); // possibly wrong
+    float x = horizontal.dot(xvec);
+    float y = -vector.get(2);
 
-    x = (x+1)/2;
-    y = (y+1)/2;
+    x = (x + 1.0f) / 2.0f;// 0 to 0.5
 
-    return skybox->getPixel(x,y);
-}/**/
+    if (horizontal2.dot(xvec) > 0){
+        x = -x;
+    }
+
+    x = (x + 1.0f) / 2.0f;
+    y = (y + 1) / 2;
+
+    return skybox->getPixel(x, y);
+}
 
 

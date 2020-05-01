@@ -13,14 +13,14 @@
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 5);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 3);//5
 
-    //cam.setPosition({10,0,5});
+    cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
 
-    cam.setNumberOfPixel(25000);// max number of pixels for the image
+    cam.setNumberOfPixel(500000);// max number of pixels for the image
 
-    cam.setNumberOfPixel(50000);// max number of pixels for the image
+    //cam.setNumberOfPixel(50000);// max number of pixels for the image
     cam.setWidthToHeight(16.0f / 9.0f); // Height to width ratio
 
     cam.print();
@@ -57,8 +57,15 @@ int main() {
     Light light3 = {{1.33, -0.69, 1}, {1, 1, 0}, 1};
     Light light4 = {{1.33, -0.69, 10}, {0.125, 0.125, 0.125}, 100};
 
-    //light2.setPosition({2.5,-2,2});
-    //light3.setPosition({1.3,-1,2});
+    Light* light5 = new Light{};
+
+    std::shared_ptr<Light> light6 = std::make_shared<Light>(Light{});
+
+    light.setPosition({0,0,4});
+    light1.setPosition({-0.5,-0.5,1});
+    light2.setPosition({0.5,0.5,1});
+    light3.setPosition({-0.5,0.5,2});
+    light4.setPosition({0.5,-0.5,2});
 
     /*/scene.addLight(&light);
     scene.addLight(&light1);
@@ -97,45 +104,50 @@ int main() {
 
 
     OBJLoader objLoader = OBJLoader("untitled8.obj");
+    //OBJLoader objLoader = OBJLoader("../models/wtcobj.obj");
+    //OBJLoader objLoader = OBJLoader("wtcobj.obj");
+    //OBJLoader objLoader = OBJLoader("dragon.obj");
+
+
     objLoader.LoadOBJ();
 
     Object object = objLoader.getObject(); // get the first Object inside the obj file
-    //Material material = {{1,1,1},0.4,0.2,0.6,1.025};
-    //object.setMaterial(material);
+    Material material = {{1,1,1},1.00,1.0,0.0,1.025};
+    object.setMaterial(material);
 
-    //scene.addShapes(object.getTriangles());
+    scene.addShapes(object.getTriangles());
 
 
 
 
     //Sphere sp1 = {{1.33,-0.69,-1},1,{1,1,1}};
 
-    Sphere sp1 = {{4, -0.8, 1.27f}, 0.5f, {1, 0, 0}};
+    Sphere sp1 = {{4, -0.8, 1.27f}, 1.0f, {1, 0, 0}};
 
     //Box sp1 = {{1.33,0.2,0.5},1,1,1};
     //Sphere sp1 = {{10,0,2},1,{1,1,1}};
     sp1.setMaterial({{1, 0, 0}, 0.0, 0.2, 1, 1.025f});
-
-    scene.addShape(&sp1);
+    sp1.setMaterial({{1,1,1},0,1,0});
+    //scene.addShape(&sp1);
 
     Box box = Box{{2.7,-1.3,0.5},1,1,1};
     box.setMaterial({{0.2,0.6,0.7},0,1,0});
-    scene.addShape(&box);
+    //scene.addShape(&box);
 
 
     Box box1 = Box{{2,1.3,0.5},2,1,1};
     box1.setMaterial({{1,0.1,0.1},1,0,0});
-    scene.addShape(&box1);
+    //scene.addShape(&box1);
 
 
     Sphere sphere = {{2, 0.8, 1.27f}, 0.3f, {1, 0, 0}};
     sphere.setMaterial({{0, 1, 0}, 0.1, 0, 0.7, 1.035f});
-    scene.addShape(&sphere);
+    //scene.addShape(&sphere);
 
 
     //Image skies = Image("skies.ppm");
     /**/
-    Image skies = Image("skies.ppm");//"picture80.ppm");
+    Image skies = Image("Skies.ppm");//"picture80.ppm");
     /*/
     Image skies = Image("skybox4.ppm");//"picture80.ppm");
     /**/
@@ -198,8 +210,8 @@ int main() {
 
     scene.buildBoundingBox();
 
-    scene.render();
-    scene.drawImage(0);
+    ////scene.render();
+    ////scene.drawImage(0);
 
 /*/
     Vector Origin = {10,0,2};
@@ -230,13 +242,15 @@ int main() {
 
     Vector Origin = {3, -0.2, 2};
     Vector LookAt = {3,-0.2,1};
-    float images = 101.0f;
+    LookAt = {3.44,1.66,0.87};
+    Origin = {3.44, 1.66, 1.5};
+    float images = 100.0f;
 
     Chronometer chronomovie = Chronometer("Video");
 
     float pi = 3.14159265f;
     float progress;
-    float dist = 7.5;
+    float dist = 3;
 
     for (int i = 0; i < images; ++i) {
         progress = (float) i / images;

@@ -39,9 +39,9 @@ void Scene::addShape(Shape *shape) {
 
 void Scene::render() {
 
-    //Chronometer chr = Chronometer("Raytracer");
+    Chronometer chr = Chronometer("Raytracer");
 
-    omp_set_num_threads(8); //64
+    omp_set_num_threads(256); //64
 
     int progress = 0;
 
@@ -62,11 +62,11 @@ void Scene::render() {
             ray = camera1.generateRay(x, y);
             image.setPixel(x,y,renderer.getColor(ray, 0, lights, &boundingBox));/**/
         }
-        //progress++;
-        //std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getWidth() << "% Thread: " << omp_get_thread_num() << std::endl;
+        progress++;
+        std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getWidth() << "% Thread: " << omp_get_thread_num() << std::endl;
     }
 
-    //chr.stop();
+    chr.stop();
     //boundingBox.print(40);
 }
 
