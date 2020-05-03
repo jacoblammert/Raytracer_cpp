@@ -143,21 +143,21 @@ Vector Box::getNormal(Vector pos) {
     //pos.scale(1.001);
 
     if (pos.get(0) <= bounds[0].get(0) + epsilon) {
-        return {-1, 0, 0};
+        return {-1, 0, 0}; // back
     } else if (pos.get(0) >= bounds[1].get(0) - epsilon) {
-        return {1, 0, 0};
+        return {1, 0, 0}; // front
     }
     if (pos.get(1) <= bounds[0].get(1) + 0.001) {
-        return {0, -1, 0};
+        return {0, -1, 0}; // left
     } else if (pos.get(1) >= bounds[1].get(1) - epsilon) {
-        return {0, 1, 0};
+        return {0, 1, 0}; // right
     }
     if (pos.get(2) <= bounds[0].get(2) + epsilon) {
-        return {0, 0, -1};
+        return {0, 0, -1}; // bottom
     } else if (pos.get(2) >= bounds[1].get(2) - epsilon) {
-        return {0, 0, 1};
+        return {0, 0, 1}; // top
     }
-    return {0, 1, 0};
+    return {0, 1, 0}; // if in corner, or something is wrong
 }
 
 Vector Box::getMin() {

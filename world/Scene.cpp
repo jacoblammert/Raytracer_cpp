@@ -41,7 +41,7 @@ void Scene::render() {
 
     Chronometer chr = Chronometer("Raytracer");
 
-    omp_set_num_threads(256); //64
+    omp_set_num_threads(128); //64
 
     int progress = 0;
 

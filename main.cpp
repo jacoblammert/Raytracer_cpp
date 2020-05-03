@@ -51,28 +51,29 @@ int main() {
     Box b4 = Box(Vector(-2, -3.2, -2), Vector(4, 2.2, 2), Color(1, 1, 1));
 
 
-    Light light = {{-3, 0, 1}, {1, 0, 0.2}, 1};
-    Light light1 = {{4, 1.42, 1}, {0, 1, 1}, 1};
-    Light light2 = {{4, -1.5, 1.22}, {1, 0, 0}, 1};
-    Light light3 = {{1.33, -0.69, 1}, {1, 1, 0}, 1};
-    Light light4 = {{1.33, -0.69, 10}, {0.125, 0.125, 0.125}, 100};
+
+    Light light = {{3.44, 1.66, 4}, {1, 1, 1}, 0};
+    Light light1 = {{4, 1.42, 1}, {0, 1, 1}, 0};
+    Light light2 = {{4, -1.5, 1.22}, {1, 0, 0}, 0};
+    Light light3 = {{1.33, -0.69, 1}, {1, 1, 0}, 0};
+    Light light4 = {{1.33, -0.69, 10}, {0.125, 0.125, 0.125}, 10};
 
     Light* light5 = new Light{};
 
     std::shared_ptr<Light> light6 = std::make_shared<Light>(Light{});
 
-    light.setPosition({0,0,4});
-    light1.setPosition({-0.5,-0.5,1});
-    light2.setPosition({0.5,0.5,1});
-    light3.setPosition({-0.5,0.5,2});
-    light4.setPosition({0.5,-0.5,2});
+    //light.setPosition({0,0,4});
+    //light1.setPosition({-0.5,-0.5,1});
+    //light2.setPosition({0.5,0.5,1});
+    //light3.setPosition({-0.5,0.5,2});
+    //light4.setPosition({0.5,-0.5,2});
 
     /*/scene.addLight(&light);
     scene.addLight(&light1);
     scene.addLight(&light2);
     scene.addLight(&light3);/**/
 
-    const std::vector<Light *> &lightvec = {&light, &light1, &light2,/**/&light3,/**/&light4};
+    const std::vector<Light *> &lightvec = {&light/**/, &light1, &light2,&light3,&light4/**/};
 
     Scene scene = Scene(cam, lightvec);
 /*/
@@ -103,7 +104,8 @@ int main() {
     //scene.addShape(&p1);
 
 
-    OBJLoader objLoader = OBJLoader("untitled8.obj");
+    //OBJLoader objLoader = OBJLoader("dragon1.obj");
+    OBJLoader objLoader = OBJLoader("untitled8.obj"); //car
     //OBJLoader objLoader = OBJLoader("../models/wtcobj.obj");
     //OBJLoader objLoader = OBJLoader("wtcobj.obj");
     //OBJLoader objLoader = OBJLoader("dragon.obj");
@@ -112,10 +114,10 @@ int main() {
     objLoader.LoadOBJ();
 
     Object object = objLoader.getObject(); // get the first Object inside the obj file
-    Material material = {{1,1,1},1.00,1.0,0.0,1.025};
+    Material material = {{1.0,1.0,1.0},0.00,0.1,0.0,1.025};
     object.setMaterial(material);
 
-    scene.addShapes(object.getTriangles());
+    //scene.addShapes(object.getTriangles());
 
 
 
@@ -123,6 +125,8 @@ int main() {
     //Sphere sp1 = {{1.33,-0.69,-1},1,{1,1,1}};
 
     Sphere sp1 = {{4, -0.8, 1.27f}, 1.0f, {1, 0, 0}};
+
+
 
     //Box sp1 = {{1.33,0.2,0.5},1,1,1};
     //Sphere sp1 = {{10,0,2},1,{1,1,1}};
@@ -156,8 +160,10 @@ int main() {
     //skies.saveImage(123456);
 
 
+    Sphere testMetal = {{3.44,-0.25,0.87},1};
+    testMetal.setMaterial({{1,1,1},0,1,0,1});
 
-
+    scene.addShape(&testMetal);
 
 /*/
     Light light = {{-3,0,-1},{1,0,0.2},1};
@@ -210,8 +216,8 @@ int main() {
 
     scene.buildBoundingBox();
 
-    ////scene.render();
-    ////scene.drawImage(0);
+    /*/scene.render();/**/
+    /*/scene.drawImage(0);/**/
 
 /*/
     Vector Origin = {10,0,2};
@@ -242,18 +248,29 @@ int main() {
 
     Vector Origin = {3, -0.2, 2};
     Vector LookAt = {3,-0.2,1};
-    LookAt = {3.44,1.66,0.87};
-    Origin = {3.44, 1.66, 1.5};
+    LookAt = {3.44,-0.25,0.87};
+    Origin = {3.44, -0.25, 1.5};
+    //LookAt = {0.0,0,0.8};//obj9
+    //Origin = {0.0, 0, 1.4};//obj9
+
     float images = 100.0f;
 
     Chronometer chronomovie = Chronometer("Video");
 
     float pi = 3.14159265f;
     float progress;
-    float dist = 3;
+    float dist = 4;
 
     for (int i = 0; i < images; ++i) {
+
+
         progress = (float) i / images;
+
+        material = {{1.0,1.0,1.0},progress,1.0,0.0,1.025};
+        //object.setMaterial(material);
+
+        testMetal.setMaterial(material);
+
         Vector offset = {dist * sin(progress*2*pi), dist * cos(progress*2*pi), 0};
 
         cam.setPosition(Origin + offset);

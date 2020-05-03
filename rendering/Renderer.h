@@ -28,6 +28,16 @@ public:
 
     Color getSkybox(Vector vector);
 
+    Color getRefractedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth,
+                            std::vector<Light *> lights, BoundingBox *boundingBox, std::vector<Shape *> shapes,
+                            int hit);
+
+    Color getReflectedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth,
+                            std::vector<Light *> lights, BoundingBox *boundingBox, std::vector<Shape *> shapes,
+                            int hit);
+
+    float randomFloat(float range);
+
 private:
     Image* skybox;
 };

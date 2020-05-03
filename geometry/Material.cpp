@@ -55,7 +55,7 @@ float Material::getTransparency() {
 }
 
 Color Material::getColor() {
-    return color = Color(1.0f,1.0f,1.0f);
+    return color;
 }
 
 float Material::getRefractiveIndex() {
