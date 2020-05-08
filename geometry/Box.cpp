@@ -4,10 +4,11 @@
 
 #include <iostream>
 #include "Box.h"
+
 Box::Box() {}
 
 Box::Box(Vector minXminYminZ, Vector maxXmaxYmaxZ) {
-    this->material.setColor({1,1,1});
+    this->material.setColor({1, 1, 1});
 
     bounds.push_back(minXminYminZ);
     bounds.push_back(maxXmaxYmaxZ);
@@ -21,7 +22,7 @@ Box::Box(Vector Pos, float xScale, float yScale, float zScale) {
     Vector maxXmaxYmaxZ = Vector(Pos.getX() + xScale / 2, Pos.getY() + yScale / 2, Pos.getZ() + zScale / 2);
     bounds.push_back(minXminYminZ);
     bounds.push_back(maxXmaxYmaxZ);
-    this->material.setColor({1,1,1});
+    this->material.setColor({1, 1, 1});
     position = Pos;
 }
 
@@ -78,31 +79,77 @@ bool Box::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &d
     if (tzmax < tmax)
         tmax = tzmax;
 
-//#pragma omp critical
-    {
 
-        if (0 < tmin && tmin < distance) {
-            raydirection = ray.getDir();
-            raydirection.scale(tmin);
+    if (0 < tmin && tmin < distance) {
+        raydirection = ray.getDir();
+        raydirection.scale(tmin);
 
-            distance = tmin;
-            HitPoint = rayposition + raydirection;
-            HitNormal = getNormal(HitPoint);
-            id = newid;
-            return true;
-        }
-        if (tmin < 0 && 0 < tmax && tmax < distance) {
-            raydirection = ray.getDir();
-            raydirection.scale(tmax);
+        distance = tmin;
+        HitPoint = rayposition + raydirection;
+        HitNormal = getNormal(HitPoint);
+        id = newid;
+        return true;
+    }
+    if (tmin < 0 && 0 < tmax && tmax < distance) {
+        raydirection = ray.getDir();
+        raydirection.scale(tmax);
 
-            distance = tmax;
-            HitPoint = rayposition + raydirection;
-            HitNormal = getNormal(HitPoint);
-            id = newid;
-            return true;
-        }
+        distance = tmax;
+        HitPoint = rayposition + raydirection;
+        HitNormal = getNormal(HitPoint);
+        id = newid;
+        return true;
     }
 
+
+}
+
+/**
+ * Only important for the Skybox
+ * we now the ray hits the Skybox, therfore we can remove a few things
+ * @param direction
+ * @param HitNormal
+ */
+void Box::getIntersectVec(Vector &direction, Vector &HitNormal) {
+
+    Vector raydirection = direction;
+
+    direction.divide(1);
+
+    float tmin, tmax, tymin, tymax, tzmin, tzmax;
+
+    tmin = (bounds[direction.sign(0)].getX()) * direction.getX();
+    tmax = (bounds[1 - direction.sign(0)].getX()) * direction.getX();
+    tymin = (bounds[direction.sign(1)].getY()) * direction.getY();
+    tymax = (bounds[1 - direction.sign(1)].getY()) * direction.getY();
+
+    if (tymin > tmin)
+        tmin = tymin;
+    if (tymax < tmax)
+        tmax = tymax;
+
+    tzmin = (bounds[direction.sign(2)].getZ()) * direction.getZ();
+    tzmax = (bounds[1 - direction.sign(2)].getZ()) * direction.getZ();
+
+
+    if (tzmin > tmin)
+        tmin = tzmin;
+    if (tzmax < tmax)
+        tmax = tzmax;
+
+
+    if (0 < tmin) {
+        direction = raydirection;
+        direction.scale(tmin);
+
+        HitNormal = getNormal(direction);
+    }
+    if (tmin < 0 && 0 < tmax) {
+        direction = raydirection; // original direction values get passed onto the original direction vector
+        direction.scale(tmax);
+
+        HitNormal = getNormal(direction);
+    }
 }
 
 /**
@@ -173,8 +220,9 @@ Vector Box::getMedian() {
 }
 
 void Box::print() {
-    std::cout<<"Box"<<std::endl;
+    std::cout << "Box" << std::endl;
 }
+
 /**/
 Material Box::getMaterial() {
     return material;
@@ -182,7 +230,10 @@ Material Box::getMaterial() {
 
 void Box::setMaterial(Material material) {
     this->material = material;
-}/**/
+}
+
+
+/**/
 
 
 

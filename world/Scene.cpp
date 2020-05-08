@@ -88,7 +88,7 @@ void Scene::buildBoundingBox() {
     chrb.stop();
 }
 
-void Scene::setSkybox(Image *skybox) {
+void Scene::setSkybox(Skybox *skybox) {
     this->skybox = skybox;
 }
 

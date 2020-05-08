@@ -12,6 +12,7 @@
 #include "Light.h"
 #include "BoundingBox.h"
 #include "../rendering/Image.h"
+#include "Skybox.h"
 #include <vector>
 
 class Scene {
@@ -34,7 +35,7 @@ public:
 
     void drawImage(int number);
 
-    void setSkybox(Image* skybox);
+    void setSkybox(Skybox* skybox);
 
     //static Image background = Image("");
 
@@ -44,7 +45,7 @@ private:
     std::vector<Shape *> shapes;
     const std::vector<Light *> &lights;
     Image image = Image("picture");
-    Image* skybox;
+    Skybox* skybox;
 };
 
 

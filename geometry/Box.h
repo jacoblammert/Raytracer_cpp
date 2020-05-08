@@ -25,6 +25,8 @@ public:
 
     bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) override;
 
+    void getIntersectVec(Vector &direction,  Vector &HitNormal);
+
     bool getIntersect(Ray ray);
 
     Vector getNormal(Vector pos) override;

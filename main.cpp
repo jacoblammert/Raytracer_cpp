@@ -4,6 +4,7 @@
 #include "world/Camera.h"
 #include "geometry/Sphere.h"
 #include "world/Scene.h"
+#include "world/Skybox.h"
 #include "geometry/Plane.h"
 #include "geometry/Triangle.h"
 #include "obj/OBJLoader.h"
@@ -13,12 +14,12 @@
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 3);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 1);//5
 
     cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
 
-    cam.setNumberOfPixel(500000);// max number of pixels for the image
+    cam.setNumberOfPixel(200000);// max number of pixels for the image
 
     //cam.setNumberOfPixel(50000);// max number of pixels for the image
     cam.setWidthToHeight(16.0f / 9.0f); // Height to width ratio
@@ -149,15 +150,32 @@ int main() {
     //scene.addShape(&sphere);
 
 
+
+
+
+    /*
+
     //Image skies = Image("skies.ppm");
-    /**/
+
     Image skies = Image("Skies.ppm");//"picture80.ppm");
-    /*/
+
     Image skies = Image("skybox4.ppm");//"picture80.ppm");
-    /**/
+
     skies.loadImage();
     scene.setSkybox(&skies);
     //skies.saveImage(123456);
+
+    /**/
+
+
+
+    Skybox skybox = Skybox();
+    //skybox.getColor();
+
+    scene.setSkybox(&skybox);
+
+
+
 
 
     Sphere testMetal = {{3.44,-0.25,0.87},1};
@@ -253,7 +271,7 @@ int main() {
     //LookAt = {0.0,0,0.8};//obj9
     //Origin = {0.0, 0, 1.4};//obj9
 
-    float images = 100.0f;
+    float images = 1000.0f;
 
     Chronometer chronomovie = Chronometer("Video");
 
@@ -266,7 +284,7 @@ int main() {
 
         progress = (float) i / images;
 
-        material = {{1.0,1.0,1.0},progress,1.0,0.0,1.025};
+        material = {{1.0,1.0,1.0},0,1.0,0.0,1.025};
         //object.setMaterial(material);
 
         testMetal.setMaterial(material);

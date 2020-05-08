@@ -7,6 +7,10 @@
 #include <iostream>
 #include "Image.h"
 
+Image::Image() {
+
+}
+
 Image::Image(std::string filename) {
     this->filename = filename;
 }
@@ -121,7 +125,7 @@ void Image::constructImage() {
 
 void Image::saveImage(int number) {
 
-    std::cout<<"Saving Image: "<<number<<std::endl;
+    std::cout << "Saving Image: " << number << std::endl;
 
     std::ofstream img("picture" + std::to_string(number) + ".ppm");
     img << "P3" << std::endl << width << " " << height << std::endl << "255" << std::endl;
@@ -147,19 +151,54 @@ void Image::saveImage(int number) {
  */
 Color Image::getPixel(float x, float y) {
 
-    x = x * (float)width;
-    y = y * (float)height;
+    if (/*!image.empty() && !image[(int)(y * height)].empty() &&*/ 0 < x && 0 < y) {
+        x = x * (float) this->width;
+        y = y * (float) this->height;
 
-    x =  ((int)x) % (int)width;
-    y =  ((int)y) % (int)height;
+        x = ((int) x) % (int) this->width;
+        y = ((int) y) % (int) this->height;
 
-    return image[y][x];
+        return image[y][x];
+    } else{
+        //std::cout<<"Image is empty, or x < 0 or y < 0! " << std::endl;
+        return {0,0,0};
+    }
 }
 
 void Image::resetImage() {
     std::vector<Color> vec;
     vec.assign(width, Color());
     image.assign(height, vec);
+}
+
+void Image::printR() {
+    std::cout<<"RED:\n";
+    for (int i = 0; i < image.size(); ++i) {
+        for (int j = 0; j < image[i].size(); ++j) {
+            std::cout << image[i][j].getR()<< " ";
+        }
+        std::cout<<std::endl;
+    }
+}
+
+void Image::printG() {
+    std::cout<<"GREEN:\n";
+    for (int i = 0; i < image.size(); ++i) {
+        for (int j = 0; j < image[i].size(); ++j) {
+            std::cout << image[i][j].getG()<< " ";
+        }
+        std::cout<<std::endl;
+    }
+}
+
+void Image::printB() {
+    std::cout<<"BLUE:\n";
+    for (int i = 0; i < image.size(); ++i) {
+        for (int j = 0; j < image[i].size(); ++j) {
+            std::cout << image[i][j].getB()<< " ";
+        }
+        std::cout<<std::endl;
+    }
 }
 
 

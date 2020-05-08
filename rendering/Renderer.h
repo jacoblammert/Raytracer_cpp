@@ -12,6 +12,7 @@
 #include "../world/Light.h"
 #include "../world/BoundingBox.h"
 #include "Image.h"
+#include "../world/Skybox.h"
 
 class Renderer {
 public:
@@ -24,9 +25,9 @@ public:
 
     bool castShadowRay(Ray ray, BoundingBox *boundingBox, float distance);
 
-    void setSkybox(Image* skybox);
+    void setSkybox(Skybox* skybox);
 
-    Color getSkybox(Vector vector);
+    //Color getSkybox(Vector vector);
 
     Color getRefractedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth,
                             std::vector<Light *> lights, BoundingBox *boundingBox, std::vector<Shape *> shapes,
@@ -39,7 +40,7 @@ public:
     float randomFloat(float range);
 
 private:
-    Image* skybox;
+    Skybox* skybox;
 };
 
 

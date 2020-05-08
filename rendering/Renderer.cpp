@@ -8,6 +8,7 @@
 #include "../geometry/Material.h"
 
 Renderer::Renderer() {
+
     //std::cout<< "Loading Image"<<std::endl;
     //image = Image("picture99999.ppm");
     //image.loadImage();
@@ -53,7 +54,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
         float lightStrength = 0;
         float angle;
 
-        if (shapes[hit]->getMaterial().getTransparency() != 1 && shapes[hit]->getMaterial().getGlossy() != 1) { // ||?
+        if (shapes[hit]->getMaterial().getTransparency() != 1 || shapes[hit]->getMaterial().getGlossy() != 1) { // ||?
             for (int i = 0; i < lights.size(); ++i) {
 
                 if (lights[i]->getIntensity() > 0) {
@@ -146,7 +147,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
         return colorfinal;
     }
-    return /**/getSkybox(ray.getDir());/*/Color();/**/
+    return skybox->getColor(ray.getDir());
 }
 
 /**
@@ -174,38 +175,8 @@ bool Renderer::castShadowRay(Ray ray, BoundingBox *boundingBox, float distance) 
     return hit >= 0 && 0 < mindistance && mindistance < distance;
 }
 
-void Renderer::setSkybox(Image *skybox) {
+void Renderer::setSkybox(Skybox *skybox) {
     this->skybox = skybox;
-}
-
-/**
- * Returns the color of the Skybox, if the ray doesn't hit any objects and
- * takes the directional Vector as an Input
- * @param vector direction
- * @return color at x and y
- */
-/**/
-Color Renderer::getSkybox(Vector vector) {
-    vector.normalize();
-    Vector horizontal = {1, 0, 0};
-    Vector horizontal2 = {0, 1, 0};
-
-    Vector xvec = {vector.get(0), vector.get(1), 0};
-    xvec.normalize();
-
-    float x = horizontal.dot(xvec);
-    float y = -vector.get(2);
-
-    x = (x + 1.0f) / 2.0f;// 0 to 0.5
-
-    if (horizontal2.dot(xvec) < 0) {
-        x = -x;
-    }
-
-    x = (x + 1.0f) / 2.0f;
-    y = (y + 1) / 2;
-
-    return skybox->getPixel(x, y);
 }
 
 float Renderer::randomFloat(float range) {
