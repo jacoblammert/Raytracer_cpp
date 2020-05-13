@@ -6,20 +6,20 @@
 #include <iostream>
 #include "Triangle.h"
 
-Triangle::Triangle(Vector a, Vector b, Vector c) {
-    this->a = a;
-    this->b = b;
-    this->c = c;
-    this->material.setColor({1,1,1});
+Triangle::Triangle(Vector a, Vector b, Vector c) :
+        a{a},
+        b{b},
+        c{c} {
+    this->material.setColor({1, 1, 1});
     Vector ab = b - a;
     Vector ac = c - a;
     this->normal = ab * ac;
 }
 
-Triangle::Triangle(Vector a, Vector b, Vector c, Color color) {
-    this->a = a;
-    this->b = b;
-    this->c = c;
+Triangle::Triangle(Vector a, Vector b, Vector c, Color color):
+        a{a},
+        b{b},
+        c{c} {
     this->material.setColor(color);
     Vector ab = b - a;
     Vector ac = c - a;
@@ -44,7 +44,7 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
 
     // if the determinant is negative the triangle is backfacing
     // if the determinant is close to 0, the ray misses the triangle
-    if (det < 0.0001f){
+    if (det < 0.0001f) {
         //normal.scale(-1);
         //return false;
     }
@@ -120,14 +120,15 @@ Vector Triangle::getMedian() {
 }
 
 void Triangle::print() {
-    std::cout<<"Triangle"<<std::endl;
-    std::cout<<"A: ";
+    std::cout << "Triangle" << std::endl;
+    std::cout << "A: ";
     a.print();
-    std::cout<<"B: ";
+    std::cout << "B: ";
     b.print();
-    std::cout<<"C: ";
+    std::cout << "C: ";
     c.print();
 }
+
 /**/
 Material Triangle::getMaterial() {
     return material;

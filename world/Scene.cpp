@@ -62,8 +62,8 @@ void Scene::render() {
             ray = camera1.generateRay(x, y);
             image.setPixel(x,y,renderer.getColor(ray, 0, lights, &boundingBox));/**/
         }
-        progress++;
-        std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getWidth() << "% Thread: " << omp_get_thread_num() << std::endl;
+        //progress++;
+        //std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getWidth() << "% Thread: " << omp_get_thread_num() << std::endl;
     }
 
     chr.stop();

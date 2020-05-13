@@ -47,6 +47,52 @@ BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<S
     }
 }
 
+void BoundingBox::getIntersectedShape(Ray ray, Shape &shape, Vector &Hitpoint, Vector &Hitnormal, float &distance,
+                                      bool &hit) {
+    if (!box.getIntersect(ray)) {
+        return;
+    }
+    if (this->boxes.size() == 2) {
+        if (VectorInsideBox(ray.getPos())) { // Ray is inside of the current Box
+            if (VectorInsideBoxZero(ray.getPos())) { // Test, if Ray is inside one of the boxes
+                boxes[0].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
+                if (hit) {
+                    return;
+                } else {
+                    boxes[1].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
+                }
+            } else {
+                boxes[1].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
+                if (hit) {
+                    return;
+                } else {
+                    boxes[0].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
+                }
+            }
+        } else {
+            for (int i = 0; i < boxes.size(); ++i) {
+                boxes[i].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
+            }
+        }
+
+    }
+
+
+    if (!shapes.empty()) {
+        int hitid = -1;
+        int newid = 2;
+        float oldDist = distance;
+        for (int i = 0; i < shapes.size(); ++i) {
+            shapes[i]->getIntersectVec(ray, Hitpoint, Hitnormal, distance, hitid, newid);
+            if (distance < oldDist) { // Test, if new already hit shape is closer and set shape to shape and hit to true
+                shape = *shapes[i];
+                hit = true;
+            }
+        }
+
+    }
+}
+
 std::vector<Shape *> BoundingBox::getIntersectVec(Ray ray) {
 
     std::vector<Shape *> returnshapes;
@@ -71,31 +117,13 @@ std::vector<Shape *> BoundingBox::getIntersectVec(Ray ray) {
     return returnshapes;
 }
 
-/**
- * removes all the doubles from the array to avoid testing the same shape twice
- * @param shapesToClear input shapes hit by the ray
- * @return output array without the same shape twice
- */
-std::vector<Shape *> BoundingBox::removeDoubles(std::vector<Shape *> shapesToClear) {
-    for (int i = (int) shapesToClear.size() - 1; i > 0; i--) {
-        for (int j = (int) i - 1; j > 0; j--) {
-            if (shapesToClear[i] == shapesToClear[j]) {
-                shapesToClear.erase(shapesToClear.begin() + i);
-                i--;
-                j--;
-            }
-        }
-    }
-    return shapesToClear;
-}
-
 
 /**
  * Only splits the box, if either the depth is smaller than 4
  * or if there are more than 10 shapes inside the box
  */
 void BoundingBox::build() {
-    if (/**/depth < 14 && /**/shapes.size() > 80) {
+    if (/**/depth < 14 && /**/shapes.size() > 125) {
         setMid();
         split();
     }
@@ -213,6 +241,32 @@ void BoundingBox::print(int depthToPrint) {
         }
     }
 }
+
+Vector BoundingBox::getMedian() {
+    return median;
+}
+
+bool BoundingBox::VectorInsideBoxZero(Vector test) { // test, if a Vector is inside of the first Box
+    return (boxes[0].getMin().get(0) <= test.get(0) && test.get(0) <= boxes[0].getMin().get(0) &&
+            boxes[0].getMin().get(1) <= test.get(1) && test.get(1) <= boxes[0].getMin().get(1) &&
+            boxes[0].getMin().get(2) <= test.get(2) && test.get(2) <= boxes[0].getMin().get(2));
+}
+
+bool BoundingBox::VectorInsideBox(Vector test) { // test, if a Vector is inside of the first Box
+    return (minXminYminZ.get(0) <= test.get(0) && test.get(0) <= maxXmaxYmaxZ.get(0) &&
+            minXminYminZ.get(1) <= test.get(1) && test.get(1) <= maxXmaxYmaxZ.get(1) &&
+            minXminYminZ.get(2) <= test.get(2) && test.get(2) <= maxXmaxYmaxZ.get(2));
+}
+
+Vector BoundingBox::getMin() {
+    return minXminYminZ;
+}
+
+Vector BoundingBox::getMax() {
+    return maxXmaxYmaxZ;
+}
+
+
 
 
 

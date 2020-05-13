@@ -14,12 +14,12 @@
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 1);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 2);//5
 
     cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
 
-    cam.setNumberOfPixel(200000);// max number of pixels for the image
+    cam.setNumberOfPixel(200000);// max number of pixels for the image  // old full hd car: 874s new full hd car: 223.9s
 
     //cam.setNumberOfPixel(50000);// max number of pixels for the image
     cam.setWidthToHeight(16.0f / 9.0f); // Height to width ratio
@@ -53,11 +53,11 @@ int main() {
 
 
 
-    Light light = {{3.44, 1.66, 4}, {1, 1, 1}, 0};
-    Light light1 = {{4, 1.42, 1}, {0, 1, 1}, 0};
-    Light light2 = {{4, -1.5, 1.22}, {1, 0, 0}, 0};
-    Light light3 = {{1.33, -0.69, 1}, {1, 1, 0}, 0};
-    Light light4 = {{1.33, -0.69, 10}, {0.125, 0.125, 0.125}, 10};
+    Light light = {{2, 2, 1}, {0.7, 0.7, 0}, 3};
+    Light light1 = {{-2, 2, 1}, {1, 0.7, 0}, 3};
+    Light light2 = {{-2, -2, 1}, {1, 0.2, 0}, 3};
+    Light light3 = {{2, -2, 1}, {1, 0.6, 0.0}, 3};
+    Light light4 = {{0, 0, 2}, {0.075, 0.125, 0.125}, 3};
 
     Light* light5 = new Light{};
 
@@ -104,24 +104,41 @@ int main() {
 /**/
     //scene.addShape(&p1);
 
-
+/*/
     //OBJLoader objLoader = OBJLoader("dragon1.obj");
-    OBJLoader objLoader = OBJLoader("untitled8.obj"); //car
+    //OBJLoader objLoader = OBJLoader("dragon.obj"); //car
+    OBJLoader objLoader = OBJLoader("singleTower_mirror.obj"); //car
     //OBJLoader objLoader = OBJLoader("../models/wtcobj.obj");
     //OBJLoader objLoader = OBJLoader("wtcobj.obj");
     //OBJLoader objLoader = OBJLoader("dragon.obj");
 
 
+    OBJLoader objLoader2 = OBJLoader("singleTower_metal.obj"); //car
+
     objLoader.LoadOBJ();
+    objLoader2.LoadOBJ();
 
     Object object = objLoader.getObject(); // get the first Object inside the obj file
-    Material material = {{1.0,1.0,1.0},0.00,0.1,0.0,1.025};
+    Object object2 = objLoader2.getObject(); // get the first Object inside the obj file
+
+    Material material = {{1.0,1.0,1.0},0.00,1.0,0.0,1.025};
     object.setMaterial(material);
 
-    //scene.addShapes(object.getTriangles());
+    Material material2 = {{1.0,1.0,1.0},1.00,1.0,0.0,1.025};
+    object2.setMaterial(material2);
 
+    scene.addShapes(object.getTriangles());
+    scene.addShapes(object2.getTriangles());
 
+/*/
 
+    OBJLoader objLoader = OBJLoader("car.obj"); //car
+    objLoader.LoadOBJ();
+    Object object = objLoader.getObject(); // get the first Object inside the obj file
+    Material material = {{1.0,1.0,1.0},0.00,1.0,0.0,1.025};
+    object.setMaterial(material);
+    scene.addShapes(object.getTriangles());
+/**/
 
     //Sphere sp1 = {{1.33,-0.69,-1},1,{1,1,1}};
 
@@ -178,10 +195,19 @@ int main() {
 
 
 
-    Sphere testMetal = {{3.44,-0.25,0.87},1};
+    Sphere testMetal = {{3.44,-0.25,0.87},2};
+    Sphere testMetal1 = {{5.44,-0.6,1},2};
+    Sphere testMetal3 = {{5.44,1.6,3},1};
+
+    Box testMetal2 = {{3.44,-0.25,0.0},10,10,0.2};
+
+
     testMetal.setMaterial({{1,1,1},0,1,0,1});
 
-    scene.addShape(&testMetal);
+    //scene.addShape(&testMetal);
+    //scene.addShape(&testMetal1);
+    //scene.addShape(&testMetal2);
+    //scene.addShape(&testMetal3);
 
 /*/
     Light light = {{-3,0,-1},{1,0,0.2},1};
@@ -268,26 +294,47 @@ int main() {
     Vector LookAt = {3,-0.2,1};
     LookAt = {3.44,-0.25,0.87};
     Origin = {3.44, -0.25, 1.5};
+
+
+    LookAt = {0,0,0.5}; // 1 1 0
+    Origin = {0, 0, 1.6}; // 1 1 0.15
+
     //LookAt = {0.0,0,0.8};//obj9
     //Origin = {0.0, 0, 1.4};//obj9
 
-    float images = 1000.0f;
+    float images = 100.0f;
 
     Chronometer chronomovie = Chronometer("Video");
 
     float pi = 3.14159265f;
     float progress;
-    float dist = 4;
+    float dist = 3;
 
     for (int i = 0; i < images; ++i) {
 
 
         progress = (float) i / images;
 
-        material = {{1.0,1.0,1.0},0,1.0,0.0,1.025};
+        //material = {{1.0,1.0,1.0},0,1.0,0,1.025}; // Glas
+
         //object.setMaterial(material);
 
-        testMetal.setMaterial(material);
+        //testMetal.setMaterial(material);
+
+        /*/
+        material = {{1.0,1.0,1.0},0,0.3,0.95,1.03}; // Glas
+        testMetal1.setMaterial(material);
+
+        material =  {{0.8,0.8,0.8},1,0.8,0.0,0.0}; // Metal
+        testMetal2.setMaterial(material);
+
+
+
+        material =  {{0.8,0.8,0.8},0,1,0.0,0.0}; // Mirror
+        testMetal3.setMaterial(material);
+
+
+        /**/
 
         Vector offset = {dist * sin(progress*2*pi), dist * cos(progress*2*pi), 0};
 

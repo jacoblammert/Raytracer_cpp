@@ -6,6 +6,8 @@
 #include <utility>
 #include "Renderer.h"
 #include "../geometry/Material.h"
+#include "../geometry/Triangle.h"
+#include "../geometry/Sphere.h"
 
 Renderer::Renderer() {
 
@@ -31,13 +33,28 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
     int hit = -1;
     float mindistance = INFINITY - 1;
 
+
+    /**Get Intersected Object here**/
+
+
+/*///183.541s Full HD: 747.5s  /// 128s with 10000 Triangles & 500000Pixels /// 66.7s car 500000 Pixel
     std::vector<Shape *> shapes = boundingBox->getIntersectVec(ray);
 
     for (int i = 0; i < shapes.size(); ++i) {
         if (shapes[i]->getIntersectVec(ray, HitPoint, HitNormal, mindistance, hit,
                                        i)) { // bool if ray intersects the Object // hit & other values set for lighting & stuff
         }
-    }
+    }/*/ // 106.98 Seconds Full HD: 395.3s  /// 88s with 10000 Triangles & 500000Pixels  /// 37.7s car 500000 Pixel
+    std::vector<Shape *> shapes;
+
+    bool hitbool = false;
+    Sphere s = {{},1};
+    boundingBox->getIntersectedShape(ray,s,HitPoint,HitNormal,mindistance,hitbool);
+    shapes.push_back(&s);
+
+    if (hitbool){
+        hit = 0;
+    }/**/
 
 
     if (hit > -1) { // shape gets hit
@@ -54,7 +71,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
         float lightStrength = 0;
         float angle;
 
-        if (shapes[hit]->getMaterial().getTransparency() != 1 || shapes[hit]->getMaterial().getGlossy() != 1) { // ||?
+        if (/*/true/*/!(shapes[hit]->getMaterial().getTransparency() == 1 || shapes[hit]->getMaterial().getGlossy() == 1)/**/) { // ||?
             for (int i = 0; i < lights.size(); ++i) {
 
                 if (lights[i]->getIntensity() > 0) {
@@ -86,7 +103,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
         Color reflectionColor;
         Color refractionColor;
 
-        if (depth < 3) { // calculates as n reflections because depth < n
+        if (depth < 10) { // calculates as n reflections because depth < n
 
             Vector Normal = HitNormal;//HitNormal.scale(0.001);
 
@@ -97,7 +114,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
 
                 Color refl = {0, 0, 0};
-                int reflectionsamples = 8;
+                int reflectionsamples = 1;
 
                 if (depth > 0){ // only the first reflection rays will be multiplied by the amount of the reflaction samples (if there are to many reflection surfaces, there might be reflectionsamples^n , n = depth reflections and extra calculations)
                     reflectionsamples = 1;
@@ -116,7 +133,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
 
                 Color refr = {0, 0, 0};
-                int refractionsamples = 8;
+                int refractionsamples = 1;
 
                 if (depth > 0){
                     refractionsamples = 1;
@@ -142,7 +159,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
         colorfinal = colorfinal + reflectionColor + refractionColor;
 
         colorfinal.scale(1 /
-                         (shapes[hit]->getMaterial().getTransparency() + 1 /*shapes[hit]->getMaterial().getGlossy()*/ +
+                         ((1-shapes[hit]->getMaterial().getTransparency()) + shapes[hit]->getMaterial().getGlossy() +
                           shapes[hit]->getMaterial().getRoughness()));
 
         return colorfinal;

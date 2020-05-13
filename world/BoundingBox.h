@@ -23,6 +23,8 @@ public:
 
     std::vector<Shape *> getIntersectVec(Ray ray);
 
+    void getIntersectedShape(Ray ray,Shape &shape,Vector &Hitpoint, Vector &Hitnormal,float &distance,bool &hit);
+
     std::vector<Shape *> removeDoubles(std::vector<Shape *> shapes);
 
     void build();
@@ -39,6 +41,14 @@ public:
 
     void addShape(Shape *shape);
 
+    Vector getMedian();
+
+    Vector getMin();
+
+    Vector getMax();
+
+    bool VectorInsideBoxZero(Vector test);
+    bool VectorInsideBox(Vector test);
 
     void print(int depth);
 

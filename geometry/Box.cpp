@@ -185,7 +185,7 @@ bool Box::getIntersect(Ray ray) {
 
 Vector Box::getNormal(Vector pos) {
 
-    float epsilon = 0.0001f;
+    float epsilon = 0.000001f;
 
     //pos.scale(1.001);
 
