@@ -5,9 +5,8 @@
 #include <iostream>
 #include "Ray.h"
 
-Ray::Ray(Vector position, Vector direction) {
-    this->position = position;
-    this->direction = direction;
+Ray::Ray(Vector position, Vector direction):
+        position{position},direction{direction}{
     this->direction.normalize();
 }
 

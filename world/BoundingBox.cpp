@@ -123,7 +123,7 @@ std::vector<Shape *> BoundingBox::getIntersectVec(Ray ray) {
  * or if there are more than 10 shapes inside the box
  */
 void BoundingBox::build() {
-    if (/**/depth < 14 && /**/shapes.size() > 125) {
+    if (/**/depth < 14 && /**/shapes.size() > 30) {
         setMid();
         split();
     }

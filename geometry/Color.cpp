@@ -5,18 +5,12 @@
 #include <iostream>
 #include "Color.h"
 
-Color::Color() {
-    r = 0;
-    g = 0;
-    b = 0;
+Color::Color() :
+        r{0}, g{0}, b{0} {
 }
 
-Color::Color(float r, float g, float b) {
-    this->r = r;
-    this->g = g;
-    this->b = b;
-
-}
+Color::Color(float r, float g, float b) :
+        r{r}, g{g}, b{b} {}
 
 /**
  * 0 - 1
@@ -70,61 +64,52 @@ void Color::scale(float scale) {
 }
 
 void Color::print() {
-    std::cout<<"Red: " <<r<<" Green: " << g << " Blue: "<<std::endl;
+    std::cout << "Red: " << r << " Green: " << g << " Blue: " << std::endl;
 }
 
-Color Color::operator+(Color &obj) {
-    Color a = Color(r + obj.getR(), g + obj.getG(), b + obj.getB());
-    return a;
+Color Color::operator+(Color const &obj) {
+    return {r + obj.r, g + obj.g, b + obj.b};
 }
 
-Color Color::operator+=(Color &obj) {
+Color Color::operator+=(Color const &obj) {
 
-    Color a = Color(r + obj.getR(), g + obj.getG(), b + obj.getB());
-    return a;
+    return {r + obj.r, g + obj.g, b + obj.b};
 }
 
-Color Color::operator-(Color &obj) {
-
-    Color a = Color(r - obj.getR(), g - obj.getG(), b - obj.getB());
-    return a;
+Color Color::operator-(Color const &obj) {
+    return {r - obj.r, g - obj.g, b - obj.b};
 }
 
-Color Color::operator-=(Color &obj) {
-    Color a = Color(r - obj.getR(), g - obj.getG(), b - obj.getB());
-    return a;;
+Color Color::operator-=(Color const &obj) {
+    return {r - obj.r, g - obj.g, b - obj.b};
 }
 
-Color Color::operator*(Color &obj) {
-    Color a = Color(r * obj.getR(), g * obj.getG(), b * obj.getB());
-    return a;
+Color Color::operator*(Color const &obj) {
+    return {r * obj.r ,g * obj.g, b * obj.b};
 }
 
-Color Color::operator*=(Color &obj) {
-    Color a = Color(r * obj.getR(), g * obj.getG(), b * obj.getB());
-    return a;
+Color Color::operator*=(Color const &obj) {
+    return {r * obj.r, g * obj.g, b * obj.b};
 }
 
-Color Color::operator/(Color &obj) {
-    Color a = Color(r / obj.getR(), g / obj.getG(), b / obj.getB());
-    return a;
+Color Color::operator/(Color const &obj) {
+    return {r / obj.r, g / obj.g, b / obj.b};
 }
 
-Color Color::operator/=(Color &obj) {
-    Color a = Color(r / obj.getR(), g / obj.getG(), b / obj.getB());
-    return a;
+Color Color::operator/=(Color const &obj) {
+    return {r / obj.r, g / obj.g, b / obj.b};
 }
 
 void Color::setR(int red) {
-    r = (float) red /255.0f;
+    r = (float) red / 255.0f;
 }
 
 void Color::setG(int green) {
-    g = (float) green /255.0f;
+    g = (float) green / 255.0f;
 }
 
 void Color::setB(int blue) {
-    b = (float) blue /255.0f;
+    b = (float) blue / 255.0f;
 }
 
 

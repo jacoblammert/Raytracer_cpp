@@ -30,21 +30,21 @@ public:
 
     void setB(int blue);
 
-    Color operator+(Color &obj);
+    Color operator+(Color const&obj);
 
-    Color operator+=(Color &obj);
+    Color operator+=(Color const&obj);
 
-    Color operator-(Color &obj);
+    Color operator-(Color const&obj);
 
-    Color operator-=(Color &obj);
+    Color operator-=(Color const&obj);
 
-    Color operator*(Color &obj);
+    Color operator*(Color const&obj);
 
-    Color operator*=(Color &obj);
+    Color operator*=(Color const&obj);
 
-    Color operator/(Color &obj);
+    Color operator/(Color const&obj);
 
-    Color operator/=(Color &obj);
+    Color operator/=(Color const&obj);
 
 private:
     float r, g, b;

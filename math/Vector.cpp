@@ -10,26 +10,18 @@
 
 using namespace std;
 
-Vector::Vector() {
-    x = 0;
-    y = 0;
-    z = 0;
+Vector::Vector() :
+        x{0}, y{0}, z{0} {
 }
 
-Vector::Vector(float x) {
-    this->x = x;
-}
+Vector::Vector(float x) :
+        x{x}, y{0}, z{0} {}
 
-Vector::Vector(float x, float y) {
-    this->x = x;
-    this->y = y;
-}
+Vector::Vector(float x, float y) :
+        x{x}, y{y}, z{0} {}
 
-Vector::Vector(float x, float y, float z) {
-    this->x = x;
-    this->y = y;
-    this->z = z;
-}
+Vector::Vector(float x, float y, float z) :
+        x{x}, y{y}, z{z} {}
 
 void Vector::setX(float value) {
     x = value;
@@ -97,16 +89,12 @@ float Vector::getLength() {
     return (float) sqrt(x * x + y * y + z * z);
 }
 
-float Vector::dot(Vector &obj) {
-    return x * obj.getX() + y * obj.getY() + z * obj.getZ();
+float Vector::dot(Vector const& obj) {
+    return x * obj.x + y * obj.y + z * obj.z;
 }
 
-Vector Vector::cross(Vector &obj) {
-    Vector res;
-    res.setX(y * obj.getZ() - z * obj.getY());
-    res.setY(z * obj.getX() - x * obj.getZ());
-    res.setZ(x * obj.getY() - y * obj.getX());
-    return res;
+Vector Vector::cross(Vector const& obj) {
+    return {y * obj.z - z * obj.y,z * obj.x - x * obj.z,x * obj.y - y * obj.x};
 }
 
 Vector Vector::getReflected(Vector normal) {
@@ -121,14 +109,14 @@ Vector Vector::getReflected(Vector normal) {
 
 Vector Vector::getRefracted(Vector normal, float n1, float n2) {
 
-    Vector thisVec = *this;
+    Vector thisVec{*this};
     thisVec.normalize();
     normal.normalize();
 
     float n = n1 / n2;
     float cosI = -thisVec.dot(normal);
     float sinT2 = n * n * (1.0 - cosI * cosI);
-    if(sinT2 > 1.0) return thisVec.getReflected(normal); // TIR
+    if (sinT2 > 1.0) return thisVec.getReflected(normal); // TIR
     float cosT = sqrt(1.0 - sinT2);
 
     thisVec.scale(n);
@@ -136,20 +124,12 @@ Vector Vector::getRefracted(Vector normal, float n1, float n2) {
     return thisVec + normal;
 }
 
-Vector Vector::operator+(Vector &obj) {
-    Vector res;
-    res.setX(x + obj.getX());
-    res.setY(y + obj.getY());
-    res.setZ(z + obj.getZ());
-    return res;
+Vector Vector::operator+(Vector const& obj) {
+    return {x + obj.x,y + obj.y,z + obj.z};
 }
 
-Vector Vector::operator-(Vector &obj) {
-    Vector res;
-    res.setX(x - obj.getX());
-    res.setY(y - obj.getY());
-    res.setZ(z - obj.getZ());
-    return res;
+Vector Vector::operator-(Vector const& obj) {
+    return {x - obj.x,y - obj.y,z - obj.z};
 }
 
 /*/
@@ -159,20 +139,12 @@ float Vector::operator * (Vector &obj) {
     return res;
 }
  /*/
-Vector Vector::operator*(Vector &obj) {
-    Vector res;
-    res.setX(y * obj.getZ() - z * obj.getY());
-    res.setY(z * obj.getX() - x * obj.getZ());
-    res.setZ(x * obj.getY() - y * obj.getX());
-    return res;
+Vector Vector::operator*(Vector const& obj) {
+    return {y * obj.z - z * obj.y,z * obj.x - x * obj.z,x * obj.y - y * obj.x};
 }
 
 Vector Vector::operator*(float &obj) {
-    Vector res;
-    res.setX(x * obj);
-    res.setY(y * obj);
-    res.setZ(z * obj);
-    return res;
+    return {x * obj,y * obj,z * obj};
 }
 
 void Vector::divide(float value) {

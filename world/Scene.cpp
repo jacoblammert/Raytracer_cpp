@@ -41,7 +41,7 @@ void Scene::render() {
 
     Chronometer chr = Chronometer("Raytracer");
 
-    omp_set_num_threads(128); //64
+    omp_set_num_threads(256); //64
 
     int progress = 0;
 
@@ -49,12 +49,14 @@ void Scene::render() {
 
 
     Renderer renderer = Renderer();
-    renderer.setSkybox(skybox);
+    if (skybox != nullptr) {
+        renderer.setSkybox(skybox);
+    }
 
 #pragma omp parallel for
+
     for (int x = 0; x < camera.getWidth(); ++x) {
         for (int y = 0; y < camera.getHeight(); ++y) {
-
             Ray ray = {{},
                        {}};
 

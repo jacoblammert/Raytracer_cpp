@@ -61,17 +61,17 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
 
         Color Lightcolor;
-        Color colorfinal = shapes[hit]->getMaterial().getColor();
+        Color colorfinal{shapes[hit]->getMaterial().getColor()};
         colorfinal.scale(0.2f * (1 - shapes[hit]->getMaterial().getTransparency()));
 
 
-        Vector PointHit = HitPoint;//{HitPoint->get(0), HitPoint->get(1), HitPoint->get(2)};
+        Vector PointHit{HitPoint};//{HitPoint->get(0), HitPoint->get(1), HitPoint->get(2)};
         Vector HitToLight = {};
 
         float lightStrength = 0;
         float angle;
 
-        if (/*/true/*/!(shapes[hit]->getMaterial().getTransparency() == 1 || shapes[hit]->getMaterial().getGlossy() == 1)/**/) { // ||?
+        if (/*/true/*/(shapes[hit]->getMaterial().getTransparency() != 1 && shapes[hit]->getMaterial().getGlossy() != 1)/**/) { // ||?
             for (int i = 0; i < lights.size(); ++i) {
 
                 if (lights[i]->getIntensity() > 0) {
@@ -105,7 +105,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
         if (depth < 10) { // calculates as n reflections because depth < n
 
-            Vector Normal = HitNormal;//HitNormal.scale(0.001);
+            Vector Normal{HitNormal};//HitNormal.scale(0.001);
 
             Normal.scale(0.001);
 
@@ -159,12 +159,16 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
         colorfinal = colorfinal + reflectionColor + refractionColor;
 
         colorfinal.scale(1 /
-                         ((1-shapes[hit]->getMaterial().getTransparency()) + shapes[hit]->getMaterial().getGlossy() +
+                         ((/*/1-/**/shapes[hit]->getMaterial().getTransparency()) + shapes[hit]->getMaterial().getGlossy() +
                           shapes[hit]->getMaterial().getRoughness()));
 
         return colorfinal;
     }
-    return skybox->getColor(ray.getDir());
+    if (skybox != nullptr){
+        return skybox->getColor(ray.getDir());
+    }
+    return {};
+
 }
 
 /**

@@ -7,14 +7,12 @@
 #include "cmath"
 #include "../Debug/Chronometer.h"
 
-Sphere::Sphere(Vector pos, float radius) {
-    this->pos = pos;
-    this->radius = radius;
+Sphere::Sphere(Vector pos, float radius):
+pos{pos},radius{radius}{
 }
 
-Sphere::Sphere(Vector pos, float radius, Color color) {
-    this->pos = pos;
-    this->radius = radius;
+Sphere::Sphere(Vector pos, float radius, Color color):
+        pos{pos},radius{radius} {
     this->material.setColor(color);
 }
 

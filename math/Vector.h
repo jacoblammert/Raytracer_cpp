@@ -42,25 +42,25 @@ public:
 
     float getLength();
 
-    float dot(Vector &obj);
+    float dot(Vector const& obj);
 
     int sign(int pos);
 
 
-    Vector cross(Vector &obj);
+    Vector cross(Vector const& obj);
 
     Vector getReflected(Vector normal);
 
     Vector getRefracted(Vector normal,float n1,float n2);
 
-    Vector operator+(Vector &obj);
+    Vector operator+(Vector const& obj);
 
-    Vector operator-(Vector &obj);
+    Vector operator-(Vector const& obj);
 
     /*/
     float operator * (Vector &obj);//  scalarmultiplication
     /*/
-    Vector operator*(Vector &obj);// cross product ^?
+    Vector operator*(Vector const&obj);// cross product ^?
     /**/
     Vector operator*(float &obj);//scalar
 
