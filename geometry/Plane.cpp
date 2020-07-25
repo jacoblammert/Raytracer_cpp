@@ -8,7 +8,6 @@
 Plane::Plane(Vector position, Vector normal) {
     pos = position;
     this->normal = normal;
-    this->material.setColor({1,1,1});
 }
 
 Plane::Plane(Vector position, Vector normal, Color color) {
@@ -16,7 +15,6 @@ Plane::Plane(Vector position, Vector normal, Color color) {
     this->normal = normal;
     this->normal.normalize();
     //this->normal.scale(-1);
-    this->material.setColor(color);
 }
 
 int Plane::getId() {
@@ -71,10 +69,10 @@ void Plane::print() {
     std::cout<<"Plane"<<std::endl;
 }
 /**/
-Material Plane::getMaterial() {
+Material* Plane::getMaterial() {
     return material;
 }
-void Plane::setMaterial(Material material) {
+void Plane::setMaterial(Material* material) {
     this->material = material;
 }
 /**/

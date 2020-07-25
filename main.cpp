@@ -14,20 +14,23 @@
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 2);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920/5, 1080/5, 2);//5
 
     cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
 
-    cam.setNumberOfPixel(250000);// max number of pixels for the image  // old full hd car: 874s new full hd car: 223.9s new full hd car 40 split Bounding Box split: 108.2s
+    //cam.setNumberOfPixel(100000);// max number of pixels for the image  // old full hd car: 874s new full hd car: 223.9s new full hd car 40 split Bounding Box split: 108.2s
 
     //cam.setNumberOfPixel(50000);// max number of pixels for the image
-    cam.setWidthToHeight(16.0f / 9.0f); // Height to width ratio
+    //cam.setWidthToHeight(16.0f / 9.0f); // Height to width ratio
 
     cam.print();
 
+/*/
+    Sphere s = Sphere(Vector(0, 0, 0.5), 1);
+    //s.setMaterial(new Material{{0,0,0},0,1,0});
 
-    Sphere s = Sphere(Vector(0, 0, 0), 0.2, Color(0, 0, 1));
+
 
     Sphere s1 = Sphere(Vector(2, 0, 0.1), 0.2, Color(0, 1, 1));
     Sphere s2 = Sphere(Vector(0, 2, 0.1), 0.2, Color(1, 0, 1));
@@ -51,13 +54,13 @@ int main() {
 
     Box b4 = Box(Vector(-2, -3.2, -2), Vector(4, 2.2, 2), Color(1, 1, 1));
 
+/**/
 
-
-    Light light = {{2, 2, 1}, {0.7, 0.7, 0}, 3};
-    Light light1 = {{-2, 2, 1}, {1, 0.7, 0}, 3};
-    Light light2 = {{-2, -2, 1}, {1, 0.2, 0}, 3};
-    Light light3 = {{2, -2, 1}, {1, 0.6, 0.0}, 3};
-    Light light4 = {{0, 0, 2}, {0.075, 0.125, 0.125}, 3};
+    Light light = {{2, 2, 1}, {0.7, 0.7, 0}, 0.5};
+    Light light1 = {{-2, 2, 1}, {1, 0.7, 0}, 0.5};
+    Light light2 = {{-2, -2, 1}, {1, 0.2, 0}, 0.5};
+    Light light3 = {{2, -2, 1}, {1, 0.6, 0.0}, 0.5};
+    Light light4 = {{0, 0, 2}, {0.075, 0.125, 0.125}, 0.5};
 
     Light* light5 = new Light{};
 
@@ -74,7 +77,7 @@ int main() {
     scene.addLight(&light2);
     scene.addLight(&light3);/**/
 
-    const std::vector<Light *> &lightvec = {&light/**/, &light1, &light2,&light3,&light4/**/};
+    const std::vector<Light *> &lightvec = /*/{};/*/{&light, &light1, &light2,&light3,&light4};/**/
 
     Scene scene = Scene(cam, lightvec);
 /*/
@@ -121,25 +124,26 @@ int main() {
     Object object = objLoader.getObject(); // get the first Object inside the obj file
     Object object2 = objLoader2.getObject(); // get the first Object inside the obj file
 
-    Material material = {{1.0,1.0,1.0},0.00,1.0,0.0,1.025};
+    Material* material = new Material{{1.0,1.0,1.0},0.00,1.0,0.0,1.025};
     object.setMaterial(material);
 
-    Material material2 = {{1.0,1.0,1.0},1.00,1.0,0.0,1.025};
+    Material* material2 = new Material{{1.0,1.0,1.0},1.00,1.0,0.0,1.025};
     object2.setMaterial(material2);
 
     scene.addShapes(object.getTriangles());
     scene.addShapes(object2.getTriangles());
 
-/*/
+/**/
+/**/
 
     OBJLoader objLoader = OBJLoader("car.obj"); //car // dragon1 // untitled11
     objLoader.LoadOBJ();
     Object object = objLoader.getObject(); // get the first Object inside the obj file
-    Material material = {{1.0,1.0,1.0},0.00,1.0,0.0,1.025};
+    Material* material = new Material{{0.65,0.75,0.35},0.00,1.0,0.0,0};
     object.setMaterial(material);
     scene.addShapes(object.getTriangles());
 /**/
-
+    //scene.addShape(&s);
 
     Skybox skybox = Skybox();
     scene.setSkybox(&skybox);
@@ -155,7 +159,7 @@ int main() {
     Origin={0, 0, 1.25}; // 1 1 0.15
 
 
-    float images = 1.0f;
+    float images = 100.0f;
 
     Chronometer chronomovie = Chronometer("Video");
 

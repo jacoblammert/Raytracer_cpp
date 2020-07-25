@@ -86,8 +86,8 @@ int Camera::getHeight() {
 
 void Camera::setNumberOfPixel(int Pixel) {
     this->pixel = Pixel;
-    width = (int) (wToH * sqrt((float) pixel / wToH));
-    height = (int) sqrt((float) pixel / wToH);
+    width = (int) abs(wToH * sqrt((float) pixel / wToH));
+    height = (int) abs(sqrt((float) pixel / wToH));
 }
 
 void Camera::setWidthToHeight(float wToH) {

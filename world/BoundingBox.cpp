@@ -124,7 +124,8 @@ std::vector<Shape *> BoundingBox::getIntersectVec(Ray ray) {
  */
 void BoundingBox::build() {
     if (/**/depth < 14 && /**/shapes.size() > 30) {
-        setMid();
+        /*/setMid();/*/  // 200s for dragon1
+        setMinMaxMid();/**/ // 140s for dragon1
         split();
     }
 }
@@ -178,7 +179,22 @@ void BoundingBox::getMax(Vector shapemax) {
 
 void BoundingBox::split() {
 
+
     int axis = depth % 3; // % 3 because we want to split across x = 0, y = 1 and z = 2
+
+    /**/
+
+
+    Vector size = maxXmaxYmaxZ-minXminYminZ; // max of the Box in terms of width, height, depth
+
+
+    if (size.getX() > size.getY() && size.getX() > size.getZ()){ // X is largest
+        axis = 0; // x split
+    } else if (size.getY() > size.getX() && size.getY() > size.getZ()){ // Y is lagest
+        axis = 1; // y split
+    }else { // Z is largest
+        axis = 2; // z split
+    }/**/
 
     Vector min = {};
     Vector max = {};
@@ -208,10 +224,10 @@ void BoundingBox::split() {
                 boxes[1].addShape(shapes[i]);
                 shapes.erase(shapes.begin() + i);
                 i--;
-            } else {
+            } //else {
                 //boxes[0].addShape(shapes[i]); // object inside the cutting plane added to both arrays -> simpler
                 //boxes[1].addShape(shapes[i]); // object inside the cutting plane added to both arrays -> simpler
-            }
+            //}
 
         }
     }

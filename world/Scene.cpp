@@ -41,35 +41,35 @@ void Scene::render() {
 
     Chronometer chr = Chronometer("Raytracer");
 
-    omp_set_num_threads(256); //64
+    omp_set_num_threads(32); //64
 
     int progress = 0;
 
     image = Image("picture", camera.getWidth(),camera.getHeight());
 
-
     Renderer renderer = Renderer();
-    if (skybox != nullptr) {
+    if (nullptr != skybox) {
         renderer.setSkybox(skybox);
     }
+
+
 
 #pragma omp parallel for
 
     for (int x = 0; x < camera.getWidth(); ++x) {
         for (int y = 0; y < camera.getHeight(); ++y) {
-            Ray ray = {{},
-                       {}};
-
-            Camera camera1 = camera;
-            ray = camera1.generateRay(x, y);
-            image.setPixel(x,y,renderer.getColor(ray, 0, lights, &boundingBox));/**/
+            Camera camera1 = camera; // local copies for parallelization
+            Ray ray = camera1.generateRay(x, y); // local copies for parallelization
+            image.setPixel(x, y, renderer.getColor(ray, 0, lights, &boundingBox));/**/
         }
-        //progress++;
-        //std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getWidth() << "% Thread: " << omp_get_thread_num() << std::endl;
+        progress++;
+        if (progress % 10 == 0) {
+            std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getWidth() << "% Thread: "
+                      << omp_get_thread_num() << std::endl;
+        }
     }
 
     chr.stop();
-    //boundingBox.print(40);
 }
 
 Camera Scene::getCamera() {

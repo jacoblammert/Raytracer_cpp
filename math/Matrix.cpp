@@ -102,11 +102,7 @@ float Matrix::getDet() {
 
         for (int i = 0; i < getHeight(); ++i) {
             matrix1 = Matrix(getRemainder(i, 0));
-            if (i % 2 == 0) {
-                sign = 1;
-            } else {
-                sign = -1;
-            }
+            sign = i % 2 == 0? 1: -1;
             det += matrix[0][i] * sign * matrix1.getDet();
         }
         return det;

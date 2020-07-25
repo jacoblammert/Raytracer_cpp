@@ -10,8 +10,7 @@ Triangle::Triangle(Vector a, Vector b, Vector c) :
         a{a},
         b{b},
         c{c} {
-    this->material.setColor({1, 1, 1});
-    Vector ab = b - a;
+    Vector ab = b-a;
     Vector ac = c - a;
     this->normal = ab * ac;
 }
@@ -20,7 +19,6 @@ Triangle::Triangle(Vector a, Vector b, Vector c, Color color):
         a{a},
         b{b},
         c{c} {
-    this->material.setColor(color);
     Vector ab = b - a;
     Vector ac = c - a;
     this->normal = ab * ac;
@@ -34,7 +32,7 @@ int Triangle::getId() {
 bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) {
 
     Vector raydirection = ray.getDir();
-    Vector rayposition = ray.getPos();
+    //Vector rayposition = ray.getPos();
 
 
     Vector v0v1 = b - a;
@@ -54,7 +52,9 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
 
     float invDet = 1 / det;
 
-    Vector tvec = rayposition - a;
+
+
+    Vector tvec = /**/ray.getPos()/*/rayposition/**/ - a;
     float u = tvec.dot(pvec) * invDet;
     if (u < 0 || u > 1) return false;
 
@@ -69,7 +69,7 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
             distance = t;
             HitNormal = normal;
             raydirection.scale(t);
-            HitPoint = rayposition + raydirection;
+            HitPoint = /**/ray.getPos()/*/rayposition/**/ + raydirection;
             id = newid;
         }
     }
@@ -81,7 +81,7 @@ Vector Triangle::getNormal(Vector pos) {
 }
 
 Vector Triangle::getMin() {
-    Vector min = a;
+    Vector min = {a.getX(),a.getY(),a.getZ()};
 
     for (int j = 0; j < 3; ++j) {
         if (min.get(j) > b.get(j)) {
@@ -99,7 +99,7 @@ Vector Triangle::getMin() {
 
 
 Vector Triangle::getMax() {
-    Vector max = a;
+    Vector max = {a.getX(),a.getY(),a.getZ()};
     for (int j = 0; j < 3; ++j) {
         if (max.get(j) < b.get(j)) {
             max.set(j, b.get(j));
@@ -114,6 +114,7 @@ Vector Triangle::getMax() {
 }
 
 Vector Triangle::getMedian() {
+
     Vector median = a + b + c;
     median.scale(1.0f / 3.0f);
     return median;
@@ -130,10 +131,10 @@ void Triangle::print() {
 }
 
 /**/
-Material Triangle::getMaterial() {
+Material* Triangle::getMaterial() {
     return material;
 }
 
-void Triangle::setMaterial(Material material) {
+void Triangle::setMaterial(Material* material) {
     this->material = material;
 }/**/

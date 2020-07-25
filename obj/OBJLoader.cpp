@@ -100,7 +100,7 @@ void OBJLoader::buildObject() {
                 count++;
             }
         } else if (filestring[i] == "v") {
-            Vector vector = Vector{std::stof(filestring[i + 1]),
+            Vector vector{std::stof(filestring[i + 1]),
                                    std::stof(filestring[i + 2]),
                                    std::stof(filestring[i + 3])};
             vectors.push_back(vector);
@@ -110,7 +110,7 @@ void OBJLoader::buildObject() {
             B = (int) std::stof(filestring[i + 2]) - 1;
             C = (int) std::stof(filestring[i + 3]) - 1;
 
-            auto *triangle = new Triangle{vectors[A], vectors[B], vectors[C]};
+            Triangle* triangle = new Triangle{vectors[A], vectors[B], vectors[C]};
 
             shapes.push_back(triangle);
         }

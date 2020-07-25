@@ -11,7 +11,7 @@
 #include "../math/Ray.h"
 #include "../world/Light.h"
 
-class Material {
+class Material { /// struct would be better
 public:
     Material();
 

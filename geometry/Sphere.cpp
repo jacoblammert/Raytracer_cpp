@@ -11,9 +11,9 @@ Sphere::Sphere(Vector pos, float radius):
 pos{pos},radius{radius}{
 }
 
-Sphere::Sphere(Vector pos, float radius, Color color):
+Sphere::Sphere(Vector pos, float radius, Material* material):
         pos{pos},radius{radius} {
-    this->material.setColor(color);
+    this->material = material;
 }
 
 int Sphere::getId() {
@@ -31,9 +31,8 @@ bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float
 
 
     raydirection = raydirection * t;
-    Vector point = rayposition + raydirection;
 
-    float y = (pos - point).getLength();
+    float y = (pos - rayposition - raydirection).getLength();
 
     if (y < radius) { // (y < radius)
 
@@ -98,10 +97,10 @@ void Sphere::print() {
 }
 
 /**/
-Material Sphere::getMaterial() {
+Material* Sphere::getMaterial() {
     return material;
 }
 
-void Sphere::setMaterial(Material material) {
+void Sphere::setMaterial(Material* material) {
     this->material = material;
 }/**/

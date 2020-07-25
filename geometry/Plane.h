@@ -26,8 +26,8 @@ public:
 
     Vector getMedian() override;
 /**/
-    Material getMaterial() override;
-    void setMaterial(Material material) override;
+    Material* getMaterial() override;
+    void setMaterial(Material* material) override;
 /**/
     void print() override;
 

@@ -63,15 +63,15 @@ void Vector::print() {
 }
 
 
-float Vector::getX() {
+float Vector::getX() const {
     return x;
 }
 
-float Vector::getY() {
+float Vector::getY() const {
     return y;
 }
 
-float Vector::getZ() {
+float Vector::getZ() const {
     return z;
 }
 
@@ -89,12 +89,12 @@ float Vector::getLength() {
     return (float) sqrt(x * x + y * y + z * z);
 }
 
-float Vector::dot(Vector const& obj) {
+float Vector::dot(Vector const &obj) {
     return x * obj.x + y * obj.y + z * obj.z;
 }
 
-Vector Vector::cross(Vector const& obj) {
-    return {y * obj.z - z * obj.y,z * obj.x - x * obj.z,x * obj.y - y * obj.x};
+Vector Vector::cross(Vector const &obj) {
+    return {y * obj.z - z * obj.y, z * obj.x - x * obj.z, x * obj.y - y * obj.x};
 }
 
 Vector Vector::getReflected(Vector normal) {
@@ -124,13 +124,24 @@ Vector Vector::getRefracted(Vector normal, float n1, float n2) {
     return thisVec + normal;
 }
 
-Vector Vector::operator+(Vector const& obj) {
-    return {x + obj.x,y + obj.y,z + obj.z};
+Vector Vector::operator+(Vector const &obj) {
+    return {x + obj.x, y + obj.y, z + obj.z};
 }
 
-Vector Vector::operator-(Vector const& obj) {
-    return {x - obj.x,y - obj.y,z - obj.z};
+Vector Vector::operator-(Vector const &obj) {
+    return {x - obj.x, y - obj.y, z - obj.z};
 }
+
+///free operator:
+Vector operator-(const Vector &left, const Vector *right) {
+    return {left.getX() - right->getX(), left.getY() - right->getY(), left.getZ() - right->getY()};
+}
+
+
+
+//Vector Vector::operator-(Vector *const &obj) {
+//    return {x - obj->x,y - obj->y,z - obj->z};
+//}
 
 /*/
 float Vector::operator * (Vector &obj) {
@@ -139,12 +150,12 @@ float Vector::operator * (Vector &obj) {
     return res;
 }
  /*/
-Vector Vector::operator*(Vector const& obj) {
-    return {y * obj.z - z * obj.y,z * obj.x - x * obj.z,x * obj.y - y * obj.x};
+Vector Vector::operator*(Vector const &obj) {
+    return {y * obj.z - z * obj.y, z * obj.x - x * obj.z, x * obj.y - y * obj.x};
 }
 
 Vector Vector::operator*(float &obj) {
-    return {x * obj,y * obj,z * obj};
+    return {x * obj, y * obj, z * obj};
 }
 
 void Vector::divide(float value) {
@@ -159,6 +170,7 @@ int Vector::sign(int pos) {
     }
     return 0;
 }
+
 
 
 

@@ -121,6 +121,7 @@ void Image::constructImage() {
     //std::cout<<"Width image: "<<filestring[1]<<std::endl;
     //std::cout<<"Height image: "<<filestring[2]<<std::endl;
 
+
 }
 
 void Image::saveImage(int number) {
@@ -130,16 +131,22 @@ void Image::saveImage(int number) {
     std::ofstream img("picture" + std::to_string(number) + ".ppm");
     img << "P3" << std::endl << width << " " << height << std::endl << "255" << std::endl;
 
+    std::string string;
 
     for (auto &i : image) {
         for (auto &j : i) {
 
             j.scale(255);
             j.setRange(0, 255);
-
-            img << (int) j.getR() << " " << (int) j.getG() << " " << (int) j.getB() << std::endl;
+            string += std::to_string((int)j.getR());
+            string += " ";
+            string += std::to_string((int)j.getG());
+            string += " ";
+            string += std::to_string((int)j.getB());
+            string += "\n";
         }
     }
+    img << string;
 }
 
 
@@ -155,13 +162,27 @@ Color Image::getPixel(float x, float y) {
         x = x * (float) this->width;
         y = y * (float) this->height;
 
-        x = ((int) x) % (int) this->width;
-        y = ((int) y) % (int) this->height;
+        float percentageX = x-floor(x);
+        float percentageY = y-floor(y);
 
-        return image[y][x];
-    } else{
-        //std::cout<<"Image is empty, or x < 0 or y < 0! " << std::endl;
-        return {0,0,0};
+
+        x = ((int) floor(x)) % (int) this->width;
+        y = ((int) floor(y)) % (int) this->height;
+
+
+        int xMax = (x+1) < width ? x+1 :x;
+        int yMax = (y+1) < height ? y+1 :y;
+
+        Color middle = image[y][x];
+        Color right = image[y][xMax];
+        Color bottom = image[yMax][x];
+        Color bottomright = image[yMax][xMax];
+
+
+        return interpolate(interpolate(interpolate(middle,right,percentageX),interpolate(bottom,bottomright,percentageX),percentageY),
+                interpolate(interpolate(middle,bottom,percentageY),interpolate(right,bottomright,percentageY),percentageX),0.5f);
+    } else {
+        return {0, 0, 0};
     }
 }
 
@@ -172,33 +193,41 @@ void Image::resetImage() {
 }
 
 void Image::printR() {
-    std::cout<<"RED:\n";
+    std::cout << "RED:\n";
     for (int i = 0; i < image.size(); ++i) {
         for (int j = 0; j < image[i].size(); ++j) {
-            std::cout << image[i][j].getR()<< " ";
+            std::cout << image[i][j].getR() << " ";
         }
-        std::cout<<std::endl;
+        std::cout << std::endl;
     }
 }
 
 void Image::printG() {
-    std::cout<<"GREEN:\n";
+    std::cout << "GREEN:\n";
     for (int i = 0; i < image.size(); ++i) {
         for (int j = 0; j < image[i].size(); ++j) {
-            std::cout << image[i][j].getG()<< " ";
+            std::cout << image[i][j].getG() << " ";
         }
-        std::cout<<std::endl;
+        std::cout << std::endl;
     }
 }
 
 void Image::printB() {
-    std::cout<<"BLUE:\n";
+    std::cout << "BLUE:\n";
     for (int i = 0; i < image.size(); ++i) {
         for (int j = 0; j < image[i].size(); ++j) {
-            std::cout << image[i][j].getB()<< " ";
+            std::cout << image[i][j].getB() << " ";
         }
-        std::cout<<std::endl;
+        std::cout << std::endl;
     }
+}
+
+Color Image::interpolate(Color A, Color B, float value) {
+
+    Color c = B-A;
+    c.scale(value);
+    c = c+A;
+    return c;
 }
 
 

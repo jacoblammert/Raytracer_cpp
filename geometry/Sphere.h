@@ -11,7 +11,7 @@ class Sphere : public Shape {
 public:
     Sphere(Vector position, float radius);
 
-    Sphere(Vector position, float radius, Color color);
+    Sphere(Vector position, float radius, Material* material);
 
     int getId() override;
 
@@ -25,9 +25,9 @@ public:
 
     Vector getMedian() override;
 /**/
-    Material getMaterial() override;
+    Material* getMaterial() override;
 
-    void setMaterial(Material material) override;
+    void setMaterial(Material* material) override;
 /**/
     void print() override;
 

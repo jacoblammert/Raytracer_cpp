@@ -25,15 +25,15 @@ public:
 
     virtual Vector getMedian() = 0;
 /**/
-    virtual Material getMaterial() = 0;
+    virtual Material* getMaterial() = 0;
 
-    virtual void setMaterial(Material material) = 0;
+    virtual void setMaterial(Material* material) = 0;
 /**/
     virtual void print() = 0;
 
 protected:
     int id;
-    Material material;
+    Material* material;
 };
 
 

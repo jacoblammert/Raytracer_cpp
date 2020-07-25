@@ -19,7 +19,7 @@ public:
 
     void setTriangles(std::vector<Shape *> triangles);
 
-    void setMaterial(Material material);
+    void setMaterial(Material* material);
 
     std::vector<Shape *> getTriangles();
 

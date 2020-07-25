@@ -38,6 +38,8 @@ public:
 
     Color getPixel(float x, float y);
 
+    Color interpolate(Color A, Color B, float value);
+
 private:
     std::vector<std::vector<Color>> image;
     int width, height;

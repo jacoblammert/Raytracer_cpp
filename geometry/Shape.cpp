@@ -15,11 +15,11 @@ Vector Shape::getNormal(Vector pos) {
     return {};
 }
 /**/
-Material Shape::getMaterial() {
-    return {};
+Material* Shape::getMaterial() {
+    return material;
 }
 
 
-void Shape::setMaterial(Material material) {
+void Shape::setMaterial(Material* material) {
    this->material = material;
 }/**/

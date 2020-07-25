@@ -32,11 +32,11 @@ public:
 
     void print();
 
-    float getX();
+    float getX() const;
 
-    float getY();
+    float getY() const;
 
-    float getZ();
+    float getZ() const;
 
     float get(int position);
 
@@ -57,6 +57,7 @@ public:
 
     Vector operator-(Vector const& obj);
 
+
     /*/
     float operator * (Vector &obj);//  scalarmultiplication
     /*/
@@ -70,6 +71,8 @@ private:
     float z;
 
 };
+Vector operator - (const Vector& left,const Vector* right);
+
 
 
 #endif //RAYTRACER_VECTOR_H
