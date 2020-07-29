@@ -52,7 +52,16 @@ void BoundingBox::getIntersectedShape(Ray ray, Shape &shape, Vector &Hitpoint, V
     if (!box.getIntersect(ray)) {
         return;
     }
-    if (this->boxes.size() == 2) {
+
+    //float BoxDistance = box.getDistance(ray);
+
+    //if(BoxDistance < 0 || (INFINITY-2) <= BoxDistance){
+    //    return;
+    //}
+
+
+    //if (this->boxes.size() == 2) {
+        /*/
         if (VectorInsideBox(ray.getPos())) { // Ray is inside of the current Box
             if (VectorInsideBoxZero(ray.getPos())) { // Test, if Ray is inside one of the boxes
                 boxes[0].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
@@ -69,13 +78,24 @@ void BoundingBox::getIntersectedShape(Ray ray, Shape &shape, Vector &Hitpoint, V
                     boxes[0].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
                 }
             }
-        } else {
-            for (int i = 0; i < boxes.size(); ++i) {
-                boxes[i].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
-            }
-        }
+        } else {/**/
+            //for (int i = 0; i < boxes.size(); ++i) {
+            //    //// Loops over all Boxes and all Boxes inside the boxes and returns the closest shape hit
+            //    /// can be made faster by checking the closest box first and then the next closest box
+            //    /// in order to prevent testing even though the closest shape hit has been found already
+            //    boxes[i].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
+            //}
+        //}
 
+    //}
+
+
+    //TODO sort the Boxes from the first hit by the ray to last box hit by ray (distance along ray) in order to check the closest boxes/ shapes first and be faster
+
+    for (int i = 0; i < boxes.size(); ++i) {
+        boxes[i].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
     }
+
 
 
     if (!shapes.empty()) {
@@ -123,9 +143,12 @@ std::vector<Shape *> BoundingBox::getIntersectVec(Ray ray) {
  * or if there are more than 10 shapes inside the box
  */
 void BoundingBox::build() {
-    if (/**/depth < 14 && /**/shapes.size() > 30) {
-        /*/setMid();/*/  // 200s for dragon1
-        setMinMaxMid();/**/ // 140s for dragon1
+
+    setMinMaxMid();
+
+    box = Box(minXminYminZ, maxXmaxYmaxZ); /// needs to be renewed since the values changed
+
+    if (depth < 14 && shapes.size() > 60) {
         split();
     }
 }
@@ -147,18 +170,7 @@ void BoundingBox::setMinMaxMid() {
         median = median + medianShape;
     }
     median.scale(1.0f / (float) std::size(shapes));
-}
 
-void BoundingBox::setMid() {
-
-    median = Vector();
-    Vector medianShape = {};
-    for (int i = 0; i < shapes.size(); ++i) {
-        medianShape = shapes[i]->getMedian();
-        median = median + medianShape;
-    }
-
-    median.scale(1.0f / std::size(shapes));
 }
 
 void BoundingBox::getMin(Vector shapemin) {
@@ -180,10 +192,7 @@ void BoundingBox::getMax(Vector shapemax) {
 void BoundingBox::split() {
 
 
-    int axis = depth % 3; // % 3 because we want to split across x = 0, y = 1 and z = 2
-
-    /**/
-
+    int axis;
 
     Vector size = maxXmaxYmaxZ-minXminYminZ; // max of the Box in terms of width, height, depth
 
@@ -194,22 +203,21 @@ void BoundingBox::split() {
         axis = 1; // y split
     }else { // Z is largest
         axis = 2; // z split
-    }/**/
+    }
 
     Vector min = {};
     Vector max = {};
 
-    Vector leftMax = maxXmaxYmaxZ;
-    Vector rightMin = minXminYminZ;
 
-    leftMax.set(axis, median.get(axis));
-    rightMin.set(axis, median.get(axis));
-
-    BoundingBox left = BoundingBox(minXminYminZ, leftMax, depth);
-    BoundingBox right = BoundingBox(rightMin, maxXmaxYmaxZ, depth);
+    BoundingBox left = BoundingBox({},{},depth);
+    BoundingBox right = BoundingBox({},{},depth);
+    BoundingBox middle = BoundingBox({},{},depth);
 
     boxes.push_back(right);
     boxes.push_back(left);
+    boxes.push_back(middle); /// This is a smaller box which will contain every shape "cut" in half by the seperation
+
+
 
     for (int i = 0; i < shapes.size(); ++i) {
         if (!dynamic_cast<Plane *>(shapes[i])) { // Planes stay in the first Box, because they are really big
@@ -218,22 +226,19 @@ void BoundingBox::split() {
 
             if (min.get(axis) > median.get(axis)) { // right box
                 boxes[0].addShape(shapes[i]);
-                shapes.erase(shapes.begin() + i);
-                i--;
             } else if (max.get(axis) < median.get(axis)) { // left box
                 boxes[1].addShape(shapes[i]);
-                shapes.erase(shapes.begin() + i);
-                i--;
-            } //else {
-                //boxes[0].addShape(shapes[i]); // object inside the cutting plane added to both arrays -> simpler
-                //boxes[1].addShape(shapes[i]); // object inside the cutting plane added to both arrays -> simpler
-            //}
-
+            } else {
+                boxes[2].addShape(shapes[i]);
+            }
+            shapes.erase(shapes.begin() + i);
+            i--;
         }
     }
 
-    boxes[0].build(); // generate box
-    boxes[1].build(); // generate box
+    boxes[0].build();
+    boxes[1].build();
+    boxes[2].build();
 
 }
 
@@ -261,12 +266,19 @@ void BoundingBox::print(int depthToPrint) {
 Vector BoundingBox::getMedian() {
     return median;
 }
-
+/*/
 bool BoundingBox::VectorInsideBoxZero(Vector test) { // test, if a Vector is inside of the first Box
-    return (boxes[0].getMin().get(0) <= test.get(0) && test.get(0) <= boxes[0].getMin().get(0) &&
-            boxes[0].getMin().get(1) <= test.get(1) && test.get(1) <= boxes[0].getMin().get(1) &&
-            boxes[0].getMin().get(2) <= test.get(2) && test.get(2) <= boxes[0].getMin().get(2));
-}
+    return (boxes[0].getMin().get(0) <= test.get(0) && test.get(0) <= boxes[0].getMax().get(0) &&
+            boxes[0].getMin().get(1) <= test.get(1) && test.get(1) <= boxes[0].getMax().get(1) &&
+            boxes[0].getMin().get(2) <= test.get(2) && test.get(2) <= boxes[0].getMax().get(2));
+}/**/
+
+/*/
+bool BoundingBox::VectorInsideBox(Vector test,int i) { // test, if a Vector is inside of the first Box
+    return (boxes[i].getMin().get(0) <= test.get(0) && test.get(0) <= boxes[i].getMax().get(0) &&
+            boxes[i].getMin().get(1) <= test.get(1) && test.get(1) <= boxes[i].getMax().get(1) &&
+            boxes[i].getMin().get(2) <= test.get(2) && test.get(2) <= boxes[i].getMax().get(2));
+}/**/
 
 bool BoundingBox::VectorInsideBox(Vector test) { // test, if a Vector is inside of the first Box
     return (minXminYminZ.get(0) <= test.get(0) && test.get(0) <= maxXmaxYmaxZ.get(0) &&

@@ -33,8 +33,6 @@ public:
 
     void setMinMaxMid();
 
-    void setMid();
-
     void getMin(Vector shapemin);
 
     void getMax(Vector shapemax);
@@ -47,7 +45,8 @@ public:
 
     Vector getMax();
 
-    bool VectorInsideBoxZero(Vector test);
+    //bool VectorInsideBoxZero(Vector test);
+    //bool VectorInsideBox(Vector test,int i);
     bool VectorInsideBox(Vector test);
 
     void print(int depth);
@@ -60,6 +59,7 @@ private:
     int depth;
 
     Box box;
+
 
     std::vector<BoundingBox> boxes;
     std::vector<Shape *> shapes;

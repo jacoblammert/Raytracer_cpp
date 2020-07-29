@@ -41,7 +41,7 @@ void Scene::render() {
 
     Chronometer chr = Chronometer("Raytracer");
 
-    omp_set_num_threads(32); //64
+    omp_set_num_threads(64); //64
 
     int progress = 0;
 
@@ -88,6 +88,7 @@ void Scene::buildBoundingBox() {
     Chronometer chrb = Chronometer("BoundingBox");
     this->boundingBox = BoundingBox(this->shapes);
     chrb.stop();
+    //this->boundingBox.print(3);
 }
 
 void Scene::setSkybox(Skybox *skybox) {

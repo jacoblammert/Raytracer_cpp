@@ -14,7 +14,7 @@
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920/5, 1080/5, 2);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 2);//5
 
     cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
@@ -136,7 +136,7 @@ int main() {
 /**/
 /**/
 
-    OBJLoader objLoader = OBJLoader("car.obj"); //car // dragon1 // untitled11
+    OBJLoader objLoader = OBJLoader("dragon1.obj"); //car // dragon1 // untitled11 -> statue // untitled9
     objLoader.LoadOBJ();
     Object object = objLoader.getObject(); // get the first Object inside the obj file
     Material* material = new Material{{0.65,0.75,0.35},0.00,1.0,0.0,0};
@@ -159,7 +159,7 @@ int main() {
     Origin={0, 0, 1.25}; // 1 1 0.15
 
 
-    float images = 100.0f;
+    float images = 1.0f;
 
     Chronometer chronomovie = Chronometer("Video");
 
@@ -170,7 +170,7 @@ int main() {
     for (int i = 0; i < images; ++i) {
 
 
-        progress = (float) i / images;
+        progress = /**/0.25;/*/(float) i / images;/**/
 
         //material = {{1.0,1.0,1.0},0,1.0,0,1.025}; // Glas
 

@@ -29,6 +29,8 @@ public:
 
     bool getIntersect(Ray ray);
 
+    float getDistance(Ray ray);
+
     Vector getNormal(Vector pos) override;
 
     Vector getMin() override;

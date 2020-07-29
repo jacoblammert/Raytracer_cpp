@@ -148,6 +148,44 @@ void Box::getIntersectVec(Vector &direction, Vector &HitNormal) {
     }
 }
 
+float Box::getDistance(Ray ray) {
+    Vector direction = ray.getDir();
+    Vector raydirection = direction;
+
+    direction.divide(1);
+
+    float tmin, tmax, tymin, tymax, tzmin, tzmax;
+
+    tmin = (bounds[direction.sign(0)].getX()) * direction.getX();
+    tmax = (bounds[1 - direction.sign(0)].getX()) * direction.getX();
+    tymin = (bounds[direction.sign(1)].getY()) * direction.getY();
+    tymax = (bounds[1 - direction.sign(1)].getY()) * direction.getY();
+
+    if (tymin > tmin)
+        tmin = tymin;
+    if (tymax < tmax)
+        tmax = tymax;
+
+    tzmin = (bounds[direction.sign(2)].getZ()) * direction.getZ();
+    tzmax = (bounds[1 - direction.sign(2)].getZ()) * direction.getZ();
+
+
+    if (tzmin > tmin)
+        tmin = tzmin;
+    if (tzmax < tmax)
+        tmax = tzmax;
+
+
+    if (0 < tmin) {
+        return tmin;
+    }
+    if (tmin < 0 && 0 < tmax) {
+        return tmax;
+    }
+    return INFINITY;
+}
+
+
 /**
  * Important for BoundingBox intersection testing. Similar to the previous method, but without all the useless stuff
  * @param ray that get tested against this box
@@ -227,6 +265,8 @@ Material* Box::getMaterial() {
 void Box::setMaterial(Material* material) {
     this->material = material;
 }
+
+
 
 
 /**/
