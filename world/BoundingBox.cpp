@@ -8,6 +8,8 @@
 #include <utility>
 #include <iostream>
 #include <cmath>
+//#include <map>
+//#include <algorithm>
 
 BoundingBox::BoundingBox() {
 
@@ -49,54 +51,12 @@ BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<S
 
 void BoundingBox::getIntersectedShape(Ray ray, Shape &shape, Vector &Hitpoint, Vector &Hitnormal, float &distance,
                                       bool &hit) {
-    if (!box.getIntersect(ray)) {
-        return;
-    }
-
-    //float BoxDistance = box.getDistance(ray);
-
-    //if(BoxDistance < 0 || (INFINITY-2) <= BoxDistance){
-    //    return;
-    //}
-
-
-    //if (this->boxes.size() == 2) {
-        /*/
-        if (VectorInsideBox(ray.getPos())) { // Ray is inside of the current Box
-            if (VectorInsideBoxZero(ray.getPos())) { // Test, if Ray is inside one of the boxes
-                boxes[0].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
-                if (hit) {
-                    return;
-                } else {
-                    boxes[1].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
-                }
-            } else {
-                boxes[1].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
-                if (hit) {
-                    return;
-                } else {
-                    boxes[0].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
-                }
-            }
-        } else {/**/
-            //for (int i = 0; i < boxes.size(); ++i) {
-            //    //// Loops over all Boxes and all Boxes inside the boxes and returns the closest shape hit
-            //    /// can be made faster by checking the closest box first and then the next closest box
-            //    /// in order to prevent testing even though the closest shape hit has been found already
-            //    boxes[i].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
-            //}
-        //}
-
-    //}
-
-
-    //TODO sort the Boxes from the first hit by the ray to last box hit by ray (distance along ray) in order to check the closest boxes/ shapes first and be faster
 
     for (int i = 0; i < boxes.size(); ++i) {
-        boxes[i].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
+        if (boxes[i].box.getIntersect(ray)) {
+            boxes[i].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
+        }
     }
-
-
 
     if (!shapes.empty()) {
         int hitid = -1;
@@ -109,32 +69,7 @@ void BoundingBox::getIntersectedShape(Ray ray, Shape &shape, Vector &Hitpoint, V
                 hit = true;
             }
         }
-
     }
-}
-
-std::vector<Shape *> BoundingBox::getIntersectVec(Ray ray) {
-
-    std::vector<Shape *> returnshapes;
-
-    if (box.getIntersect(ray)) {
-        if (boxes.empty()) {
-            return shapes;
-        }
-        for (auto &boxe : boxes) {
-            std::vector<Shape *> shapes2 = boxe.getIntersectVec(ray);
-            returnshapes.insert(returnshapes.end(), shapes2.begin(), shapes2.end());
-        }
-        if (!shapes.empty()) {
-            returnshapes.insert(returnshapes.end(), shapes.begin(), shapes.end());
-        }
-
-    }
-    //if (this->depth == 0) {
-    //returnshapes = removeDoubles(returnshapes);
-    //}
-
-    return returnshapes;
 }
 
 
@@ -148,7 +83,7 @@ void BoundingBox::build() {
 
     box = Box(minXminYminZ, maxXmaxYmaxZ); /// needs to be renewed since the values changed
 
-    if (depth < 14 && shapes.size() > 60) {
+    if (depth < 14 && shapes.size() > 30) {
         split();
     }
 }
@@ -194,14 +129,14 @@ void BoundingBox::split() {
 
     int axis;
 
-    Vector size = maxXmaxYmaxZ-minXminYminZ; // max of the Box in terms of width, height, depth
+    Vector size = maxXmaxYmaxZ - minXminYminZ; // max of the Box in terms of width, height, depth
 
 
-    if (size.getX() > size.getY() && size.getX() > size.getZ()){ // X is largest
+    if (size.getX() > size.getY() && size.getX() > size.getZ()) { // X is largest
         axis = 0; // x split
-    } else if (size.getY() > size.getX() && size.getY() > size.getZ()){ // Y is lagest
+    } else if (size.getY() > size.getX() && size.getY() > size.getZ()) { // Y is lagest
         axis = 1; // y split
-    }else { // Z is largest
+    } else { // Z is largest
         axis = 2; // z split
     }
 
@@ -209,9 +144,9 @@ void BoundingBox::split() {
     Vector max = {};
 
 
-    BoundingBox left = BoundingBox({},{},depth);
-    BoundingBox right = BoundingBox({},{},depth);
-    BoundingBox middle = BoundingBox({},{},depth);
+    BoundingBox left = BoundingBox({}, {}, depth);
+    BoundingBox right = BoundingBox({}, {}, depth);
+    BoundingBox middle = BoundingBox({}, {}, depth);
 
     boxes.push_back(right);
     boxes.push_back(left);
@@ -266,19 +201,6 @@ void BoundingBox::print(int depthToPrint) {
 Vector BoundingBox::getMedian() {
     return median;
 }
-/*/
-bool BoundingBox::VectorInsideBoxZero(Vector test) { // test, if a Vector is inside of the first Box
-    return (boxes[0].getMin().get(0) <= test.get(0) && test.get(0) <= boxes[0].getMax().get(0) &&
-            boxes[0].getMin().get(1) <= test.get(1) && test.get(1) <= boxes[0].getMax().get(1) &&
-            boxes[0].getMin().get(2) <= test.get(2) && test.get(2) <= boxes[0].getMax().get(2));
-}/**/
-
-/*/
-bool BoundingBox::VectorInsideBox(Vector test,int i) { // test, if a Vector is inside of the first Box
-    return (boxes[i].getMin().get(0) <= test.get(0) && test.get(0) <= boxes[i].getMax().get(0) &&
-            boxes[i].getMin().get(1) <= test.get(1) && test.get(1) <= boxes[i].getMax().get(1) &&
-            boxes[i].getMin().get(2) <= test.get(2) && test.get(2) <= boxes[i].getMax().get(2));
-}/**/
 
 bool BoundingBox::VectorInsideBox(Vector test) { // test, if a Vector is inside of the first Box
     return (minXminYminZ.get(0) <= test.get(0) && test.get(0) <= maxXmaxYmaxZ.get(0) &&
@@ -293,6 +215,8 @@ Vector BoundingBox::getMin() {
 Vector BoundingBox::getMax() {
     return maxXmaxYmaxZ;
 }
+
+
 
 
 

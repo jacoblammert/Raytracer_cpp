@@ -8,7 +8,6 @@
 #include <iostream>
 #include <cmath>
 
-using namespace std;
 
 Vector::Vector() :
         x{0}, y{0}, z{0} {
@@ -59,7 +58,7 @@ void Vector::scale(float value) {
 }
 
 void Vector::print() {
-    cout << "X: " << x << " Y: " << y << " Z: " << z << " Length: " << getLength() << endl;
+    std::cout << "X: " << x << " Y: " << y << " Z: " << z << " Length: " << getLength() << std::endl;
 }
 
 

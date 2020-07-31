@@ -42,13 +42,13 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
 
     // if the determinant is negative the triangle is backfacing
     // if the determinant is close to 0, the ray misses the triangle
-    if (det < 0.0001f) {
-        //normal.scale(-1);
-        //return false;
-    }
+    //if (det < 0.000001f) {
+    //    //normal.scale(-1);
+    //    //return false;
+    //}
 
     // ray and triangle are parallel if det is close to 0
-    if (fabs(det) < 0.0001) return false;
+    if (fabs(det) < 0.00000000001f) return false; //TODO uncomment this line for backfacing triangles -> for refractions
 
     float invDet = 1 / det;
 
@@ -64,7 +64,7 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
 
     float t = v0v2.dot(qvec) * invDet;
 //#pragma omp critical
-    {
+    //{
         if (0 < t && t < distance) {
             distance = t;
             HitNormal = normal;
@@ -72,7 +72,7 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
             HitPoint = /**/ray.getPos()/*/rayposition/**/ + raydirection;
             id = newid;
         }
-    }
+    //}
     return true;
 }
 

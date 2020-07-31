@@ -7,7 +7,7 @@
 #include <fstream>
 #include <omp.h>
 #include "Scene.h"
-#include "../debug/Chronometer.h"
+#include "../debug/Timer.h"
 #include "BoundingBox.h"
 #include "../rendering/Renderer.h"
 #include "../rendering/Image.h"
@@ -39,7 +39,7 @@ void Scene::addShape(Shape *shape) {
 
 void Scene::render() {
 
-    Chronometer chr = Chronometer("Raytracer");
+    Timer timer = Timer("Raytracer");
 
     omp_set_num_threads(64); //64
 
@@ -69,7 +69,7 @@ void Scene::render() {
         }
     }
 
-    chr.stop();
+    timer.stop();
 }
 
 Camera Scene::getCamera() {
@@ -85,9 +85,9 @@ void Scene::buildBoundingBox() {
     std::cout << "Size shapes: " << shapes.size() << std::endl;
     std::cout << "Size lights: " << lights.size() << std::endl;
 
-    Chronometer chrb = Chronometer("BoundingBox");
+    Timer timerb = Timer("BoundingBox");
     this->boundingBox = BoundingBox(this->shapes);
-    chrb.stop();
+    timerb.stop();
     //this->boundingBox.print(3);
 }
 

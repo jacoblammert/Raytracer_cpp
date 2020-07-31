@@ -2,16 +2,16 @@
 // Created by Jacob on 19.04.2020.
 //
 
-#ifndef RAYTRACER_CHRONOMETER_H
-#define RAYTRACER_CHRONOMETER_H
+#ifndef RAYTRACER_TIMER_H
+#define RAYTRACER_TIMER_H
 
 #include <chrono>
 #include <string>
 
 
-class Chronometer {
+class Timer {
 public:
-    Chronometer(std::string message);
+    Timer(std::string message);
     void start(std::string message);
     void getTime();
     void stop();
@@ -24,4 +24,4 @@ private:
 };
 
 
-#endif //RAYTRACER_CHRONOMETER_H
+#endif //RAYTRACER_TIMER_H

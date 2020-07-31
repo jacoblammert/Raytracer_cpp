@@ -149,27 +149,30 @@ void Box::getIntersectVec(Vector &direction, Vector &HitNormal) {
 }
 
 float Box::getDistance(Ray ray) {
-    Vector direction = ray.getDir();
-    Vector raydirection = direction;
 
-    direction.divide(1);
+    Vector rayposition = ray.getPos();
+    Vector raydirection = ray.getDir();
+    raydirection.divide(1);
 
     float tmin, tmax, tymin, tymax, tzmin, tzmax;
 
-    tmin = (bounds[direction.sign(0)].getX()) * direction.getX();
-    tmax = (bounds[1 - direction.sign(0)].getX()) * direction.getX();
-    tymin = (bounds[direction.sign(1)].getY()) * direction.getY();
-    tymax = (bounds[1 - direction.sign(1)].getY()) * direction.getY();
+    tmin = (bounds[raydirection.sign(0)].getX() - rayposition.getX()) * raydirection.getX();
+    tmax = (bounds[1 - raydirection.sign(0)].getX() - rayposition.getX()) * raydirection.getX();
+    tymin = (bounds[raydirection.sign(1)].getY() - rayposition.getY()) * raydirection.getY();
+    tymax = (bounds[1 - raydirection.sign(1)].getY() - rayposition.getY()) * raydirection.getY();
 
+    if ((tmin > tymax) || (tymin > tmax))
+        return INFINITY;
     if (tymin > tmin)
         tmin = tymin;
     if (tymax < tmax)
         tmax = tymax;
 
-    tzmin = (bounds[direction.sign(2)].getZ()) * direction.getZ();
-    tzmax = (bounds[1 - direction.sign(2)].getZ()) * direction.getZ();
+    tzmin = (bounds[raydirection.sign(2)].getZ() - rayposition.getZ()) * raydirection.getZ();
+    tzmax = (bounds[1 - raydirection.sign(2)].getZ() - rayposition.getZ()) * raydirection.getZ();
 
-
+    if ((tmin > tzmax) || (tzmin > tmax))
+        return INFINITY;
     if (tzmin > tmin)
         tmin = tzmin;
     if (tzmax < tmax)
@@ -254,7 +257,11 @@ Vector Box::getMedian() {
 }
 
 void Box::print() {
-    std::cout << "Box" << std::endl;
+    std::cout << "Box: " << std::endl;
+    std::cout<< "Min: ";
+    bounds[0].print();
+    std::cout<< "Max: ";
+    bounds[1].print();
 }
 
 /**/

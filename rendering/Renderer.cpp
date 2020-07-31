@@ -71,7 +71,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
         float lightStrength = 0;
         float angle;
 
-        if (/*/true/*/(shapes[hit]->getMaterial()->getTransparency() != 1 && shapes[hit]->getMaterial()->getGlossy() != 1)/**/) { // ||?
+        if (!(shapes[hit]->getMaterial()->getTransparency() == 1.0f || shapes[hit]->getMaterial()->getGlossy() == 1.0f)){///*/true/*/(shapes[hit]->getMaterial()->getTransparency() != 1.0f /*/||/*/&&/**/ /*/shapes[hit]->getMaterial()->getGlossy() != 1.0f/*/ true/**/)/**/) { // ||?
             for (int i = 0; i < lights.size(); ++i) {
 
                 if (lights[i]->getIntensity() > 0) {
@@ -107,7 +107,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
             Vector Normal{HitNormal};//HitNormal.scale(0.001);
 
-            Normal.scale(0.001);
+            //Normal.scale(0.001);
 
 
             if (shapes[hit]->getMaterial()->getGlossy() > 0) {
@@ -133,7 +133,11 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
 
                 Color refr = {0, 0, 0};
-                int refractionsamples = 4;
+                int refractionsamples = 4;//4
+
+                if(shapes[hit]->getMaterial()->getRoughness() == 0.0f){
+                    refractionsamples = 1;
+                }
 
                 if (depth > 0){
                     refractionsamples = 1;
@@ -151,16 +155,22 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
         }
 
 
-        colorfinal.scale(1 - shapes[hit]->getMaterial()->getTransparency());
+        colorfinal.scale(1.0f - shapes[hit]->getMaterial()->getTransparency());
 
         reflectionColor.scale(shapes[hit]->getMaterial()->getGlossy());
+
         refractionColor.scale(shapes[hit]->getMaterial()->getTransparency());
 
         colorfinal = colorfinal + reflectionColor + refractionColor;
 
-        colorfinal.scale(1 /
-                         ((/*/1-/**/shapes[hit]->getMaterial()->getTransparency()) + shapes[hit]->getMaterial()->getGlossy() +
-                          shapes[hit]->getMaterial()->getRoughness()));
+        float value = (1-shapes[hit]->getMaterial()->getTransparency()) * (1-shapes[hit]->getMaterial()->getGlossy()); // 1-shapes[hit]->getMaterial()->getTransparency()
+        value = 1-shapes[hit]->getMaterial()->getTransparency();
+
+        Vector Brightness{value,shapes[hit]->getMaterial()->getTransparency(),shapes[hit]->getMaterial()->getGlossy()};
+
+        colorfinal.scale(1.0f / Brightness.getLength());
+                        // ((/*/1-/**/shapes[hit]->getMaterial()->getTransparency()) + shapes[hit]->getMaterial()->getGlossy() +
+                        //  shapes[hit]->getMaterial()->getRoughness()));
 
         return colorfinal;
     }
@@ -183,17 +193,14 @@ bool Renderer::castShadowRay(Ray ray, BoundingBox *boundingBox, float distance) 
     Vector HitPoint = {};
     Vector HitNormal = {};
 
-    int hit = -1;
+    bool hit = false;
     float mindistance = INFINITY - 1;
 
-    std::vector<Shape *> shapes = boundingBox->getIntersectVec(ray);
+    Sphere s = {{},1};
 
-    for (int i = 0; i < shapes.size(); ++i) {
-        if (shapes[i]->getIntersectVec(ray, HitPoint, HitNormal, mindistance, hit,
-                                       i)) { // bool if ray intersects the Object // hit & other values set for lighting & stuff
-        }
-    }
-    return hit >= 0 && 0 < mindistance && mindistance < distance;
+    boundingBox->getIntersectedShape(ray,s,HitPoint,HitNormal,mindistance,hit);
+
+    return hit && mindistance < distance && mindistance >= 0;//hit >= 0 && 0 < mindistance && mindistance < distance;
 }
 
 void Renderer::setSkybox(Skybox *skybox) {
@@ -267,7 +274,7 @@ Color Renderer::getRefractedColor(Ray ray, Vector HitPoint, Vector HitNormal, Ve
     if (roughness != 0.0) {
 
 
-        // the first vector doesent need to be changed, but I did it this way for now
+        // the first vector doesn't need to be changed, but I did it this way for now
 
         offset.set(0, randomFloat(roughness));
         offset.set(1, randomFloat(roughness));

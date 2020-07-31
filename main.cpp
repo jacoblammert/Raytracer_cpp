@@ -8,13 +8,13 @@
 #include "geometry/Plane.h"
 #include "geometry/Triangle.h"
 #include "obj/OBJLoader.h"
-#include "debug/Chronometer.h"
+#include "debug/Timer.h"
 #include "rendering/Image.h"
 
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 2);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920/2, 1080/2, 2);//5
 
     cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
@@ -56,7 +56,7 @@ int main() {
 
 /**/
 
-    Light light = {{2, 2, 1}, {0.7, 0.7, 0}, 0.5};
+    Light light = {{0, 0, 1.7}, {0.7, 0.7, 0}, 2.5};
     Light light1 = {{-2, 2, 1}, {1, 0.7, 0}, 0.5};
     Light light2 = {{-2, -2, 1}, {1, 0.2, 0}, 0.5};
     Light light3 = {{2, -2, 1}, {1, 0.6, 0.0}, 0.5};
@@ -77,7 +77,7 @@ int main() {
     scene.addLight(&light2);
     scene.addLight(&light3);/**/
 
-    const std::vector<Light *> &lightvec = /*/{};/*/{&light, &light1, &light2,&light3,&light4};/**/
+    const std::vector<Light *> &lightvec = /*/{};/*/{&light/*/, &light1, &light2,&light3,&light4/**/};/**/
 
     Scene scene = Scene(cam, lightvec);
 /*/
@@ -136,10 +136,11 @@ int main() {
 /**/
 /**/
 
-    OBJLoader objLoader = OBJLoader("dragon1.obj"); //car // dragon1 // untitled11 -> statue // untitled9
+    OBJLoader objLoader = OBJLoader("dragon1.obj"); //car // dragon1 // untitled11 -> statue // untitled9 // skull // statue
     objLoader.LoadOBJ();
     Object object = objLoader.getObject(); // get the first Object inside the obj file
-    Material* material = new Material{{0.65,0.75,0.35},0.00,1.0,0.0,0};
+    //Material* material = new Material{{0.65,0.75,0.35},0.00,1.0,0.0,0};
+    Material* material = new Material{{1,1,1},0.01f,0.0f,1.0f,1.36f}; // 1.36 = Water
     object.setMaterial(material);
     scene.addShapes(object.getTriangles());
 /**/
@@ -155,13 +156,13 @@ int main() {
     Vector LookAt = {3,-0.2,1};
 
 
-    LookAt = {0,0,0.5}; // 1 1 0.5
-    Origin={0, 0, 1.25}; // 1 1 0.15
+    LookAt = {0,0,0.3}; // 1 1 0.5
+    Origin={0, 0, 1.0}; // 1 1 0.15
 
 
-    float images = 1.0f;
+    float images = /**/200;/*/100.0f;/**/
 
-    Chronometer chronomovie = Chronometer("Video");
+    Timer timermovie = Timer("Video");
 
     float pi = 3.14159265f;
     float progress;
@@ -170,7 +171,7 @@ int main() {
     for (int i = 0; i < images; ++i) {
 
 
-        progress = /**/0.25;/*/(float) i / images;/**/
+        progress = /*/0.25f;/*/(float) i / images;/**/
 
         //material = {{1.0,1.0,1.0},0,1.0,0,1.025}; // Glas
 
@@ -202,7 +203,7 @@ int main() {
         scene.render();
         scene.drawImage(i);
     }
-    chronomovie.stop();
+    timermovie.stop();
 
     return 0;
 }

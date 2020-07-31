@@ -21,11 +21,9 @@ public:
 
     BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<Shape *> shapes, int depth);
 
-    std::vector<Shape *> getIntersectVec(Ray ray);
+    //std::vector<Shape *> getIntersectVec(Ray ray);
 
     void getIntersectedShape(Ray ray,Shape &shape,Vector &Hitpoint, Vector &Hitnormal,float &distance,bool &hit);
-
-    std::vector<Shape *> removeDoubles(std::vector<Shape *> shapes);
 
     void build();
 
@@ -45,8 +43,6 @@ public:
 
     Vector getMax();
 
-    //bool VectorInsideBoxZero(Vector test);
-    //bool VectorInsideBox(Vector test,int i);
     bool VectorInsideBox(Vector test);
 
     void print(int depth);

@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Sphere.h"
 #include "cmath"
-#include "../Debug/Chronometer.h"
+#include "../debug/Timer.h"
 
 Sphere::Sphere(Vector pos, float radius):
 pos{pos},radius{radius}{
