@@ -10,11 +10,10 @@ Plane::Plane(Vector position, Vector normal) {
     this->normal = normal;
 }
 
-Plane::Plane(Vector position, Vector normal, Color color) {
-    pos = position;
-    this->normal = normal;
+Plane::Plane(Vector position, Vector normal, Material* material):
+pos{position},normal{normal}{
     this->normal.normalize();
-    //this->normal.scale(-1);
+    this->material = material;
 }
 
 int Plane::getId() {
@@ -54,11 +53,11 @@ Vector Plane::getNormal(Vector pos) {
 }
 
 Vector Plane::getMin() {
-    return Vector(); // should give back a box of the desired size of the plane
+    return {}; // should give back a box of the desired size of the plane
 }
 
 Vector Plane::getMax() {
-    return Vector(); // should give back a box of the desired size of the plane (cutting doesn't work)
+    return {}; // should give back a box of the desired size of the plane (cutting doesn't work)
 }
 
 Vector Plane::getMedian() {

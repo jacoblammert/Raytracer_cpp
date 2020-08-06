@@ -30,26 +30,19 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
     Vector HitNormal = {};
 
 
+    //TODO split functions into different subfunctions to make visibility better
+
     int hit = -1;
     float mindistance = INFINITY - 1;
 
 
     /**Get Intersected Object here**/
-
-
-/*///183.541s Full HD: 747.5s  /// 128s with 10000 Triangles & 500000Pixels /// 66.7s car 500000 Pixel
-    std::vector<Shape *> shapes = boundingBox->getIntersectVec(ray);
-
-    for (int i = 0; i < shapes.size(); ++i) {
-        if (shapes[i]->getIntersectVec(ray, HitPoint, HitNormal, mindistance, hit,
-                                       i)) { // bool if ray intersects the Object // hit & other values set for lighting & stuff
-        }
-    }/*/ // 106.98 Seconds Full HD: 395.3s  /// 88s with 10000 Triangles & 500000Pixels  /// 37.7s car 500000 Pixel
-    std::vector<Shape *> shapes;
+    std::vector<Shape *> shapes; // TODO add pointer remove vector
 
     bool hitbool = false;
     Sphere s = {{},1};
-    boundingBox->getIntersectedShape(ray,s,HitPoint,HitNormal,mindistance,hitbool);
+    Shape* hitShape;
+    boundingBox->getIntersectedShape(ray,s,HitPoint,HitNormal,mindistance,hitbool); // TODO make to pointer
     shapes.push_back(&s);
 
     if (hitbool){
@@ -116,6 +109,11 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
                 Color refl = {0, 0, 0};
                 int reflectionsamples = 4;
 
+                if(shapes[hit]->getMaterial()->getRoughness() == 0.0f){
+                    reflectionsamples = 1;
+                }
+
+
                 if (depth > 0){ // only the first reflection rays will be multiplied by the amount of the reflaction samples (if there are to many reflection surfaces, there might be reflectionsamples^n , n = depth reflections and extra calculations)
                     reflectionsamples = 1;
                 }
@@ -163,8 +161,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights, Boundi
 
         colorfinal = colorfinal + reflectionColor + refractionColor;
 
-        float value = (1-shapes[hit]->getMaterial()->getTransparency()) * (1-shapes[hit]->getMaterial()->getGlossy()); // 1-shapes[hit]->getMaterial()->getTransparency()
-        value = 1-shapes[hit]->getMaterial()->getTransparency();
+        float value = 1-shapes[hit]->getMaterial()->getTransparency();
 
         Vector Brightness{value,shapes[hit]->getMaterial()->getTransparency(),shapes[hit]->getMaterial()->getGlossy()};
 

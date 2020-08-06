@@ -12,7 +12,7 @@ class Plane : public Shape {
 public:
     Plane(Vector position, Vector normal);
 
-    Plane(Vector position, Vector normal, Color color);
+    Plane(Vector position, Vector normal, Material* material);
 
     int getId() override;
 

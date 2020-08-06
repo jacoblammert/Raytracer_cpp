@@ -14,7 +14,7 @@
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920/2, 1080/2, 2);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 2);//5
 
     cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
@@ -38,7 +38,7 @@ int main() {
     Sphere s4 = Sphere(Vector(-2, 0, 0.1), 0.2, Color(0, 0, 0));
 
 
-    Plane p1 = Plane(Vector(0, 0, 0.1), Vector(0, 0, 1), Color(1, 1, 1));
+
 
 
     Box b1 = Box(Vector(-10.5226, -2.22101, -2.53902), Vector(3.58757, 2.52169, 1.53902), Color(1, 0, 0));
@@ -107,6 +107,8 @@ int main() {
 /**/
     //scene.addShape(&p1);
 
+    /// wtc
+
 /*/
     //OBJLoader objLoader = OBJLoader("dragon1.obj");
     //OBJLoader objLoader = OBJLoader("dragon.obj"); //car
@@ -124,23 +126,32 @@ int main() {
     Object object = objLoader.getObject(); // get the first Object inside the obj file
     Object object2 = objLoader2.getObject(); // get the first Object inside the obj file
 
-    Material* material = new Material{{1.0,1.0,1.0},0.00,1.0,0.0,1.025};
+    Material* material = new Material{{1.0,1.0,1.0},0.20,0.9,0.0,1.025};
     object.setMaterial(material);
 
-    Material* material2 = new Material{{1.0,1.0,1.0},1.00,1.0,0.0,1.025};
+    Material* material2 = new Material{{0.3,0.3,0.3},0.5,0.5,0.0,1.025};
     object2.setMaterial(material2);
 
     scene.addShapes(object.getTriangles());
     scene.addShapes(object2.getTriangles());
 
-/**/
-/**/
+/*/
+
+
+    Material* materialPlane = new Material{{1,1,1},0,0,0,0};
+
+    Plane* p1 = new Plane({0, 0, -1.3}, {0, 0, 1}, materialPlane);
+
+    scene.addShape(p1);
+
+
+    /// normal
 
     OBJLoader objLoader = OBJLoader("dragon1.obj"); //car // dragon1 // untitled11 -> statue // untitled9 // skull // statue
     objLoader.LoadOBJ();
     Object object = objLoader.getObject(); // get the first Object inside the obj file
     //Material* material = new Material{{0.65,0.75,0.35},0.00,1.0,0.0,0};
-    Material* material = new Material{{1,1,1},0.01f,0.0f,1.0f,1.36f}; // 1.36 = Water
+    Material* material = new Material{{0.7,0.8,0.7},0.0625f,0.0f,0.8f,1.36f}; // 1.36 = Water
     object.setMaterial(material);
     scene.addShapes(object.getTriangles());
 /**/
@@ -160,7 +171,7 @@ int main() {
     Origin={0, 0, 1.0}; // 1 1 0.15
 
 
-    float images = /**/200;/*/100.0f;/**/
+    float images = /**/1;/*/100.0f;/**/
 
     Timer timermovie = Timer("Video");
 
@@ -171,7 +182,7 @@ int main() {
     for (int i = 0; i < images; ++i) {
 
 
-        progress = /*/0.25f;/*/(float) i / images;/**/
+        progress = /**/0.25f;/*/(float) i / images;/**/
 
         //material = {{1.0,1.0,1.0},0,1.0,0,1.025}; // Glas
 

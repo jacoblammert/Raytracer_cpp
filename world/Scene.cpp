@@ -41,7 +41,7 @@ void Scene::render() {
 
     Timer timer = Timer("Raytracer");
 
-    omp_set_num_threads(64); //64
+    omp_set_num_threads(128); //64
 
     int progress = 0;
 

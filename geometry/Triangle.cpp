@@ -29,7 +29,7 @@ int Triangle::getId() {
 }
 
 
-bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) {
+bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid){
 
     Vector raydirection = ray.getDir();
     //Vector rayposition = ray.getPos();
@@ -48,7 +48,7 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
     //}
 
     // ray and triangle are parallel if det is close to 0
-    if (fabs(det) < 0.00000000001f) return false; //TODO uncomment this line for backfacing triangles -> for refractions
+    if (fabs(det) < 0.00000000001f) return false; //TODO   != 0.0f    uncomment this line for backfacing triangles -> for refractions
 
     float invDet = 1 / det;
 
