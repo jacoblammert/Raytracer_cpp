@@ -43,8 +43,6 @@ public:
 
     Vector getMax();
 
-    bool VectorInsideBox(Vector test);
-
     void print(int depth);
 
 private:

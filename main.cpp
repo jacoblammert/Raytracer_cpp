@@ -14,7 +14,7 @@
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 2);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920/5, 1080/5, 2);//5
 
     cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
@@ -171,7 +171,7 @@ int main() {
     Origin={0, 0, 1.0}; // 1 1 0.15
 
 
-    float images = /**/1;/*/100.0f;/**/
+    float images = /**/100;/*/100.0f;/**/
 
     Timer timermovie = Timer("Video");
 
@@ -205,7 +205,7 @@ int main() {
 
         /**/
 
-        Vector offset = {dist * sin(progress*2*pi), dist * cos(progress*2*pi), 0};
+        Vector offset = {dist * sin(progress*2*pi), dist * cos(progress*2*pi),0/* cos(progress*2*pi)*/};
 
         cam.setPosition(Origin + offset);
         cam.lookAt(LookAt);

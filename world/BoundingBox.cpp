@@ -21,27 +21,20 @@ BoundingBox::BoundingBox(std::vector<Shape *> shapes) {
     this->shapes = std::move(shapes);
     setMinMaxMid();
 
-    box = Box(minXminYminZ, maxXmaxYmaxZ);
+
     if (!this->shapes.empty()) {
         split();
     }
 }
 
-BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, int depth) {
-    this->depth = depth + 1;
-    this->minXminYminZ = minXminYminZ;
-    this->maxXmaxYmaxZ = maxXmaxYmaxZ; // build needs to be called later otherwise it is the last box
+BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, int depth) :
+        minXminYminZ{minXminYminZ}, maxXmaxYmaxZ{maxXmaxYmaxZ}, depth{++depth}, box{minXminYminZ, maxXmaxYmaxZ} {
 
-    box = Box(minXminYminZ, maxXmaxYmaxZ);
 }
 
 
-BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<Shape *> shapes, int depth) {
-    this->depth = depth + 1;
-    this->minXminYminZ = minXminYminZ;
-    this->maxXmaxYmaxZ = maxXmaxYmaxZ;
-
-    box = Box(minXminYminZ, maxXmaxYmaxZ);
+BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<Shape *> shapes, int depth) :
+        minXminYminZ{minXminYminZ}, maxXmaxYmaxZ{maxXmaxYmaxZ}, depth{++depth}, box{minXminYminZ, maxXmaxYmaxZ} {
 
     this->shapes = std::move(shapes);
     if (!this->shapes.empty()) {
@@ -49,8 +42,7 @@ BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<S
     }
 }
 
-void BoundingBox::getIntersectedShape(Ray ray, Shape &shape, Vector &Hitpoint, Vector &Hitnormal, float &distance,
-                                      bool &hit) {
+void BoundingBox::getIntersectedShape(Ray ray, Shape &shape, Vector &Hitpoint, Vector &Hitnormal, float &distance, bool &hit) {
 
     for (int i = 0; i < boxes.size(); ++i) {
         if (boxes[i].box.getIntersect(ray)) {
@@ -81,8 +73,6 @@ void BoundingBox::build() {
 
     setMinMaxMid();
 
-    box = Box(minXminYminZ, maxXmaxYmaxZ); /// needs to be renewed since the values changed
-
     if (depth < 14 && shapes.size() > 30) {
         split();
     }
@@ -90,22 +80,23 @@ void BoundingBox::build() {
 
 
 void BoundingBox::setMinMaxMid() {
-    minXminYminZ = Vector(INFINITY, INFINITY,
-                          INFINITY); // need to be set to opposite values to get the correct ones for all the shapes inside this box
-    maxXmaxYmaxZ = Vector(-INFINITY, -INFINITY,
-                          -INFINITY); // need to be set to opposite values to get the correct ones for all the shapes inside this box
+    minXminYminZ = Vector(INFINITY, INFINITY,INFINITY); // need to be set to opposite values to get the correct ones for all the shapes inside this box
+    maxXmaxYmaxZ = Vector(-INFINITY, -INFINITY,-INFINITY); // need to be set to opposite values to get the correct ones for all the shapes inside this box
 
     median = Vector();
 
-    Vector medianShape = {};
+    Vector medianShape;
+
     for (auto &shape : shapes) {
         getMin(shape->getMin());
         getMax(shape->getMax());
+
         medianShape = shape->getMedian();
         median = median + medianShape;
     }
     median.scale(1.0f / (float) std::size(shapes));
 
+    box = Box(minXminYminZ, maxXmaxYmaxZ);
 }
 
 void BoundingBox::getMin(Vector shapemin) {
@@ -126,9 +117,7 @@ void BoundingBox::getMax(Vector shapemax) {
 
 void BoundingBox::split() {
 
-
     int axis;
-
     Vector size = maxXmaxYmaxZ - minXminYminZ; // max of the Box in terms of width, height, depth
 
 
@@ -140,9 +129,13 @@ void BoundingBox::split() {
         axis = 2; // z split
     }
 
-    Vector min = {};
-    Vector max = {};
+    // 1 0   0
+    // 0 1   1
+    // 0 0   2
 
+
+    Vector min;
+    Vector max;
 
     BoundingBox left = BoundingBox({}, {}, depth);
     BoundingBox right = BoundingBox({}, {}, depth);
@@ -153,8 +146,7 @@ void BoundingBox::split() {
     boxes.push_back(middle); /// This is a smaller box which will contain every shape "cut" in half by the seperation
 
 
-
-    for (int i = 0; i < shapes.size(); ++i) {
+    for (int i = (int) shapes.size() - 1; 0 < i; --i) {
         if (!dynamic_cast<Plane *>(shapes[i])) { // Planes stay in the first Box, because they are really big
             min = shapes[i]->getMin();
             max = shapes[i]->getMax();
@@ -167,14 +159,12 @@ void BoundingBox::split() {
                 boxes[2].addShape(shapes[i]);
             }
             shapes.erase(shapes.begin() + i);
-            i--;
         }
     }
 
     boxes[0].build();
     boxes[1].build();
     boxes[2].build();
-
 }
 
 void BoundingBox::addShape(Shape *shape) {
@@ -202,12 +192,6 @@ Vector BoundingBox::getMedian() {
     return median;
 }
 
-bool BoundingBox::VectorInsideBox(Vector test) { // test, if a Vector is inside of the first Box
-    return (minXminYminZ.get(0) <= test.get(0) && test.get(0) <= maxXmaxYmaxZ.get(0) &&
-            minXminYminZ.get(1) <= test.get(1) && test.get(1) <= maxXmaxYmaxZ.get(1) &&
-            minXminYminZ.get(2) <= test.get(2) && test.get(2) <= maxXmaxYmaxZ.get(2));
-}
-
 Vector BoundingBox::getMin() {
     return minXminYminZ;
 }
@@ -215,12 +199,3 @@ Vector BoundingBox::getMin() {
 Vector BoundingBox::getMax() {
     return maxXmaxYmaxZ;
 }
-
-
-
-
-
-
-
-
-
