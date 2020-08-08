@@ -72,8 +72,10 @@ Color Color::operator+(Color const &obj) {
 }
 
 Color Color::operator+=(Color const &obj) {
-
-    return {r + obj.r, g + obj.g, b + obj.b};
+    r += obj.r;
+    g += obj.g;
+    b += obj.b;
+    return *this;
 }
 
 Color Color::operator-(Color const &obj) {
@@ -81,7 +83,10 @@ Color Color::operator-(Color const &obj) {
 }
 
 Color Color::operator-=(Color const &obj) {
-    return {r - obj.r, g - obj.g, b - obj.b};
+    r -= obj.r;
+    g -= obj.g;
+    b -= obj.b;
+    return *this;
 }
 
 Color Color::operator*(Color const &obj) {
@@ -89,7 +94,10 @@ Color Color::operator*(Color const &obj) {
 }
 
 Color Color::operator*=(Color const &obj) {
-    return {r * obj.r, g * obj.g, b * obj.b};
+    r *= obj.r;
+    g *= obj.g;
+    b *= obj.b;
+    return *this;;
 }
 
 Color Color::operator/(Color const &obj) {
@@ -97,17 +105,27 @@ Color Color::operator/(Color const &obj) {
 }
 
 Color Color::operator/=(Color const &obj) {
-    return {r / obj.r, g / obj.g, b / obj.b};
+    r /= obj.r;
+    g /= obj.g;
+    b /= obj.b;
+    return *this;
 }
 
+/**
+ * as int from 0 to 255
+ */
 void Color::setR(int red) {
     r = (float) red / 255.0f;
 }
-
+/**
+ * as int from 0 to 255
+ */
 void Color::setG(int green) {
     g = (float) green / 255.0f;
 }
-
+/**
+ * as int from 0 to 255
+ */
 void Color::setB(int blue) {
     b = (float) blue / 255.0f;
 }

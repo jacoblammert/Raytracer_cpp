@@ -164,10 +164,10 @@ void Vector::divide(float value) {
 }
 
 int Vector::sign(int pos) {
-    if ((pos == 0 && x < 0) || (pos == 1 && y < 0) || (pos == 2 && z < 0)) {
-        return 1;
-    }
-    return 0;
+    //if  {
+        return ((pos == 0 && x < 0) || (pos == 1 && y < 0) || (pos == 2 && z < 0));
+    //}
+    //return 0;
 }
 
 

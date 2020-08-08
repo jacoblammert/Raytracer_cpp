@@ -45,22 +45,22 @@ void Scene::render() {
 
     int progress = 0;
 
-    image = Image("picture", camera.getWidth(),camera.getHeight());
+    image = Image("picture", camera.getWidth(), camera.getHeight());
 
-    Renderer renderer = Renderer();
-    if (nullptr != skybox) {
-        renderer.setSkybox(skybox);
-    }
+    //Renderer renderer = Renderer(skybox);
 
 
 
-#pragma omp parallel for
-
+#pragma omp parallel for //schedule(dynamic,10)// collapse(2)
     for (int x = 0; x < camera.getWidth(); ++x) {
+
+        Camera camera1 = camera; // local copies for parallelization
+        Renderer renderer1 = Renderer(skybox,boundingBox);
+
         for (int y = 0; y < camera.getHeight(); ++y) {
-            Camera camera1 = camera; // local copies for parallelization
-            Ray ray = camera1.generateRay(x, y); // local copies for parallelization
-            image.setPixel(x, y, renderer.getColor(ray, 0, lights, &boundingBox));/**/
+
+            Ray ray = camera1.generateRay(x, y);
+            image.setPixel(x, y, renderer1.getColor(ray, 0, lights));
         }
         progress++;
         if (progress % 10 == 0) {
@@ -78,7 +78,7 @@ Camera Scene::getCamera() {
 
 
 void Scene::drawImage(int number) {
-   image.saveImage(number);
+    image.saveImage(number);
 }
 
 void Scene::buildBoundingBox() {
@@ -86,7 +86,7 @@ void Scene::buildBoundingBox() {
     std::cout << "Size lights: " << lights.size() << std::endl;
 
     Timer timerb = Timer("BoundingBox");
-    this->boundingBox = BoundingBox(this->shapes);
+    this->boundingBox = new BoundingBox(this->shapes);
     timerb.stop();
     //this->boundingBox.print(3);
 }

@@ -14,7 +14,7 @@
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920/5, 1080/5, 2);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 2);//5
 
     cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
@@ -138,11 +138,11 @@ int main() {
 /*/
 
 
-    Material* materialPlane = new Material{{1,1,1},0,0,0,0};
+    auto* materialPlane = new Material{{1,1,1},0,0,0,0};
 
-    Plane* p1 = new Plane({0, 0, -1.3}, {0, 0, 1}, materialPlane);
+    auto* p1 = new Plane({0, 0, -1.3}, {0, 0, 1}, materialPlane);
 
-    scene.addShape(p1);
+    //scene.addShape(p1);
 
 
     /// normal
@@ -151,7 +151,7 @@ int main() {
     objLoader.LoadOBJ();
     Object object = objLoader.getObject(); // get the first Object inside the obj file
     //Material* material = new Material{{0.65,0.75,0.35},0.00,1.0,0.0,0};
-    Material* material = new Material{{0.7,0.8,0.7},0.0625f,0.0f,0.8f,1.36f}; // 1.36 = Water
+    auto* material = new Material{{0.7,0.8,0.7},0.00f,1.0f,0.0f,1.36f};//0.0625f,0.0f,0.8f,1.36f}; // 1.36 = Water
     object.setMaterial(material);
     scene.addShapes(object.getTriangles());
 /**/
@@ -171,7 +171,7 @@ int main() {
     Origin={0, 0, 1.0}; // 1 1 0.15
 
 
-    float images = /**/100;/*/100.0f;/**/
+    float images = /**/1;/*/100.0f;/**/
 
     Timer timermovie = Timer("Video");
 

@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Box.h"
 
+
 Box::Box() {}
 
 Box::Box(Vector minXminYminZ, Vector maxXmaxYmaxZ) {
@@ -45,7 +46,7 @@ int Box::getId() {
 }
 
 
-bool Box::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) {
+bool Box::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) {
 
     Vector rayposition = ray.getPos();
     Vector raydirection = ray.getDir();
@@ -83,7 +84,6 @@ bool Box::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &d
         distance = tmin;
         HitPoint = rayposition + raydirection;
         HitNormal = getNormal(HitPoint);
-        id = newid;
         return true;
     }
     if (tmin < 0 && 0 < tmax && tmax < distance) {
@@ -93,7 +93,6 @@ bool Box::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &d
         distance = tmax;
         HitPoint = rayposition + raydirection;
         HitNormal = getNormal(HitPoint);
-        id = newid;
         return true;
     }
 
@@ -209,10 +208,15 @@ bool Box::getIntersect(Ray ray) {
 
     if ((tmin > tymax) || (tymin > tmax))
         return false;
+
+
     if (tymin > tmin)
         tmin = tymin;
+
+
     if (tymax < tmax)
         tmax = tymax;
+
 
     tzmin = (bounds[raydirection.sign(2)].getZ() - rayposition.getZ()) * raydirection.getZ();
     tzmax = (bounds[1 - raydirection.sign(2)].getZ() - rayposition.getZ()) * raydirection.getZ();
@@ -258,18 +262,18 @@ Vector Box::getMedian() {
 
 void Box::print() {
     std::cout << "Box: " << std::endl;
-    std::cout<< "Min: ";
+    std::cout << "Min: ";
     bounds[0].print();
-    std::cout<< "Max: ";
+    std::cout << "Max: ";
     bounds[1].print();
 }
 
 /**/
-Material* Box::getMaterial() {
+Material *Box::getMaterial() {
     return material;
 }
 
-void Box::setMaterial(Material* material) {
+void Box::setMaterial(Material *material) {
     this->material = material;
 }
 

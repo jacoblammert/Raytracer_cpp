@@ -21,7 +21,7 @@ int Sphere::getId() {
 }
 
 
-bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) {
+bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) {
 
     Vector raydirection = ray.getDir();
     Vector rayposition = ray.getPos();
@@ -43,17 +43,12 @@ bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float
         raydirection = ray.getDir();
         raydirection.normalize();
 
-//#pragma omp critical
-        {
-
-            //float dist = t1;//(ray.getPos() - rayposition + raydirection).getLength();
 
             if (0 < t1 && t1 < distance) {
                 raydirection.scale(t1);
                 distance = t1;
                 HitPoint = rayposition + raydirection;
                 HitNormal = getNormal(HitPoint);
-                id = newid;
                 return true;
             }
             if (t1 < 0 && 0 < t2 && t2 < distance) {
@@ -61,13 +56,8 @@ bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float
                 distance = t2;
                 HitPoint = rayposition + raydirection;
                 HitNormal = getNormal(HitPoint);
-                id = newid;
-                //std::cout<<"Hitpoint: ";
-                //HitPoint.print();
-                //std::cout<<std::endl;
                 return true;
             }
-        }
     }
     return false;
 }

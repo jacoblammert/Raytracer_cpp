@@ -23,7 +23,7 @@ public:
 
     int getId() override;
 
-    bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) override;
+    bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) override;
 
     void getIntersectVec(Vector &direction,  Vector &HitNormal);
 
@@ -47,6 +47,7 @@ public:
 
 private:
     std::vector<Vector> bounds;
+
 
     Vector position;
 

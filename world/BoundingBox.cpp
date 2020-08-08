@@ -8,8 +8,6 @@
 #include <utility>
 #include <iostream>
 #include <cmath>
-//#include <map>
-//#include <algorithm>
 
 BoundingBox::BoundingBox() {
 
@@ -42,22 +40,21 @@ BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<S
     }
 }
 
-void BoundingBox::getIntersectedShape(Ray ray, Shape &shape, Vector &Hitpoint, Vector &Hitnormal, float &distance, bool &hit) {
+void BoundingBox::getIntersectedShape(Ray ray, Shape &shape, Vector &Hitpoint, Vector &Hitnormal, float &distance,
+                                      bool &hit) {
 
-    for (int i = 0; i < boxes.size(); ++i) {
-        if (boxes[i].box.getIntersect(ray)) {
-            boxes[i].getIntersectedShape(ray, shape, Hitpoint, Hitnormal, distance, hit);
+    for (auto &boxe : boxes) {
+        if (boxe.box.getIntersect(ray)) {
+            boxe.getIntersectedShape(ray, shape, Hitpoint,Hitnormal, distance, hit);
         }
     }
 
     if (!shapes.empty()) {
-        int hitid = -1;
-        int newid = 2;
         float oldDist = distance;
-        for (int i = 0; i < shapes.size(); ++i) {
-            shapes[i]->getIntersectVec(ray, Hitpoint, Hitnormal, distance, hitid, newid);
+        for (auto &shapehit : shapes) {
+            shapehit->getIntersectVec(ray, Hitpoint, Hitnormal, distance);
             if (distance < oldDist) { // Test, if new already hit shape is closer and set shape to shape and hit to true
-                shape = *shapes[i];
+                shape = *shapehit;
                 hit = true;
             }
         }
@@ -73,15 +70,17 @@ void BoundingBox::build() {
 
     setMinMaxMid();
 
-    if (depth < 14 && shapes.size() > 30) {
+    if (depth < 20 && shapes.size() > 8) {
         split();
     }
 }
 
 
 void BoundingBox::setMinMaxMid() {
-    minXminYminZ = Vector(INFINITY, INFINITY,INFINITY); // need to be set to opposite values to get the correct ones for all the shapes inside this box
-    maxXmaxYmaxZ = Vector(-INFINITY, -INFINITY,-INFINITY); // need to be set to opposite values to get the correct ones for all the shapes inside this box
+    minXminYminZ = Vector(INFINITY, INFINITY,
+                          INFINITY); // need to be set to opposite values to get the correct ones for all the shapes inside this box
+    maxXmaxYmaxZ = Vector(-INFINITY, -INFINITY,
+                          -INFINITY); // need to be set to opposite values to get the correct ones for all the shapes inside this box
 
     median = Vector();
 
@@ -96,7 +95,7 @@ void BoundingBox::setMinMaxMid() {
     }
     median.scale(1.0f / (float) std::size(shapes));
 
-    box = Box(minXminYminZ, maxXmaxYmaxZ);
+    box = Box{minXminYminZ, maxXmaxYmaxZ};
 }
 
 void BoundingBox::getMin(Vector shapemin) {
@@ -134,37 +133,29 @@ void BoundingBox::split() {
     // 0 0   2
 
 
-    Vector min;
-    Vector max;
-
     BoundingBox left = BoundingBox({}, {}, depth);
     BoundingBox right = BoundingBox({}, {}, depth);
-    BoundingBox middle = BoundingBox({}, {}, depth);
 
     boxes.push_back(right);
     boxes.push_back(left);
-    boxes.push_back(middle); /// This is a smaller box which will contain every shape "cut" in half by the seperation
 
 
     for (int i = (int) shapes.size() - 1; 0 < i; --i) {
         if (!dynamic_cast<Plane *>(shapes[i])) { // Planes stay in the first Box, because they are really big
-            min = shapes[i]->getMin();
-            max = shapes[i]->getMax();
 
-            if (min.get(axis) > median.get(axis)) { // right box
-                boxes[0].addShape(shapes[i]);
-            } else if (max.get(axis) < median.get(axis)) { // left box
-                boxes[1].addShape(shapes[i]);
+            if (shapes[i]->getMedian().get(axis) > median.get(axis)) { // right
+                boxes[0].addShape(shapes[i]); // right
             } else {
-                boxes[2].addShape(shapes[i]);
+                boxes[1].addShape(shapes[i]);
             }
+
             shapes.erase(shapes.begin() + i);
         }
     }
 
-    boxes[0].build();
-    boxes[1].build();
-    boxes[2].build();
+    for (auto &boxe : boxes) {
+        boxe.build();
+    }
 }
 
 void BoundingBox::addShape(Shape *shape) {
@@ -182,8 +173,8 @@ void BoundingBox::print(int depthToPrint) {
               << std::endl;
     if (depthToPrint > 0) {
         depthToPrint--;
-        for (int i = 0; i < boxes.size(); ++i) {
-            boxes[i].print(depthToPrint);
+        for (auto &boxe : boxes) {
+            boxe.print(depthToPrint);
         }
     }
 }

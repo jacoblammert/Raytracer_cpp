@@ -23,7 +23,7 @@ public:
 
     //std::vector<Shape *> getIntersectVec(Ray ray);
 
-    void getIntersectedShape(Ray ray,Shape &shape,Vector &Hitpoint, Vector &Hitnormal,float &distance,bool &hit);
+    void getIntersectedShape(Ray ray,Shape &shape,Vector &Hitpoint,Vector &Hitnormal, float &distance,bool &hit);
 
     void build();
 
@@ -56,6 +56,7 @@ private:
 
 
     std::vector<BoundingBox> boxes;
+
     std::vector<Shape *> shapes;
 
 

@@ -10,8 +10,8 @@ Plane::Plane(Vector position, Vector normal) {
     this->normal = normal;
 }
 
-Plane::Plane(Vector position, Vector normal, Material* material):
-pos{position},normal{normal}{
+Plane::Plane(Vector position, Vector normal, Material *material) :
+        pos{position}, normal{normal} {
     this->normal.normalize();
     this->material = material;
 }
@@ -21,8 +21,7 @@ int Plane::getId() {
 }
 
 
-
-bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance, int &id, int &newid) {
+bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) {
 
     Vector raydirection = ray.getDir();
     Vector rayposition = ray.getPos();
@@ -33,15 +32,12 @@ bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float 
     float t = p0l0.dot(normal) / denom;
 
     if (t >= 0) {
-//#pragma omp critical
-        {
-            raydirection.scale(t);
-            if (0 < t && t < distance) {
-                distance = t;
-                HitPoint = rayposition + raydirection;
-                HitNormal = normal;
-                id = newid;
-            }
+
+        raydirection.scale(t);
+        if (0 < t && t < distance) {
+            distance = t;
+            HitPoint = rayposition + raydirection;
+            HitNormal = normal;
         }
         return true;
     }
@@ -65,13 +61,15 @@ Vector Plane::getMedian() {
 }
 
 void Plane::print() {
-    std::cout<<"Plane"<<std::endl;
+    std::cout << "Plane" << std::endl;
 }
+
 /**/
-Material* Plane::getMaterial() {
+Material *Plane::getMaterial() {
     return material;
 }
-void Plane::setMaterial(Material* material) {
+
+void Plane::setMaterial(Material *material) {
     this->material = material;
 }
 /**/

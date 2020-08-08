@@ -41,7 +41,7 @@ public:
 
 private:
     Camera camera;
-    BoundingBox boundingBox;
+    BoundingBox *boundingBox;
     std::vector<Shape *> shapes;
     const std::vector<Light *> &lights;
     Image image = Image("picture");
