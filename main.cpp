@@ -14,7 +14,7 @@
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 2);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920/2, 1080/2, 2);//5
 
     cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
@@ -142,18 +142,26 @@ int main() {
 
     auto* p1 = new Plane({0, 0, -1.3}, {0, 0, 1}, materialPlane);
 
-    //scene.addShape(p1);
+    scene.addShape(p1);
 
 
     /// normal
+
 
     OBJLoader objLoader = OBJLoader("dragon1.obj"); //car // dragon1 // untitled11 -> statue // untitled9 // skull // statue
     objLoader.LoadOBJ();
     Object object = objLoader.getObject(); // get the first Object inside the obj file
     //Material* material = new Material{{0.65,0.75,0.35},0.00,1.0,0.0,0};
-    auto* material = new Material{{0.7,0.8,0.7},0.00f,1.0f,0.0f,1.36f};//0.0625f,0.0f,0.8f,1.36f}; // 1.36 = Water
+    auto* material = new Material{{0.7,0.8,0.7},/**/0.0625f,0.0f,0.8f,1.36f};/*/0.00625f,0.0f,0.8f,1.36f};/**/ // 1.36 = Water
     object.setMaterial(material);
     scene.addShapes(object.getTriangles());
+    /**/
+
+    //Sphere* sphere = new Sphere{{},1};
+    //sphere->setMaterial(material);
+    //scene.addShape(sphere);
+
+
 /**/
     //scene.addShape(&s);
 
@@ -168,10 +176,10 @@ int main() {
 
 
     LookAt = {0,0,0.3}; // 1 1 0.5
-    Origin={0, 0, 1.0}; // 1 1 0.15
+    Origin={0, 0, 1}; // 1 1 0.15  //{0, 0, 1.0}
 
 
-    float images = /**/1;/*/100.0f;/**/
+    float images = /**/200;/*/100.0f;/**/
 
     Timer timermovie = Timer("Video");
 
@@ -182,7 +190,7 @@ int main() {
     for (int i = 0; i < images; ++i) {
 
 
-        progress = /**/0.25f;/*/(float) i / images;/**/
+        progress = /*/0.25f;/*/(float) i / images;/**/
 
         //material = {{1.0,1.0,1.0},0,1.0,0,1.025}; // Glas
 

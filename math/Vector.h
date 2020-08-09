@@ -51,7 +51,7 @@ public:
 
     Vector getReflected(Vector normal);
 
-    Vector getRefracted(Vector normal,float n1,float n2);
+    Vector getRefracted(Vector normal,float n);
 
     Vector operator+(Vector const& obj);
 

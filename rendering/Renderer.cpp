@@ -230,7 +230,7 @@ Color Renderer::getRefractedColor(Ray ray, Vector HitPoint, Vector HitNormal, Ve
 
     //std::cout << "old: " << oldrefractionIndex << " new: " << newRefractionindex << std::endl;
 
-    Vector refractedVector = ray.getDir().getRefracted(HitNormal, oldrefractionIndex, newRefractionindex);
+    Vector refractedVector = ray.getDir().getRefracted(HitNormal, oldrefractionIndex / newRefractionindex);
 
 
     float roughness = shape->getMaterial()->getRoughness();

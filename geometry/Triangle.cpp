@@ -13,6 +13,7 @@ Triangle::Triangle(Vector a, Vector b, Vector c) :
     Vector ab = b - a;
     Vector ac = c - a;
     this->normal = ab * ac;
+    this->normal.normalize();
 }
 
 Triangle::Triangle(Vector a, Vector b, Vector c, Color color) :
@@ -22,6 +23,7 @@ Triangle::Triangle(Vector a, Vector b, Vector c, Color color) :
     Vector ab = b - a;
     Vector ac = c - a;
     this->normal = ab * ac;
+    this->normal.normalize();
 }
 
 int Triangle::getId() {
@@ -58,7 +60,7 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
 
     if (0 < det && det < distance) {
         distance = det;
-        HitNormal = normal;
+        HitNormal = this->normal;
         pvec = ray.getDir();
         pvec.scale(det);
         HitPoint = rayposition + pvec;
@@ -67,7 +69,7 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
 }
 
 Vector Triangle::getNormal(Vector pos) {
-    return normal;
+    return this->normal;
 }
 
 Vector Triangle::getMin() {
@@ -121,7 +123,7 @@ void Triangle::print() {
 }
 
 Material *Triangle::getMaterial() {
-    return material;
+    return this->material;
 }
 
 void Triangle::setMaterial(Material *material) {
