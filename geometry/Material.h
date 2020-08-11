@@ -23,11 +23,19 @@ public:
 
     float getRoughness();
 
+    void setRoughness(float roughness);
+
     float getGlossy();
+
+    void setGlossy(float glossy);
 
     float getTransparency();
 
+    void setTransparency(float transparency);
+
     float getRefractiveIndex();
+
+    void setRefractiveIndex(float refractiveIndex);
 
     void setColor(Color color);
 

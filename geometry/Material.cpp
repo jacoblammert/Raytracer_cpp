@@ -66,6 +66,22 @@ void Material::setColor(Color color) {
     this->color = color;
 }
 
+void Material::setRoughness(float roughness) {
+    this->roughness = roughness;
+}
+
+void Material::setGlossy(float glossy) {
+    this->glossy = glossy;
+}
+
+void Material::setTransparency(float transparency) {
+    this->transparency = transparency;
+}
+
+void Material::setRefractiveIndex(float refractiveIndex) {
+    this->refractiveIndex = refractiveIndex;
+}
+
 
 
 

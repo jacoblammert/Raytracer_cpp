@@ -68,10 +68,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
     colorfinal.scale(0.2f * (1 - transparency));
 
 
-
-
-    if (!(transparency == 1.0f || glossy ==
-                                  1.0f)) {///*/true/*/(shapes[hit]->getMaterial()->getTransparency() != 1.0f /*/||/*/&&/**/ /*/shapes[hit]->getMaterial()->getGlossy() != 1.0f/*/ true/**/)/**/) { // ||?
+    if (!(transparency == 1.0f || glossy == 1.0f)) {///*/true/*/(shapes[hit]->getMaterial()->getTransparency() != 1.0f /*/||/*/&&/**/ /*/shapes[hit]->getMaterial()->getGlossy() != 1.0f/*/ true/**/)/**/) { // ||?
         float lightStrength = 0;
 
 
@@ -103,6 +100,8 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
             }
         }
     }
+
+
     Color reflectionColor;
     Color refractionColor;
 
