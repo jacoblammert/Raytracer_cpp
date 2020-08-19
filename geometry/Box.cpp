@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <cmath>
 #include "Box.h"
 
 
@@ -39,10 +40,6 @@ Box::Box(Vector Pos, float xScale, float yScale, float zScale, Color color) {
     bounds.push_back(minXminYminZ);
     bounds.push_back(maxXmaxYmaxZ);
     position = Pos;
-}
-
-int Box::getId() {
-    return 0;
 }
 
 
@@ -275,6 +272,10 @@ Material *Box::getMaterial() {
 
 void Box::setMaterial(Material *material) {
     this->material = material;
+}
+
+void Box::translate(Vector position) {
+
 }
 
 

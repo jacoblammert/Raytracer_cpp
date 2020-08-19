@@ -45,17 +45,8 @@ void Camera::update() {
 Ray Camera::generateRay(int x, int y) {
     update(); // shouldn't be called normally, but it appears, as if the values are automatically changed, so we need to reset them
 
-    this->wToH = ((float) (width - 1) / (float) (height - 1));
-
-    float xpercentage = (float) x / (float) (width - 1);
-    float ypercentage = (float) y / (float) (height - 1);
-
-    float scalex = (xpercentage - 0.5f) * 2 * wToH; // now a range from -1 to 1 depending on the x to width ratio
-    float scaley = (ypercentage - 0.5f) * 2; // now a range from -1 to 1 depending on the y to Height ratio
-
-
-    Vector vright = right * scalex;
-    Vector vtop = top * scaley;
+    Vector vright = right * (((float) x / (float) (width - 1)) - 0.5f) * 2 * ((float) (width - 1) / (float) (height - 1));
+    Vector vtop = top * (((float) y / (float) (height - 1)) - 0.5f) * 2;
 
     return {position, direction + vtop + vright};
 }

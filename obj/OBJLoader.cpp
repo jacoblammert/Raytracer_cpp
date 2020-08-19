@@ -106,11 +106,11 @@ void OBJLoader::buildObject() {
             vectors.push_back(vector);
         } else if (filestring[i] == "f") {
 
-            A = (int) std::stof(filestring[i + 1]) - 1;
-            B = (int) std::stof(filestring[i + 2]) - 1;
-            C = (int) std::stof(filestring[i + 3]) - 1;
+            A = (int) std::stof(filestring[i + 1]);
+            B = (int) std::stof(filestring[i + 2]);
+            C = (int) std::stof(filestring[i + 3]);
 
-            Triangle* triangle = new Triangle{vectors[A], vectors[B], vectors[C]};
+            Triangle* triangle = new Triangle{vectors[A-1], vectors[B-1], vectors[C-1]};
 
             shapes.push_back(triangle);
         }

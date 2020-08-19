@@ -51,22 +51,35 @@ void Scene::render() {
 
 
 
-#pragma omp parallel for //schedule(dynamic,10)// collapse(2)
+#pragma omp parallel for schedule(dynamic,2) collapse(2)
+
+//float error = 0.0f;
+
+//#pragma omp target teams distribute parallel for// reduction(max:error)/*private(x,y)/*schedule(dynamic,2)*/ //collapse(2)
     for (int x = 0; x < camera.getWidth(); ++x) {
+/*/
+        Camera camera1 = camera; // local copies for parallelization
+        Renderer renderer1 = Renderer(skybox,boundingBox);
+/**/
+        for (int y = 0; y < camera.getHeight(); ++y) {
+
+            /**/
 
         Camera camera1 = camera; // local copies for parallelization
         Renderer renderer1 = Renderer(skybox,boundingBox);
 
-        for (int y = 0; y < camera.getHeight(); ++y) {
+
+             /**/
+
 
             Ray ray = camera1.generateRay(x, y);
             image.setPixel(x, y, renderer1.getColor(ray, 0, lights));
         }
-        progress++;
-        if (progress % 10 == 0) {
-            std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getWidth() << "% Thread: "
-                      << omp_get_thread_num() << std::endl;
-        }
+        //progress++;
+        //if (progress % 10 == 0) {
+        //    std::cout << "Progress: " << (float) (100 * progress) / (float) camera.getWidth() << "% Thread: "
+        //              << omp_get_thread_num() << std::endl;
+        //}
     }
 
     timer.stop();

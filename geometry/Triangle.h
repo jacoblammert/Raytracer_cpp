@@ -16,8 +16,6 @@ public:
     Triangle(Vector a, Vector b, Vector c, Color color);
 
 
-    int getId() override;
-
     bool getIntersectVec(Ray ray, Vector &HitPoint,  Vector &HitNormal, float &distance) override;
 
     Vector getNormal(Vector pos) override;
@@ -32,6 +30,9 @@ public:
 
     void setMaterial(Material* material) override;
 /**/
+
+void translate(Vector position) override;
+
     void print() override;
 
 private:

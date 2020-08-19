@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <utility>
+#include <cmath>
 #include "Renderer.h"
 #include "../geometry/Material.h"
 #include "../geometry/Triangle.h"
@@ -203,7 +204,7 @@ Color Renderer::getReflectedColor(Ray ray, Vector HitPoint, Vector HitNormal, Ve
 
     Ray reflectionray = {HitPoint + Normal, reflectedVector};
 
-    return getColor(reflectionray, depth + 1, std::move(lights));
+    return getColor(reflectionray, depth , std::move(lights));
 }
 
 Color Renderer::getRefractedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth,

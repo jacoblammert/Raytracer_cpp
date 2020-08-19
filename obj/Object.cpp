@@ -36,4 +36,10 @@ void Object::setMaterial(Material* material) {
 
 }
 
+void Object::add(Vector position) {
+    for (int i = 0; i < triangles.size(); ++i) {
+            triangles[i]->translate(position);
+    }
+}
+
 

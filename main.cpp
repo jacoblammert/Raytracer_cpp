@@ -1,5 +1,7 @@
 
 #include <iostream>
+#include <cmath>
+#include <memory>
 #include "math/Vector.h"
 #include "world/Camera.h"
 #include "geometry/Sphere.h"
@@ -11,10 +13,11 @@
 #include "debug/Timer.h"
 #include "rendering/Image.h"
 
+
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920/2, 1080/2, 2);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920/4, 1080/4, 2);//5
 
     cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
@@ -56,9 +59,9 @@ int main() {
 
 /**/
 
-    Light light = {{0, 0, 1.7}, {0.7, 0.7, 0}, 2.5};
-    Light light1 = {{-2, 2, 1}, {1, 0.7, 0}, 0.5};
-    Light light2 = {{-2, -2, 1}, {1, 0.2, 0}, 0.5};
+    Light light = {{0, 0, 1.7}, {0.3, 0.7, 1}, 2.5};
+    Light light1 = {{-2, 2, 1}, {1, 0.7, 0}, 1.5};
+    Light light2 = {{-2, -2, 1}, {1, 0.2, 0}, 1.5};
     Light light3 = {{2, -2, 1}, {1, 0.6, 0.0}, 0.5};
     Light light4 = {{0, 0, 2}, {0.075, 0.125, 0.125}, 0.5};
 
@@ -77,7 +80,7 @@ int main() {
     scene.addLight(&light2);
     scene.addLight(&light3);/**/
 
-    const std::vector<Light *> &lightvec = /*/{};/*/{&light/*/, &light1, &light2,&light3,&light4/**/};/**/
+    const std::vector<Light *> &lightvec = /*/{};/*/{&light/*/, &light1/**//*/, &light2/*/,&light3,&light4/**/};/**/
 
     Scene scene = Scene(cam, lightvec);
 /*/
@@ -148,13 +151,26 @@ int main() {
     /// normal
 
 
-    OBJLoader objLoader = OBJLoader("dragon1.obj"); //car // dragon1 // untitled11 -> statue // untitled9 // skull // statue
+    OBJLoader objLoader = OBJLoader("dragon1.obj"); //car // dragon1 // untitled11 -> statue // untitled9 // skull // statue //worldtrade
     objLoader.LoadOBJ();
     Object object = objLoader.getObject(); // get the first Object inside the obj file
     //Material* material = new Material{{0.65,0.75,0.35},0.00,1.0,0.0,0};
-    auto* material = new Material{/*/{1,1,0.7}/*/{0.7,0.8,0.7}/**/,/**/0.0f,0.0f,1.0f,/**//*/0.0f/*/1.36f/**/};/*/0.00625f,0.0f,0.8f,1.36f};/**/ // 1.36 = Water
+    auto* material = new Material{/**/{1,0,1}/*/{0.7,0.8,0.7}/**/,/**/0.00f,0.00f,0.0f,/**//*/0.0f/*/1.36f/**/};/*/0.00625f,0.0f,0.8f,1.36f};/**/ // 1.36 = Water
     object.setMaterial(material);
     scene.addShapes(object.getTriangles());
+
+
+
+    //OBJLoader objLoaderb = OBJLoader("dragon1.obj"); //car // dragon1 // untitled11 -> statue // untitled9 // skull // statue //worldtrade
+    //objLoaderb.LoadOBJ();
+    //Object objectaa = objLoaderb.getObject(); // get the first Object inside the obj file
+    ////Material* material = new Material{{0.65,0.75,0.35},0.00,1.0,0.0,0};
+    //auto* material11 = new Material{/**/{1,0,0}/*/{0.7,0.8,0.7}/**/,/**/0.100f,1.00f,0.0f,/**//*/0.0f/*/1.36f/**/};/*/0.00625f,0.0f,0.8f,1.36f};/**/ // 1.36 = Water
+    //objectaa.setMaterial(material11);
+    //objectaa.add({0,0,2});
+    //scene.addShapes(objectaa.getTriangles());
+
+
     /**/
 
     //Sphere* sphere = new Sphere{{},1};
@@ -179,7 +195,7 @@ int main() {
     Origin={0, 0, 1}; // 1 1 0.15  //{0, 0, 1.0}
 
 
-    float images = /**/200;/*/100.0f;/**/
+    float images = /**/1000;/*/100.0f;/**/
 
     Timer timermovie = Timer("Video");
 
@@ -213,9 +229,9 @@ int main() {
 
         /**/
 
-        material->setRefractiveIndex( 0.6f * (1 + cos(progress*2*pi)));
+        //material->setRefractiveIndex( 0.6f * (1 + cos(progress*2*pi)));
 
-        Vector offset = {dist * sin(progress*2*pi), dist * cos(progress*2*pi),0/* cos(progress*2*pi)*/};
+        Vector offset = {(float)(dist * sin(progress*2.0f*pi)), (float)(dist * cos(progress*2*pi)),0/* cos(progress*2*pi)*/};
 
         cam.setPosition(Origin + offset);
         cam.lookAt(LookAt);

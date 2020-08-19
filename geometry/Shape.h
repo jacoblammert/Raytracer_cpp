@@ -13,7 +13,6 @@
 
 class Shape {
 public:
-    virtual int getId() = 0;
 
     virtual bool getIntersectVec(Ray ray, Vector &HitPoint,Vector &Hitnormal, float &distance) = 0; // returns true, if the Ray and the object intersect
 
@@ -24,15 +23,16 @@ public:
     virtual Vector getMax() = 0;
 
     virtual Vector getMedian() = 0;
-/**/
-    virtual Material* getMaterial() = 0;
 
-    virtual void setMaterial(Material* material) = 0;
-/**/
+    virtual Material* getMaterial() = 0; // needs override for composite object
+
+    virtual void setMaterial(Material* material) = 0; // needs override for composite object
+
     virtual void print() = 0;
 
+    virtual void translate(Vector position) = 0;
+
 protected:
-    int id;
     Material* material;
 };
 

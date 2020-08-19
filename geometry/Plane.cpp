@@ -16,10 +16,6 @@ Plane::Plane(Vector position, Vector normal, Material *material) :
     this->material = material;
 }
 
-int Plane::getId() {
-    return 0;
-}
-
 
 bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) {
 
@@ -71,5 +67,9 @@ Material *Plane::getMaterial() {
 
 void Plane::setMaterial(Material *material) {
     this->material = material;
+}
+
+void Plane::translate(Vector position) {
+
 }
 /**/

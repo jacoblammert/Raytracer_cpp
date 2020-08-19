@@ -21,7 +21,9 @@ public:
 
     Box(Vector Pos, float xScale, float yScale, float zScale, Color color);
 
-    int getId() override;
+    //int getId() override;
+
+    void translate(Vector position) override;
 
     bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) override;
 

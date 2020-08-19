@@ -5,11 +5,6 @@
 #include "Shape.h"
 
 
-
-int Shape::getId() {
-    return 0;
-}
-
 Material* Shape::getMaterial() {
     return material;
 }

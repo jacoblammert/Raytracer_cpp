@@ -13,8 +13,6 @@ public:
 
     Sphere(Vector position, float radius, Material* material);
 
-    int getId() override;
-
     bool getIntersectVec(Ray ray, Vector &HitPoint,  Vector &HitNormal,float &distance) override;
 
     Vector getNormal(Vector pos) override;
@@ -23,6 +21,7 @@ public:
 
     Vector getMax() override;
 
+    void translate(Vector position) override;
     Vector getMedian() override;
 /**/
     Material* getMaterial() override;

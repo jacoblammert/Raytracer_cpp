@@ -21,6 +21,9 @@ public:
 
     void setMaterial(Material* material);
 
+    void add(Vector position);
+
+
     std::vector<Shape *> getTriangles();
 
 private:

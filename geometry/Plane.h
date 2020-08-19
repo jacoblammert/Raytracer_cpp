@@ -14,8 +14,6 @@ public:
 
     Plane(Vector position, Vector normal, Material* material);
 
-    int getId() override;
-
     bool getIntersectVec(Ray ray, Vector &HitPoint,  Vector &HitNormal,float &distance) override;
 
     Vector getNormal(Vector pos) override;
@@ -25,6 +23,9 @@ public:
     Vector getMax() override;
 
     Vector getMedian() override;
+
+
+    void translate(Vector position) override;
 /**/
     Material* getMaterial() override;
     void setMaterial(Material* material) override;

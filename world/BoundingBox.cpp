@@ -93,7 +93,7 @@ void BoundingBox::setMinMaxMid() {
         medianShape = shape->getMedian();
         median = median + medianShape;
     }
-    median.scale(1.0f / (float) std::size(shapes));
+    median.scale(1.0f / (float) shapes.size());
 
     box = Box{minXminYminZ, maxXmaxYmaxZ};
 }
@@ -164,7 +164,7 @@ void BoundingBox::addShape(Shape *shape) {
 
 void BoundingBox::print(int depthToPrint) {
     std::cout << std::endl << "Depth: " << this->depth << std::endl;
-    std::cout << "Size: " << std::size(shapes) << std::endl;
+    std::cout << "Size: " << shapes.size() << std::endl;
     std::cout << "MinX: " << minXminYminZ.get(0) << " MinY: " << minXminYminZ.get(1) << " MinZ: " << minXminYminZ.get(2)
               << std::endl;
     std::cout << "MaxX: " << maxXmaxYmaxZ.get(0) << " MaxY: " << maxXmaxYmaxZ.get(1) << " MaxZ: " << maxXmaxYmaxZ.get(2)

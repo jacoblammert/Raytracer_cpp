@@ -16,10 +16,6 @@ Sphere::Sphere(Vector pos, float radius, Material* material):
     this->material = material;
 }
 
-int Sphere::getId() {
-    return 0;
-}
-
 
 bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) {
 
@@ -93,4 +89,9 @@ Material* Sphere::getMaterial() {
 
 void Sphere::setMaterial(Material* material) {
     this->material = material;
-}/**/
+}
+
+void Sphere::translate(Vector position) {
+
+}
+/**/

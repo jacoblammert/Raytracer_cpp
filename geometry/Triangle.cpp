@@ -26,10 +26,6 @@ Triangle::Triangle(Vector a, Vector b, Vector c, Color color) :
     this->normal.normalize();
 }
 
-int Triangle::getId() {
-    return 0;
-}
-
 
 bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) {
 
@@ -128,4 +124,10 @@ Material *Triangle::getMaterial() {
 
 void Triangle::setMaterial(Material *material) {
     this->material = material;
+}
+
+void Triangle::translate(Vector position) {
+    a = a+position;
+    b = b+position;
+    c = c+position;
 }
