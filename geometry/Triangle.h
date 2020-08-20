@@ -16,7 +16,7 @@ public:
     Triangle(Vector a, Vector b, Vector c, Color color);
 
 
-    bool getIntersectVec(Ray ray, Vector &HitPoint,  Vector &HitNormal, float &distance) override;
+    bool getIntersectVec(Intersect* intersect) override;
 
     Vector getNormal(Vector pos) override;
 

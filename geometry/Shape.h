@@ -10,11 +10,12 @@
 #include "../math/Ray.h"
 #include "Color.h"
 #include "Material.h"
+#include "Intersect.h"
 
 class Shape {
 public:
 
-    virtual bool getIntersectVec(Ray ray, Vector &HitPoint,Vector &Hitnormal, float &distance) = 0; // returns true, if the Ray and the object intersect
+    virtual bool getIntersectVec(Intersect* intersect) = 0; // returns true, if the Ray and the object intersect
 
     virtual Vector getNormal(Vector pos) = 0;
 

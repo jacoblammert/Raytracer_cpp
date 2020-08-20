@@ -17,7 +17,7 @@
 int main() {
 
 
-    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920/4, 1080/4, 2);//5
+    Camera cam = Camera(Vector(10, 0, 2), Vector(1, 0, 0), 1920, 1080, 2);//5
 
     cam.setPosition({10,0,2});
     cam.lookAt(Vector(0, 0, 0));
@@ -145,7 +145,7 @@ int main() {
 
     auto* p1 = new Plane({0, 0, -1.3}, {0, 0, 1}, materialPlane);
 
-    //scene.addShape(p1);
+    scene.addShape(p1);
 
 
     /// normal
@@ -155,7 +155,7 @@ int main() {
     objLoader.LoadOBJ();
     Object object = objLoader.getObject(); // get the first Object inside the obj file
     //Material* material = new Material{{0.65,0.75,0.35},0.00,1.0,0.0,0};
-    auto* material = new Material{/**/{1,0,1}/*/{0.7,0.8,0.7}/**/,/**/0.00f,0.00f,0.0f,/**//*/0.0f/*/1.36f/**/};/*/0.00625f,0.0f,0.8f,1.36f};/**/ // 1.36 = Water
+    auto* material = new Material{/**/{0.75,0.8,0.7}/*/{0.7,0.8,0.7}/**/,/**/0.00f,0.00f,0.0f,/**//*/0.0f/*/1.36f/**/};/*/0.00625f,0.0f,0.8f,1.36f};/**/ // 1.36 = Water
     object.setMaterial(material);
     scene.addShapes(object.getTriangles());
 
@@ -195,7 +195,7 @@ int main() {
     Origin={0, 0, 1}; // 1 1 0.15  //{0, 0, 1.0}
 
 
-    float images = /**/1000;/*/100.0f;/**/
+    float images = /**/1;/*/100.0f;/**/
 
     Timer timermovie = Timer("Video");
 
@@ -206,7 +206,7 @@ int main() {
     for (int i = 0; i < images; ++i) {
 
 
-        progress = /*/0.25f;/*/(float) i / images;/**/
+        progress = /**/0.25f;/*/(float) i / images;/**/
 
         //material = {{1.0,1.0,1.0},0,1.0,0,1.025}; // Glas
 

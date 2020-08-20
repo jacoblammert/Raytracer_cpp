@@ -17,13 +17,13 @@ public:
 
     BoundingBox(std::vector<Shape *> shapes);
 
-    BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, int depth);
+    BoundingBox(int depth);
 
-    BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<Shape *> shapes, int depth);
+    //BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<Shape *> shapes, int depth);
 
     //std::vector<Shape *> getIntersectVec(Ray ray);
 
-    void getIntersectedShape(Ray ray,Shape &shape,Vector &Hitpoint,Vector &Hitnormal, float &distance,bool &hit);
+    void getIntersectedShape(Shape &shape, Intersect* intersect,bool &hit);
 
     void build();
 

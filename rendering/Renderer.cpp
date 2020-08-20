@@ -30,14 +30,12 @@ Renderer::Renderer(Skybox *skybox, BoundingBox *boundingBox) :
  * @return color consisting of brightness for that point and each light and color of the shape blended together
  */
 Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
-    Vector HitPoint{};
-    Vector HitNormal{};
+
 
 
     //TODO split functions into different subfunctions to make visibility better
 
 
-    float mindistance = INFINITY - 1;
 
 
     /**Get Intersected Object here**/
@@ -45,7 +43,9 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
     bool hitbool = false;
     Sphere s{{},0};
     Shape *shape;
-    boundingBox->getIntersectedShape(ray, s, HitPoint, HitNormal,mindistance, hitbool); // TODO make to pointer
+    Intersect* intersect = new Intersect{ray};
+    intersect->ray = ray;
+    boundingBox->getIntersectedShape(s,intersect, hitbool);
     shape = &s;
 
 
@@ -56,8 +56,6 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
         }
         return {};
     }
-
-
 
 
     float glossy = shape->getMaterial()->getGlossy();
@@ -78,11 +76,11 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
 
             if (lights[i]->getIntensity() > 0) {
 
-                Vector Normal = HitNormal;
+                Vector Normal = intersect->HitNormal;
                 Normal.normalize();
 
 
-                HitToLight = (lights[i]->getPosition() - HitPoint);
+                HitToLight = (lights[i]->getPosition() - intersect->HitPoint);
                 lightStrength = HitToLight.getLength();
                 HitToLight.normalize();
 
@@ -90,7 +88,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
 
                 if (0 < angle) { // normal facing in direction of light
                     Normal.scale(0.001);
-                    if (!castShadowRay({HitPoint + Normal, HitToLight}, lightStrength)) {
+                    if (!castShadowRay({intersect->HitPoint + Normal, HitToLight}, lightStrength)) {
 
                         Color Lightcolor = lights[i]->getColor();
                         Lightcolor.scale((angle * lights[i]->getIntensity()) / (lightStrength * lightStrength)); // brightness
@@ -108,7 +106,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
 
     if (depth < 20) { // calculates as n reflections because depth < n
 
-        Vector Normal{HitNormal};//HitNormal.scale(0.001);
+        Vector Normal{intersect->HitNormal};//HitNormal.scale(0.001);
 
 
         if (glossy > 0) {
@@ -117,7 +115,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
             // 4 rays in the first iteration, only 1 in each following iteration. If the roughness is 0.0f, we do always have one new ray only
 
             for (int i = 0; i < reflectionsamples; ++i) {
-                reflectionColor += getReflectedColor(ray, HitPoint, HitNormal, Normal, depth, lights,
+                reflectionColor += getReflectedColor(ray, intersect->HitPoint, intersect->HitNormal, Normal, depth, lights,
                                                      shape);// increasing the depth is not really necessary
             }
             reflectionColor.scale(glossy / (float) reflectionsamples);
@@ -129,7 +127,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
             // 4 rays in the first iteration, only 1 in each following iteration. If the roughness is 0.0f, we do always have one new ray only
 
             for (int i = 0; i < refractionsamples; ++i) {
-                refractionColor += getRefractedColor(ray, HitPoint, HitNormal, Normal, depth, lights,
+                refractionColor += getRefractedColor(ray, intersect->HitPoint, intersect->HitNormal, Normal, depth, lights,
                                                      shape);// increasing the depth is not really necessary
             }
             refractionColor.scale(transparency / (float) refractionsamples);
@@ -146,6 +144,10 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
 
     colorfinal.scale(1.0f / Brightness.getLength());
 
+    if (nullptr != intersect) {
+        delete intersect;
+    }
+
     return colorfinal;
 
 }
@@ -159,16 +161,17 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
  */
 bool Renderer::castShadowRay(Ray ray, float distance) {
 
-    Vector HitPoint{};
-    Vector HitNormal{};
 
     bool hit = false;
     float mindistance = INFINITY - 1;
 
     Sphere s = {{}, 1};
 
-    boundingBox->getIntersectedShape(ray, s, HitPoint,HitNormal, mindistance, hit);
-
+    Intersect* intersect = new Intersect{ray};
+    boundingBox->getIntersectedShape( s, intersect , hit);
+    if (nullptr != intersect) {
+        delete intersect;
+    }
     return hit && mindistance < distance && mindistance >= 0;
 }
 

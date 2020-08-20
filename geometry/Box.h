@@ -25,7 +25,7 @@ public:
 
     void translate(Vector position) override;
 
-    bool getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) override;
+    bool getIntersectVec(Intersect* intersect) override;
 
     void getIntersectVec(Vector &direction,  Vector &HitNormal);
 

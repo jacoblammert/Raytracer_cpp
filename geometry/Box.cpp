@@ -43,10 +43,10 @@ Box::Box(Vector Pos, float xScale, float yScale, float zScale, Color color) {
 }
 
 
-bool Box::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) {
+bool Box::getIntersectVec(Intersect* intersect) {
 
-    Vector rayposition = ray.getPos();
-    Vector raydirection = ray.getDir();
+    Vector rayposition = intersect->ray.getPos();
+    Vector raydirection = intersect->ray.getDir();
     raydirection.divide(1);
 
     float tmin, tmax, tymin, tymax, tzmin, tzmax;
@@ -74,22 +74,22 @@ bool Box::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &d
         tmax = tzmax;
 
 
-    if (0 < tmin && tmin < distance) {
-        raydirection = ray.getDir();
+    if (0 < tmin && tmin < intersect->distance) {
+        raydirection = intersect->ray.getDir();
         raydirection.scale(tmin);
 
-        distance = tmin;
-        HitPoint = rayposition + raydirection;
-        HitNormal = getNormal(HitPoint);
+        intersect->distance = tmin;
+        intersect->HitPoint = rayposition + raydirection;
+        intersect->HitNormal = getNormal(intersect->HitPoint);
         return true;
     }
-    if (tmin < 0 && 0 < tmax && tmax < distance) {
-        raydirection = ray.getDir();
+    if (tmin < 0 && 0 < tmax && tmax < intersect->distance) {
+        raydirection = intersect->ray.getDir();
         raydirection.scale(tmax);
 
-        distance = tmax;
-        HitPoint = rayposition + raydirection;
-        HitNormal = getNormal(HitPoint);
+        intersect->distance = tmax;
+        intersect->HitPoint = rayposition + raydirection;
+        intersect->HitNormal = getNormal(intersect->HitPoint);
         return true;
     }
 

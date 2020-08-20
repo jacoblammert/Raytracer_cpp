@@ -17,10 +17,10 @@ Plane::Plane(Vector position, Vector normal, Material *material) :
 }
 
 
-bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) {
+bool Plane::getIntersectVec(Intersect* intersect) {
 
-    Vector raydirection = ray.getDir();
-    Vector rayposition = ray.getPos();
+    Vector raydirection = intersect->ray.getDir();
+    Vector rayposition = intersect->ray.getPos();
 
     float denom = normal.dot(raydirection);
     Vector p0l0 = pos - rayposition;
@@ -30,10 +30,10 @@ bool Plane::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float 
     if (t >= 0) {
 
         raydirection.scale(t);
-        if (0 < t && t < distance) {
-            distance = t;
-            HitPoint = rayposition + raydirection;
-            HitNormal = normal;
+        if (0 < t && t < intersect->distance) {
+            intersect->distance = t;
+            intersect->HitPoint = rayposition + raydirection;
+            intersect->HitNormal = normal;
         }
         return true;
     }

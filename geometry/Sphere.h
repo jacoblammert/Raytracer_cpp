@@ -13,7 +13,7 @@ public:
 
     Sphere(Vector position, float radius, Material* material);
 
-    bool getIntersectVec(Ray ray, Vector &HitPoint,  Vector &HitNormal,float &distance) override;
+    bool getIntersectVec(Intersect* intersect) override;
 
     Vector getNormal(Vector pos) override;
 

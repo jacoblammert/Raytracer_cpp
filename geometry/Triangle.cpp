@@ -27,19 +27,19 @@ Triangle::Triangle(Vector a, Vector b, Vector c, Color color) :
 }
 
 
-bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) {
+bool Triangle::getIntersectVec(Intersect* intersect) {
 
 
 
 
-    Vector pvec = ray.getDir() * (c - a);
+    Vector pvec = intersect->ray.getDir() * (c - a);
     float det = pvec.dot(b - a);
 
     // ray and triangle are parallel if det is close to 0
     if (fabs(det) == 0.0f)
         return false;
 
-    Vector rayposition = ray.getPos();
+    Vector rayposition = intersect->ray.getPos();
 
     float u = pvec.dot(rayposition - a)/det;
 
@@ -47,19 +47,19 @@ bool Triangle::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, flo
         return false;
 
     pvec = (rayposition - a) * (b-a);
-    float v = pvec.dot(ray.getDir()) / det;
+    float v = pvec.dot(intersect->ray.getDir()) / det;
 
     if (v < 0 || (u + v) > 1)
         return false;
 
     det = pvec.dot(c - a)/det;
 
-    if (0 < det && det < distance) {
-        distance = det;
-        HitNormal = this->normal;
-        pvec = ray.getDir();
+    if (0 < det && det < intersect->distance) {
+        intersect->distance = det;
+        intersect->HitNormal = this->normal;
+        pvec = intersect->ray.getDir();
         pvec.scale(det);
-        HitPoint = rayposition + pvec;
+        intersect->HitPoint = rayposition + pvec;
     }
     return true;
 }

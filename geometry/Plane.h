@@ -14,7 +14,7 @@ public:
 
     Plane(Vector position, Vector normal, Material* material);
 
-    bool getIntersectVec(Ray ray, Vector &HitPoint,  Vector &HitNormal,float &distance) override;
+    bool getIntersectVec(Intersect* intersect) override;
 
     Vector getNormal(Vector pos) override;
 

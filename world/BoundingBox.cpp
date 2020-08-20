@@ -25,35 +25,24 @@ BoundingBox::BoundingBox(std::vector<Shape *> shapes) {
     }
 }
 
-BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, int depth) :
-        minXminYminZ{minXminYminZ}, maxXmaxYmaxZ{maxXmaxYmaxZ}, depth{++depth}, box{minXminYminZ, maxXmaxYmaxZ} {
+BoundingBox::BoundingBox(int depth) :
+        depth{++depth} {
 
 }
 
-
-BoundingBox::BoundingBox(Vector minXminYminZ, Vector maxXmaxYmaxZ, std::vector<Shape *> shapes, int depth) :
-        minXminYminZ{minXminYminZ}, maxXmaxYmaxZ{maxXmaxYmaxZ}, depth{++depth}, box{minXminYminZ, maxXmaxYmaxZ} {
-
-    this->shapes = std::move(shapes);
-    if (!this->shapes.empty()) {
-        build();
-    }
-}
-
-void BoundingBox::getIntersectedShape(Ray ray, Shape &shape, Vector &Hitpoint, Vector &Hitnormal, float &distance,
-                                      bool &hit) {
+void BoundingBox::getIntersectedShape(Shape &shape, Intersect *intersect, bool &hit) {
 
     for (auto &boxe : boxes) {
-        if (boxe.box.getIntersect(ray)) {
-            boxe.getIntersectedShape(ray, shape, Hitpoint,Hitnormal, distance, hit);
+        if (boxe.box.getIntersect(intersect->ray)) {
+            boxe.getIntersectedShape( shape, intersect, hit);
         }
     }
 
     if (!shapes.empty()) {
-        float oldDist = distance;
+        float oldDist = intersect->distance;
         for (auto &shapehit : shapes) {
-            shapehit->getIntersectVec(ray, Hitpoint, Hitnormal, distance);
-            if (distance < oldDist) { // Test, if new already hit shape is closer and set shape to shape and hit to true
+            shapehit->getIntersectVec(intersect);
+            if (intersect->distance < oldDist) { // Test, if new already hit shape is closer and set shape to shape and hit to true
                 shape = *shapehit;
                 hit = true;
             }
@@ -133,8 +122,8 @@ void BoundingBox::split() {
     // 0 0   2
 
 
-    BoundingBox left = BoundingBox({}, {}, depth);
-    BoundingBox right = BoundingBox({}, {}, depth);
+    BoundingBox left = BoundingBox(depth);
+    BoundingBox right = BoundingBox(depth);
 
     boxes.push_back(right);
     boxes.push_back(left);

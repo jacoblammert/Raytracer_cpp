@@ -17,10 +17,10 @@ Sphere::Sphere(Vector pos, float radius, Material* material):
 }
 
 
-bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float &distance) {
+bool Sphere::getIntersectVec(Intersect* intersect) {
 
-    Vector raydirection = ray.getDir();
-    Vector rayposition = ray.getPos();
+    Vector raydirection = intersect->ray.getDir();
+    Vector rayposition = intersect->ray.getPos();
 
 
     float t = (pos - rayposition).dot(raydirection);
@@ -36,22 +36,22 @@ bool Sphere::getIntersectVec(Ray ray, Vector &HitPoint, Vector &HitNormal, float
         float t1 = t - x; // close intersection point
         float t2 = t + x; // far intersection point
 
-        raydirection = ray.getDir();
+        raydirection = intersect->ray.getDir();
         raydirection.normalize();
 
 
-            if (0 < t1 && t1 < distance) {
+            if (0 < t1 && t1 < intersect->distance) {
                 raydirection.scale(t1);
-                distance = t1;
-                HitPoint = rayposition + raydirection;
-                HitNormal = getNormal(HitPoint);
+                intersect->distance = t1;
+                intersect->HitPoint = rayposition + raydirection;
+                intersect->HitNormal = getNormal(intersect->HitPoint);
                 return true;
             }
-            if (t1 < 0 && 0 < t2 && t2 < distance) {
+            if (t1 < 0 && 0 < t2 && t2 < intersect->distance) {
                 raydirection.scale(t2);
-                distance = t2;
-                HitPoint = rayposition + raydirection;
-                HitNormal = getNormal(HitPoint);
+                intersect->distance = t2;
+                intersect->HitPoint = rayposition + raydirection;
+                intersect->HitNormal = getNormal(intersect->HitPoint);
                 return true;
             }
     }
