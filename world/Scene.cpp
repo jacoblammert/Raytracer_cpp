@@ -51,7 +51,7 @@ void Scene::render() {
 
 
 
-#pragma omp parallel for schedule(dynamic,2) collapse(2)
+#pragma omp parallel for schedule(dynamic,2)// collapse(2)
 
 //float error = 0.0f;
 
@@ -61,19 +61,11 @@ void Scene::render() {
         Camera camera1 = camera; // local copies for parallelization
         Renderer renderer1 = Renderer(skybox,boundingBox);
 /**/
-        for (int y = 0; y < camera.getHeight(); ++y) {
-
-            /**/
-
-        Camera camera1 = camera; // local copies for parallelization
         Renderer renderer1 = Renderer(skybox,boundingBox);
-
-
-             /**/
-
-
-            Ray ray = camera1.generateRay(x, y);
-            image.setPixel(x, y, renderer1.getColor(ray, 0, lights));
+        renderer1.setLights(lights);
+        Camera camera1 = camera;
+        for (int y = 0; y < camera.getHeight(); ++y) {
+            image.setPixel(x, y, renderer1.getColor(camera1.generateRay(x, y), 0));
         }
         //progress++;
         //if (progress % 10 == 0) {

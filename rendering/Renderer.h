@@ -21,7 +21,7 @@ public:
     Renderer(Skybox *skybox,BoundingBox* boundingBox);
 
 
-    Color getColor(Ray ray, int depth, std::vector<Light *> lights);
+    Color getColor(Ray ray, int depth);
 
     bool castShadowRay(Ray ray, float distance);
 
@@ -29,17 +29,18 @@ public:
 
     void setBoundingBox(BoundingBox *boundingBox);
 
+    void setLights(std::vector<Light*> lights);
+
     //Color getSkybox(Vector vector);
 
-    Color getRefractedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth,
-                            std::vector<Light *> lights, Shape *shape);
+    Color getRefractedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth, Shape *shape);
 
-    Color getReflectedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth,
-                            std::vector<Light *> lights, Shape *shape);
+    Color getReflectedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth, Shape *shape);
 
     float randomFloat(float range);
 
 private:
+    std::vector<Light *> lights;
     Skybox *skybox;
     BoundingBox* boundingBox;
 };

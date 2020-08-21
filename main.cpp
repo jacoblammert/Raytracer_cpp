@@ -145,7 +145,7 @@ int main() {
 
     auto* p1 = new Plane({0, 0, -1.3}, {0, 0, 1}, materialPlane);
 
-    scene.addShape(p1);
+    //scene.addShape(p1);
 
 
     /// normal
@@ -155,7 +155,7 @@ int main() {
     objLoader.LoadOBJ();
     Object object = objLoader.getObject(); // get the first Object inside the obj file
     //Material* material = new Material{{0.65,0.75,0.35},0.00,1.0,0.0,0};
-    auto* material = new Material{/**/{0.75,0.8,0.7}/*/{0.7,0.8,0.7}/**/,/**/0.00f,0.00f,0.0f,/**//*/0.0f/*/1.36f/**/};/*/0.00625f,0.0f,0.8f,1.36f};/**/ // 1.36 = Water
+    auto* material = new Material{/**/{0.75,0.8,0.7}/*/{0.7,0.8,0.7}/**/,/**/0.00f,0.00f,01.0f,/**//*/0.0f/*/1.36f/**/};/*/0.00625f,0.0f,0.8f,1.36f};/**/ // 1.36 = Water
     object.setMaterial(material);
     scene.addShapes(object.getTriangles());
 

@@ -29,7 +29,7 @@ Renderer::Renderer(Skybox *skybox, BoundingBox *boundingBox) :
  * @param boundingBox to get intersections with other shapes from the ray to go to all the lightsources
  * @return color consisting of brightness for that point and each light and color of the shape blended together
  */
-Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
+Color Renderer::getColor(Ray ray, int depth) {
 
 
 
@@ -115,7 +115,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
             // 4 rays in the first iteration, only 1 in each following iteration. If the roughness is 0.0f, we do always have one new ray only
 
             for (int i = 0; i < reflectionsamples; ++i) {
-                reflectionColor += getReflectedColor(ray, intersect->HitPoint, intersect->HitNormal, Normal, depth, lights,
+                reflectionColor += getReflectedColor(ray, intersect->HitPoint, intersect->HitNormal, Normal, depth,
                                                      shape);// increasing the depth is not really necessary
             }
             reflectionColor.scale(glossy / (float) reflectionsamples);
@@ -127,7 +127,7 @@ Color Renderer::getColor(Ray ray, int depth, std::vector<Light *> lights) {
             // 4 rays in the first iteration, only 1 in each following iteration. If the roughness is 0.0f, we do always have one new ray only
 
             for (int i = 0; i < refractionsamples; ++i) {
-                refractionColor += getRefractedColor(ray, intersect->HitPoint, intersect->HitNormal, Normal, depth, lights,
+                refractionColor += getRefractedColor(ray, intersect->HitPoint, intersect->HitNormal, Normal, depth,
                                                      shape);// increasing the depth is not really necessary
             }
             refractionColor.scale(transparency / (float) refractionsamples);
@@ -184,8 +184,7 @@ float Renderer::randomFloat(float range) {
     return r;
 }
 
-Color Renderer::getReflectedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth,
-                                  std::vector<Light *> lights, Shape *shape) {
+Color Renderer::getReflectedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth, Shape *shape) {
 
     Vector reflectedVector = ray.getDir().getReflected(HitNormal);
 
@@ -207,11 +206,10 @@ Color Renderer::getReflectedColor(Ray ray, Vector HitPoint, Vector HitNormal, Ve
 
     Ray reflectionray = {HitPoint + Normal, reflectedVector};
 
-    return getColor(reflectionray, depth , std::move(lights));
+    return getColor(reflectionray, depth);
 }
 
-Color Renderer::getRefractedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth,
-                                  std::vector<Light *> lights, Shape *shape) {
+Color Renderer::getRefractedColor(Ray ray, Vector HitPoint, Vector HitNormal, Vector Normal, int depth, Shape *shape) {
 
     Vector position = {};
 
@@ -255,7 +253,7 @@ Color Renderer::getRefractedColor(Ray ray, Vector HitPoint, Vector HitNormal, Ve
     Ray refractionray = {position, refractedVector};
     refractionray.setRefractionindex(shape->getMaterial()->getRefractiveIndex());
 
-    return getColor(refractionray, depth + 1, std::move(lights));
+    return getColor(refractionray, depth + 1);
 }
 
 void Renderer::setSkybox(Skybox *skybox) {
@@ -264,6 +262,10 @@ void Renderer::setSkybox(Skybox *skybox) {
 
 void Renderer::setBoundingBox(BoundingBox *boundingBox) {
     this->boundingBox = boundingBox;
+}
+
+void Renderer::setLights(std::vector<Light*> lights) {
+    this->lights = lights;
 }
 
 
